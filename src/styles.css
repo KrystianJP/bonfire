@@ -1,11 +1,15 @@
 :root {
   --dark-main: #36393f;
-  --dark-darker: #202225;
+  --dark-darkest: #202225;
+  --dark-darker: #2f3136;
+  --dark-text: rgb(189, 189, 189);
 }
 
 * {
   margin: 0;
   box-sizing: border-box;
+  color: var(--dark-text);
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
 }
 
 html,
@@ -20,22 +24,130 @@ body {
 
 .App {
   height: 100vh;
+  display: flex;
 }
 
 .sidebar {
-  background: var(--dark-darker);
-  width: 72px;
+  background: var(--dark-darkest);
+  width: 80px;
   padding: 10px;
   height: 100%;
+  overflow: auto;
+}
+
+.friends-page {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 260px 1fr;
 }
 
 .main-icon {
   width: 100%;
-  height: 52px;
+  height: 60px;
   background: var(--dark-main);
   padding: 4px;
   border-radius: 50%;
+  transition-duration: 200ms;
 }
 .main-icon img {
   width: 100%;
+}
+.main-icon:hover {
+  cursor: pointer;
+  background: rgb(43, 117, 208);
+  border-radius: 30%;
+}
+
+.dm-column {
+  background: var(--dark-darker);
+  padding: 15px;
+  padding-top: 20px;
+}
+.friend-add-button {
+  font-size: 20px;
+  margin-bottom: 20px;
+  background: rgb(42, 133, 42);
+  border: none;
+  padding: 5px 20px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+.friend-add-button span {
+  color: white;
+}
+.friend-add-button:hover {
+  cursor: pointer;
+}
+.dm-column h2 {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-bubble {
+  font-size: 20px;
+}
+
+.add-friend-page {
+  padding: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.add-friend-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+.add-friend-container label {
+  font-size: 28px;
+  font-weight: bold;
+}
+.add-friend-container input[type="text"] {
+  max-width: 500px;
+}
+.add-friend-container button {
+  background: rgb(43, 117, 208);
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.add-friend-container button:hover {
+  cursor: pointer;
+  background: rgb(64, 126, 202);
+}
+.add-friend-container button span {
+  color: white;
+  font-size: 20px;
+}
+
+.add-friend-inputs-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+input[type="text"] {
+  background: var(--dark-darkest);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 16px;
+  color: white;
+}
+
+.received-req h2 {
+  font-size: 28px;
 }
