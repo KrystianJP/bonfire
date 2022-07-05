@@ -1,0 +1,41 @@
+:root {
+  --dark-main: #36393f;
+  --dark-darker: #202225;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100vh;
+  width: 100%;
+}
+
+body {
+  background: var(--dark-main);
+}
+
+.App {
+  height: 100vh;
+}
+
+.sidebar {
+  background: var(--dark-darker);
+  width: 72px;
+  padding: 10px;
+  height: 100%;
+}
+
+.main-icon {
+  width: 100%;
+  height: 52px;
+  background: var(--dark-main);
+  padding: 4px;
+  border-radius: 50%;
+}
+.main-icon img {
+  width: 100%;
+}
