@@ -3,6 +3,7 @@
   --dark-darkest: #202225;
   --dark-darker: #2f3136;
   --dark-text: rgb(189, 189, 189);
+  --dark-lighter: #41454b;
 }
 
 * {
@@ -29,10 +30,21 @@ body {
 
 .sidebar {
   background: var(--dark-darkest);
-  width: 80px;
+  width: 85px;
   padding: 10px;
   height: 100%;
-  overflow: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background-color: none;
+}
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background: var(--dark-main);
+  border-radius: 3px;
 }
 
 .friends-page {
@@ -42,17 +54,27 @@ body {
 }
 
 .main-icon {
+  padding: 4px;
+}
+.main-icon .main-icon-img {
   width: 100%;
+}
+
+.server-icon {
+  width: 60px;
   height: 60px;
   background: var(--dark-main);
-  padding: 4px;
   border-radius: 50%;
   transition-duration: 200ms;
+  margin: 10px 0;
+  overflow: hidden;
 }
-.main-icon img {
-  width: 100%;
+.server-icon-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
 }
-.main-icon:hover {
+.server-icon:hover {
   cursor: pointer;
   background: rgb(43, 117, 208);
   border-radius: 30%;
@@ -62,14 +84,26 @@ body {
   background: var(--dark-darker);
   padding: 15px;
   padding-top: 20px;
+  overflow: auto;
 }
+.dm-column::-webkit-scrollbar {
+  width: 5px;
+}
+.dm-column::-webkit-scrollbar-track {
+  background-color: none;
+}
+.dm-column:hover::-webkit-scrollbar-thumb {
+  background: var(--dark-darkest);
+  border-radius: 3px;
+}
+
 .friend-add-button {
   font-size: 20px;
   margin-bottom: 20px;
   background: rgb(42, 133, 42);
   border: none;
   padding: 5px 20px;
-  border-radius: 15px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -80,12 +114,14 @@ body {
 }
 .friend-add-button:hover {
   cursor: pointer;
+  background: rgb(54, 149, 54);
 }
 .dm-column h2 {
   font-size: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
+  padding-bottom: 10px;
 }
 
 .chat-bubble {
@@ -98,6 +134,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 40px;
+  overflow-y: scroll;
+}
+.add-friend-page::-webkit-scrollbar {
+  width: 8px;
+}
+.add-friend-page::-webkit-scrollbar-track {
+  background-color: none;
+}
+.add-friend-page:hover::-webkit-scrollbar-thumb {
+  background: var(--dark-darkest);
+  border-radius: 5px;
 }
 .add-friend-container {
   display: flex;
@@ -150,4 +197,77 @@ input[type="text"] {
 
 .received-req h2 {
   font-size: 28px;
+  padding-bottom: 10px;
+}
+
+ul {
+  padding: 0;
+}
+.friend,
+.req {
+  padding: 6px;
+  border-radius: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+.friend:hover {
+  cursor: pointer;
+  background: var(--dark-main);
+}
+
+.req-left,
+.friend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.req-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.req {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.req:hover {
+  background: var(--dark-lighter);
+}
+
+.friend-pfp {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.req-name {
+  color: white;
+}
+
+.hor-line {
+  background: var(--dark-darker);
+  height: 2px;
+  width: 100%;
+}
+
+.accept-button {
+  background: var(--dark-darker);
+  border: none;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+.accept-button:hover {
+  cursor: pointer;
+}
+.accept-button-accept:hover span {
+  color: green;
+}
+.accept-button-decline:hover span {
+  color: rgb(255, 54, 54);
 }
