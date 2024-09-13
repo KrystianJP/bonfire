@@ -91,6 +91,9 @@ body {
   background-color: var(--dark-main);
   border-radius: 3px;
 }
+.sidebar * {
+  flex-shrink: 0;
+}
 
 .server-icon {
   width: 50px;
@@ -149,9 +152,6 @@ body {
   background: var(--dark-darker);
   overflow-y: scroll;
   overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 .friends-bar::-webkit-scrollbar {
   width: 5px;
@@ -284,4 +284,32 @@ body {
   cursor: pointer;
   background: var(--dark-highlight);
   color: var(--dark-lightest);
+}
+
+.friends-list {
+  padding: 10px 25px;
+}
+.search-container {
+  position: relative;
+}
+#search-bar {
+  width: 100%;
+  border: none;
+  padding: 8px;
+  background: var(--dark-darkest);
+  outline: none;
+  color: var(--dark-msg);
+  font-size: 0.95rem;
+  border-radius: 4px;
+}
+#search-bar::placeholder {
+  color: var(--dark-text);
+}
+#search-icon {
+  position: absolute;
+  right: 10px;
+  font-size: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--dark-msg);
 }

@@ -10,7 +10,7 @@ function ProfileBar() {
             className="profile-pfp-img"
           />
         </div>
-        <span className="profile-name">KrysJP</span>
+        <span className="profile-name">HugeJuicyPickle</span>
       </div>
       <div className="profile-icons">
         <span className="material-icons">mic</span>

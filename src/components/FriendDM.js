@@ -9,7 +9,7 @@ function FriendDM() {
           className="friend-pfp-img"
         />
       </div>
-      <span className="friend-name">Krystian Jakub Procowski</span>
+      <span className="friend-name">Pickle Juice Tartar Sauce</span>
     </div>
   );
 }

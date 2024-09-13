@@ -1,10 +1,12 @@
 import FriendsBar from "./FriendsBar";
 import ProfileBar from "./ProfileBar";
+import FriendsList from "./FriendsList";
 function FriendsPage() {
   return (
     <div className="friends-page">
       <FriendsBar />
       <ProfileBar />
+      <FriendsList />
     </div>
   );
 }
