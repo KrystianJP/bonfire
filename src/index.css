@@ -6,6 +6,8 @@
   --dark-text: #949ba4;
   --dark-lightest: #dddee1;
   --dark-msg: #c1c3c7;
+  --dark-highlight: #404249;
+  --dark-hover: #35373c;
 }
 
 * {
@@ -13,6 +15,31 @@
   box-sizing: border-box;
   color: var(--dark-text);
   font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
+.material-icons {
+  font-family: "Material Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px; /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: "liga";
 }
 
 html,
@@ -82,7 +109,8 @@ body {
   background: rgb(43, 117, 208);
   border-radius: 30%;
 }
-.server-icon-img {
+.server-icon-img,
+.friend-pfp-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -96,4 +124,81 @@ body {
   height: 2px;
   background: var(--dark-main);
   margin: 5px 0;
+}
+
+.friends-bar {
+  width: 240px;
+  height: 100%;
+  padding: 8px;
+  background: var(--dark-darker);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.friends-bar::-webkit-scrollbar {
+  width: 5px;
+}
+.-friends-bar::-webkit-scrollbar-track {
+  background-color: none;
+}
+.friends-bar::-webkit-scrollbar-thumb {
+  background-color: var(--dark-darkest);
+  border-radius: 3px;
+}
+
+.friends-icon {
+  font-size: 30px;
+}
+.friend-tab {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.friend-tab:hover {
+  background: var(--dark-hover);
+  cursor: pointer;
+}
+.friend-tab:hover * {
+  color: var(--dark-lightest);
+}
+
+.direct-msgs-txt {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+  color: var(--dark-lighter);
+  font-weight: bold;
+  margin: 10px 0;
+}
+.direct-msgs-txt:hover {
+  cursor: default;
+}
+
+.friend-pfp {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.friend-dm {
+  width: 100%;
+  padding: 5px 7px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+.friend-dm:hover {
+  background: var(--dark-hover);
+  cursor: pointer;
+}
+.friend-dm:hover .friend-name {
+  color: var(--dark-lightest);
 }
