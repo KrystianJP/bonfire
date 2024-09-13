@@ -6,7 +6,7 @@ function FriendDM() {
         <img
           src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
           alt="user profile picture"
-          className="friend-pfp-img"
+          className="pfp-img"
         />
       </div>
       <span className="friend-name">Krystian Jakub Procowski</span>

@@ -7,7 +7,7 @@ function ProfileBar() {
           <img
             src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
             alt="user profile picture"
-            className="profile-pfp-img"
+            className="pfp-img"
           />
         </div>
         <span className="profile-name">KrysJP</span>
