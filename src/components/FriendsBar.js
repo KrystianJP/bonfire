@@ -9,6 +9,7 @@ function FriendsBar() {
       </div>
       <div className="direct-msgs-txt">DIRECT MESSAGES</div>
       <FriendDM />
+      <FriendDM />
     </div>
   );
 }

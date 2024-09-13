@@ -2,12 +2,13 @@
   --dark-darkest: #1e1f22;
   --dark-darker: #2b2d31;
   --dark-main: #313338;
-  --dark-lighter: #b5bac1;
+  --dark-light: #b5bac1;
   --dark-text: #949ba4;
-  --dark-lightest: #dddee1;
+  --dark-lighter: #dddee1;
   --dark-msg: #c1c3c7;
   --dark-highlight: #404249;
   --dark-hover: #35373c;
+  --dark-lightest: white;
 }
 
 * {
@@ -15,13 +16,14 @@
   box-sizing: border-box;
   color: var(--dark-text);
   font-family: "Roboto", Arial, Helvetica, sans-serif;
+  letter-spacing: 0.02rem;
 }
 
 .material-icons {
   font-family: "Material Icons";
   font-weight: normal;
   font-style: normal;
-  font-size: 24px; /* Preferred icon size */
+  font-size: 1.5rem; /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -149,7 +151,7 @@ body {
 }
 
 .friends-icon {
-  font-size: 30px;
+  font-size: 1.875rem;
 }
 .friend-tab {
   width: 100%;
@@ -164,17 +166,19 @@ body {
   cursor: pointer;
 }
 .friend-tab:hover * {
-  color: var(--dark-lightest);
+  color: var(--dark-lighter);
 }
 
 .direct-msgs-txt {
   width: 100%;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 500;
   padding: 6px 10px;
-  color: var(--dark-lighter);
+  color: var(--dark-text);
   font-weight: bold;
-  margin: 10px 0;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  letter-spacing: 0.05rem;
 }
 .direct-msgs-txt:hover {
   cursor: default;
@@ -194,11 +198,15 @@ body {
   gap: 10px;
   overflow: hidden;
   border-radius: 5px;
+  margin-bottom: 2px;
 }
 .friend-dm:hover {
   background: var(--dark-hover);
   cursor: pointer;
 }
 .friend-dm:hover .friend-name {
-  color: var(--dark-lightest);
+  color: var(--dark-lighter);
+}
+.friend-name {
+  margin-left: 3px;
 }
