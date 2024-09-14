@@ -1,4 +1,5 @@
 import DMProfileBar from "./DMProfileBar";
+import Messages from "./Messages";
 function DMs() {
   return (
     <div className="dms">
@@ -16,8 +17,11 @@ function DMs() {
         <div className="top-bar-right">
           <span className="material-icons">call</span>
           <span className="material-icons">videocam</span>
+          <span className="material-icons">delete</span>
+          <span className="material-icons">block</span>
         </div>
       </div>
+      <Messages />
       <DMProfileBar />
     </div>
   );

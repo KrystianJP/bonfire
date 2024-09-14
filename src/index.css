@@ -10,6 +10,7 @@
   --dark-hover: #35373c;
   --dark-lightest: white;
   --dark-profile-bar: #232428;
+  --dark-about-me: #111214;
 }
 
 * {
@@ -48,6 +49,8 @@
 html,
 body {
   height: 100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
   width: 100%;
 }
 
@@ -74,12 +77,13 @@ body {
   background: var(--dark-darkest);
   width: 80px;
   padding: 10px;
-  height: 100%;
+  height: auto;
   overflow-y: scroll;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-shrink: 0;
 }
 .sidebar::-webkit-scrollbar {
   width: 5px;
@@ -112,7 +116,7 @@ body {
 }
 .server-icon:hover {
   cursor: pointer;
-  background: rgb(43, 117, 208);
+  background: #5865f2;
   border-radius: 30%;
 }
 .pfp-img {
@@ -133,7 +137,7 @@ body {
 
 .friends-page {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: grid;
   grid-template-areas:
     "friends-bar friends-list"
@@ -145,7 +149,7 @@ body {
 .friends-bar {
   grid-area: friends-bar;
   width: 240px;
-  height: 100%;
+  height: auto;
   padding: 8px;
   background: var(--dark-darker);
   overflow-y: scroll;
@@ -290,11 +294,12 @@ body {
   color: var(--dark-lightest);
 }
 .top-bar {
+  grid-area: top-bar;
   width: 100%;
   padding: 6px 10px;
-  border-bottom: var(--dark-profile-bar) solid 5px;
+  border-bottom: var(--dark-darker) solid 2px;
   border-bottom-style: solid;
-  border-bottom-width: 1px;
+  box-shadow: 0 0px 2px var(--dark-darker);
 }
 .friend-dm-pfp {
   width: 30px;
@@ -315,22 +320,69 @@ body {
   transition-duration: 150ms;
   color: var(--dark-light);
   font-size: 1.75rem;
+  cursor: default;
 }
 .top-bar-right span:hover {
   color: var(--dark-lightest);
   cursor: pointer;
 }
 
+.dms {
+  grid-area: friends-list;
+  display: grid;
+  grid-template-areas: "top-bar top-bar" "messages dm-profile-bar";
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr min-content;
+}
+
 .dm-profile-bar {
+  grid-area: dm-profile-bar;
   float: right;
-  height: 100%;
+  height: auto;
   width: 340px;
   background-color: var(--dark-profile-bar);
 }
 .dm-profile-pfp {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   overflow: hidden;
-  border: var(--dark-profile-bar) solid 10px;
+  border: var(--dark-profile-bar) solid 6px;
+  position: absolute;
+  top: 100%;
+  transform: translateY(-55%);
+  left: 3%;
+}
+.dm-profile-top {
+  background: rgb(163, 53, 53);
+  height: 120px;
+  position: relative;
+}
+.dm-profile-details {
+  padding: 0 15px;
+  padding-top: 50px;
+}
+.dm-profile-name {
+  color: var(--dark-lightest);
+  font-size: 1.3rem;
+}
+.about-me {
+  margin-top: 15px;
+  border-radius: 5px;
+  padding: 12px;
+  background: var(--dark-about-me);
+  min-height: 80px;
+}
+.about-me-header {
+  font-size: 0.75rem;
+  color: var(--dark-lightest);
+}
+.about-me-content {
+  color: var(--dark-msg);
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.messages-container {
+  grid-area: messages;
 }

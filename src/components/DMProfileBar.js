@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 function DMProfileBar() {
   return (
     <div className="dm-profile-bar">
@@ -10,7 +11,13 @@ function DMProfileBar() {
           />
         </div>
       </div>
-      <div className="dm-profile-details"></div>
+      <div className="dm-profile-details">
+        <span className="dm-profile-name">KrysJP</span>
+        <div className="about-me">
+          <span className="about-me-header">About Me</span>
+          <div className="about-me-content">Lorem ipsum dolor sit amet</div>
+        </div>
+      </div>
     </div>
   );
 }
