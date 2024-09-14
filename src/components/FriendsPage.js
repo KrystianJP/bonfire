@@ -7,7 +7,7 @@ function FriendsPage() {
     <div className="friends-page">
       <FriendsBar />
       <ProfileBar />
-      <FriendsList />
+      <DMs />
     </div>
   );
 }

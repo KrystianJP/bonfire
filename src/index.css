@@ -50,7 +50,7 @@ html,
 body {
   height: 100vh;
   overflow-x: hidden;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   width: 100%;
 }
 
@@ -335,6 +335,7 @@ body {
 }
 .top-bar {
   grid-area: top-bar;
+  height: 52px;
   width: 100%;
   padding: 6px 10px;
   border-bottom: var(--dark-darker) solid 2px;
@@ -376,11 +377,17 @@ body {
 }
 
 .dm-profile-bar {
+  height: calc(100vh - 52px);
   grid-area: dm-profile-bar;
+  grid-template-rows: min-content 1fr;
   float: right;
-  height: auto;
   width: 340px;
+  overflow-y: scroll;
   background-color: var(--dark-profile-bar);
+}
+
+.dm-profile-bar::-webkit-scrollbar {
+  width: 0px;
 }
 .dm-profile-pfp {
   width: 90px;
@@ -399,7 +406,8 @@ body {
   position: relative;
 }
 .dm-profile-details {
-  padding: 0 15px;
+  padding-left: 15px;
+  padding-right: 15px;
   padding-top: 50px;
 }
 .dm-profile-name {

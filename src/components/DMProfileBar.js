@@ -15,7 +15,12 @@ function DMProfileBar() {
         <span className="dm-profile-name">KrysJP</span>
         <div className="about-me">
           <span className="about-me-header">About Me</span>
-          <div className="about-me-content">Lorem ipsum dolor sit amet</div>
+          <div className="about-me-content">
+            Lorem ipsum dolor sit ametLorem ipsum dolor sit amet Lorem ipsum
+            dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
+            Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum
+            dolor sit amet Lorem ipsum dolor sit amet
+          </div>
         </div>
       </div>
     </div>
