@@ -17,8 +17,9 @@ function DMs() {
         <div className="top-bar-right">
           <span className="material-icons">call</span>
           <span className="material-icons">videocam</span>
-          <span className="material-icons">delete</span>
-          <span className="material-icons">block</span>
+          <span className="material-icons">notifications</span>
+          <span className="material-icons dangerous-icon">delete</span>
+          <span className="material-icons dangerous-icon">block</span>
         </div>
       </div>
       <Messages />

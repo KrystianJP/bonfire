@@ -344,7 +344,6 @@ input:focus {
   width: 100%;
   padding: 6px 10px;
   border-bottom: var(--dark-darker) solid 2px;
-  border-bottom-style: solid;
   box-shadow: 0 0px 2px var(--dark-darker);
 }
 .friend-dm-pfp {
@@ -544,4 +543,63 @@ input:focus {
   font-size: 0.9rem;
   height: 42px;
   padding-left: 50px;
+}
+
+.dangerous-icon {
+  color: rgb(255, 107, 107) !important;
+}
+.dangerous-icon:hover {
+  color: rgb(255, 36, 36) !important;
+}
+
+.server-page {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-areas: "server-name top-bar top-bar" "channels messages users" "profile-bar messages users";
+  grid-template-rows: min-content 1fr min-content;
+  grid-template-columns: 240px 1fr 240px;
+}
+.channels-bar {
+  grid-area: channels;
+}
+.users-bar {
+  grid-area: users;
+  background: var(--dark-darker);
+}
+.server-name-container {
+  grid-area: server-name;
+  background: var(--dark-darker);
+  border-bottom: var(--dark-profile-bar) solid 2px;
+}
+
+.channel-group-name {
+  font-weight: normal;
+  padding: 5px 0;
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.channel-group-name {
+  cursor: default;
+}
+.channel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 0;
+  padding-left: 5px;
+  border-radius: 5px;
+}
+.channel:hover {
+  background: var(--dark-highlight);
+  cursor: pointer;
+}
+.channel-name {
+  font-size: 0.95rem;
+  margin-left: 3px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
