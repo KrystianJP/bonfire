@@ -576,13 +576,12 @@ input:focus {
 .channel-group-name {
   font-weight: normal;
   padding: 5px 0;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-}
-.channel-group-name {
   cursor: default;
+  margin-top: 15px;
 }
 .channel {
   display: flex;
@@ -599,6 +598,33 @@ input:focus {
 .channel-name {
   font-size: 0.95rem;
   margin-left: 3px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.users-bar {
+  padding-left: 15px;
+}
+.server-user {
+  padding-left: 7px;
+  margin-left: -7px;
+  width: calc(240px - 15px);
+}
+
+.server-name-container {
+  padding: 10px;
+  align-items: center;
+  display: flex;
+  padding-left: 15px;
+  font-size: 0.95rem;
+}
+.server-name-container:hover {
+  background: var(--dark-hover);
+  cursor: pointer;
+}
+.server-name {
+  color: var(--dark-lightest);
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
