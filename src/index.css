@@ -125,10 +125,14 @@ input:focus {
   position: relative;
   width: 100%;
 }
-#search-bar {
+.search-bar {
   background: var(--dark-darkest);
   border: none;
   outline: none;
+  color: var(--dark-msg);
+  border-radius: 4px;
+}
+#friend-search-bar {
   width: 100%;
   padding: 8px 10px;
   color: var(--dark-msg);
@@ -137,7 +141,7 @@ input:focus {
   margin-bottom: 5px;
   font-size: 0.95rem;
 }
-.search-container #search-icon {
+.search-icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -628,4 +632,28 @@ input:focus {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.server-page .top-bar {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+}
+.top-bar-left-server {
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+}
+
+.server-page .search-icon {
+  font-size: 1.2rem;
+  color: var(--dark-text);
+}
+.server-page .search-bar {
+  padding: 5px 6px;
+  font-size: 0.85rem;
+}
+.search-bar::placeholder {
+  color: var(--dark-text);
 }

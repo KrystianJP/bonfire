@@ -13,7 +13,23 @@ function ServerPage() {
       </div>
       <ChannelsBar />
       <ProfileBar />
-      <div className="top-bar"></div>
+      <div className="top-bar top-dm-bar">
+        <div className="top-bar-left-server">
+          <span className="material-icons">tag</span>Channel name
+        </div>
+        <div className="top-bar-right">
+          <span className="material-icons">group</span>
+          <div className="search-container">
+            <span className="material-icons search-icon">search</span>
+            <input
+              id="server-search-bar"
+              className="search-bar"
+              type="text"
+              placeholder="Search"
+            />
+          </div>
+        </div>
+      </div>
       <Messages />
       <UsersBar />
     </div>
