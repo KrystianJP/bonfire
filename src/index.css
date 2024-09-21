@@ -50,9 +50,18 @@
 html,
 body {
   height: 100vh;
-  overflow-x: hidden;
+  overflow-x: scroll;
   /* overflow-y: hidden; */
   width: 100%;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 body {
@@ -61,6 +70,17 @@ body {
 
 input:focus {
   outline: none;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
 }
 
 .App {
@@ -663,6 +683,7 @@ input:focus {
   height: 100vh;
   display: grid;
   grid-template-columns: max(25%, 210px) 1fr;
+  position: relative;
 }
 .settings-side-bar-container {
   height: auto;
@@ -681,10 +702,33 @@ input:focus {
   background-color: var(--dark-darkest);
   border-radius: 3px;
 }
+.settings-exit {
+  position: fixed;
+  top: 5%;
+  right: 5%;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: solid 2px var(--dark-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--dark-main);
+  transition-duration: 150ms;
+}
+.settings-exit:hover {
+  cursor: pointer;
+  filter: brightness(120%);
+}
+.exit-icon {
+  color: var(--dark-light);
+}
 
 .settings-page-content-container {
   overflow-y: scroll;
   overflow-x: hidden;
+  width: 700px;
+  padding: 40px 30px;
 }
 .settings-page-content-container::-webkit-scrollbar {
   width: 5px;
@@ -695,14 +739,6 @@ input:focus {
 .settings-page-content-container::-webkit-scrollbar-thumb {
   background-color: var(--dark-profile-bar);
   border-radius: 3px;
-}
-.settings-page-content {
-  width: 700px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-.settings-page-content::-webkit-scrollbar {
-  width: 0;
 }
 .settings-group {
   padding: 7px 10px;
@@ -720,4 +756,109 @@ input:focus {
   width: 180px;
   height: auto;
   float: right;
+}
+
+.settings-page-content-container h1 {
+  color: var(--dark-lighter);
+  font-weight: normal;
+  font-size: 1.4rem;
+}
+.setting-container {
+  margin-top: 20px;
+}
+.setting-label {
+  color: var(--dark-light);
+  letter-spacing: 0.05rem;
+  font-weight: bold;
+  padding: 5px 0;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: default;
+  margin-top: 15px;
+  margin-bottom: 3px;
+}
+.setting-container .username {
+  color: var(--dark-lighter);
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.setting-pfp {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid var(--dark-darker);
+  overflow: hidden;
+}
+.setting-pfp:hover {
+  cursor: pointer;
+}
+.setting-bg-color {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  border: 2px solid var(--dark-darker);
+  overflow: hidden;
+  padding: 0;
+}
+.setting-bg-color:hover {
+  cursor: pointer;
+}
+.settings-content button {
+  display: block;
+  padding: 7px 15px;
+  border: none;
+  border-radius: 4px;
+  color: var(--dark-lightest);
+  font-size: 0.95rem;
+
+  transition-duration: 150ms;
+}
+.settings-content button:hover {
+  cursor: pointer;
+  filter: brightness(80%);
+}
+.about-me-save-button {
+  background: #5865f2;
+}
+.password-button {
+  margin-top: 60px;
+  background: #5865f2;
+}
+.danger-button {
+  margin-top: 20px;
+  background: #ff3838;
+}
+.setting-about-me {
+  background: var(--dark-darkest);
+  padding: 10px;
+  border-radius: 3px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+  border: none;
+  color: var(--dark-lighter);
+  resize: vertical;
+  width: 270px;
+  height: 100px;
+}
+.setting-about-me:focus {
+  outline: none;
+}
+.username-container .material-icons {
+  font-size: 1.2rem;
+  margin-left: 15px;
+  transition-duration: 150ms;
+}
+.username-container .material-icons:hover {
+  cursor: pointer;
+  color: var(--dark-lighter);
+}
+.username-container {
+  display: grid;
+  align-items: center;
+  grid-template-columns: max-content 1fr;
 }

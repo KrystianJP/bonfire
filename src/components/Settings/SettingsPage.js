@@ -1,3 +1,5 @@
+import Account from "./Account";
+
 function SettingsPage() {
   return (
     <div className="settings-page">
@@ -12,7 +14,10 @@ function SettingsPage() {
         </div>
       </div>
       <div className="settings-page-content-container">
-        <div className="settings-page-content">yo</div>
+        <Account />
+      </div>
+      <div className="settings-exit">
+        <span className="material-icons exit-icon">close</span>
       </div>
     </div>
   );
