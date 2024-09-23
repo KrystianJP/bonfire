@@ -815,6 +815,7 @@ label {
 }
 .settings-content button {
   display: block;
+  background: #5865f2;
   padding: 7px 15px;
   border: none;
   border-radius: 4px;
@@ -973,4 +974,20 @@ input:checked + .slider:before {
   background: var(--dark-profile-bar);
   border-radius: 4px;
   padding: 5px 15px;
+  cursor: pointer;
+}
+
+.test-mic-button {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.test-video-button {
+  margin-top: 20px;
+}
+
+.log-out-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
 }

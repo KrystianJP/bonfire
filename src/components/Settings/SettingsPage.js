@@ -1,4 +1,7 @@
 import Account from "./Account";
+import Privacy from "./Privacy";
+import Appearance from "./Appearance";
+import VoiceVideo from "./VoiceVideo";
 
 function SettingsPage() {
   return (
@@ -7,14 +10,16 @@ function SettingsPage() {
         <div className="settings-side-bar">
           <div className="settings-group">Account</div>
           <div className="settings-group">Privacy</div>
-          <div className="settings-group">Theme</div>
-          <div className="settings-group">Accessibility</div>
+          <div className="settings-group">Appearance</div>
           <div className="settings-group">Voice & Video</div>
-          <div className="settings-group">Log Out</div>
+          <div className="settings-group log-out-group">
+            Log Out
+            <span className="material-icons exit-icon">exit_to_app</span>
+          </div>
         </div>
       </div>
       <div className="settings-page-content-container">
-        <Account />
+        <VoiceVideo />
       </div>
       <div className="settings-exit">
         <span className="material-icons exit-icon">close</span>
