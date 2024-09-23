@@ -750,6 +750,7 @@ label {
   border-radius: 4px;
   color: var(--dark-light);
   margin-top: 7px;
+  user-select: none;
   font-size: 0.95rem;
 }
 .settings-group:hover {
@@ -930,7 +931,7 @@ input:checked + .slider:before {
 }
 /* slider styling finished */
 
-.privacy-page .setting-toggle {
+.setting-toggle {
   margin-top: 10px;
   width: 100%;
   display: flex;
@@ -943,4 +944,33 @@ input:checked + .slider:before {
 .privacy-page .setting-container {
   margin-bottom: 40px;
   margin-top: 30px;
+}
+
+.appearance-page .theme {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--dark-darker);
+  display: inline-block;
+  margin-right: 8px;
+  cursor: pointer;
+}
+#dark-theme {
+  background: var(--dark-msg-hover);
+}
+#light-theme {
+  background: var(--dark-light);
+}
+.appearance-page .setting-toggle {
+  margin: 30px 0;
+}
+.setting-text-size {
+  border: none;
+  outline: none;
+  background: none;
+  color: var(--dark-lighter);
+  font-size: 0.95rem;
+  background: var(--dark-profile-bar);
+  border-radius: 4px;
+  padding: 5px 15px;
 }
