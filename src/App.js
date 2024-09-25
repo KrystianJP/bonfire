@@ -2,13 +2,46 @@ import ServersBar from "./components/ServersBar";
 import FriendsPage from "./components/FriendsPage";
 import ServerPage from "./components/ServerPage";
 import SettingsPage from "./components/Settings/SettingsPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 
 function App() {
   return (
-    <div className="App">
-      <SettingsPage />
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <>
+                <ServersBar /> <FriendsPage />
+              </>
+            }
+          ></Route>
+          <Route
+            exact
+            path="/settings/account"
+            element={<SettingsPage setting="account" />}
+          ></Route>
+          <Route
+            exact
+            path="/settings/privacy"
+            element={<SettingsPage setting="privacy" />}
+          ></Route>
+          <Route
+            exact
+            path="/settings/appearance"
+            element={<SettingsPage setting="appearance" />}
+          ></Route>
+          <Route
+            exact
+            path="/settings/voicevideo"
+            element={<SettingsPage setting="voicevideo" />}
+          ></Route>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

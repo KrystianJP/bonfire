@@ -30,7 +30,6 @@ function Account() {
         <div className="setting-label">ABOUT ME</div>
         <textarea className="setting-about-me"></textarea>
       </div>
-      <button className="about-me-save-button">Save</button>
       <button className="password-button">Change password</button>
       <button className="danger-button">Delete account</button>
     </div>

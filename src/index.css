@@ -20,6 +20,7 @@
   color: var(--dark-text);
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   letter-spacing: 0.02rem;
+  text-decoration: inherit;
 }
 
 .material-icons {
@@ -350,7 +351,7 @@ label {
   align-items: center;
   padding-right: 8px;
 }
-.profile-icons span {
+.profile-icons .material-icons {
   font-size: 1.35rem;
   padding: 5px;
   border-radius: 4px;
@@ -358,7 +359,7 @@ label {
   align-items: center;
   justify-content: center;
 }
-.profile-icons span:hover {
+.profile-icons .material-icons:hover {
   cursor: pointer;
   background: var(--dark-highlight);
   color: var(--dark-lightest);
@@ -732,7 +733,7 @@ label {
 .settings-page-content-container {
   overflow-y: scroll;
   overflow-x: hidden;
-  width: 700px;
+  width: 600px;
   padding: 40px 30px;
 }
 .settings-page-content-container::-webkit-scrollbar {
@@ -752,6 +753,7 @@ label {
   margin-top: 7px;
   user-select: none;
   font-size: 0.95rem;
+  display: block;
 }
 .settings-group:hover {
   background: var(--dark-hover);
@@ -990,4 +992,22 @@ input:checked + .slider:before {
   align-items: center;
   gap: 10px;
   margin-top: 15px;
+}
+
+.save-button {
+  background: #23a55a;
+  color: var(--dark-lightest);
+  border: none;
+  position: fixed;
+  border-radius: 5px;
+  bottom: 20px;
+  right: 20px;
+  height: 40px;
+  width: 200px;
+  font-size: 1.1rem;
+  transition-duration: 150ms;
+}
+.save-button:hover {
+  cursor: pointer;
+  filter: brightness(90%);
 }

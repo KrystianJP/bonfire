@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
+import { Link } from "react-router-dom";
 function ProfileBar() {
   return (
     <div className="profile-bar">
@@ -15,7 +16,9 @@ function ProfileBar() {
       <div className="profile-icons">
         <span className="material-icons">mic</span>
         <span className="material-icons">headphones</span>
-        <span className="material-icons">settings</span>
+        <Link to="/settings/account" className="material-icons">
+          settings
+        </Link>
       </div>
     </div>
   );
