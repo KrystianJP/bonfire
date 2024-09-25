@@ -839,7 +839,10 @@ label {
 }
 .danger-button {
   margin-top: 20px;
-  background: #ff3838;
+  background: #ff3838 !important;
+}
+.overview-page .danger-button {
+  margin-top: 50px;
 }
 .setting-about-me {
   background: var(--dark-darkest);
@@ -1010,4 +1013,80 @@ input:checked + .slider:before {
 .save-button:hover {
   cursor: pointer;
   filter: brightness(90%);
+}
+
+.settings-side-bar h1 {
+  font-size: 0.7rem;
+  padding-left: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.role-list {
+  width: 90%;
+  border-top: 1px solid var(--dark-highlight);
+}
+.role-container {
+  width: 100%;
+  border-bottom: 1px solid var(--dark-highlight);
+  height: 47px;
+}
+.role {
+  width: calc(100% + 40px);
+  margin-top: -1px;
+  transform: translate(-20px);
+  padding: 12px 20px;
+  border-radius: 5px;
+  color: var(--dark-lighter);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.role:hover {
+  cursor: pointer;
+  background: var(--dark-highlight);
+}
+.role-container .role-color {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--dark-highlight);
+  display: inline-block;
+  background: rgb(163, 53, 53);
+}
+
+.invites-page .setting-toggle {
+  margin-top: 20px;
+}
+.invites-page .create-invite {
+  margin-top: 20px;
+}
+
+.ban-pfp {
+  width: 24px;
+  height: 24px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+.role {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bans-page .role-container {
+  position: relative;
+}
+.unban-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--dark-light);
+}
+.unban-icon:hover {
+  cursor: pointer;
+  color: var(--dark-lightest);
 }

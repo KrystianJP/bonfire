@@ -4,6 +4,7 @@ import ServerPage from "./components/ServerPage";
 import SettingsPage from "./components/Settings/SettingsPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
+import ServerSettingsPage from "./components/ServerSettings/ServerSettingsPage";
 
 function App() {
   return (
@@ -61,6 +62,26 @@ function App() {
                 <ServersBar /> <ServerPage />
               </>
             }
+          ></Route>
+          <Route
+            exact
+            path="/servers/:serverId/settings/overview"
+            element={<ServerSettingsPage setting="overview" />}
+          ></Route>
+          <Route
+            exact
+            path="/servers/:serverId/settings/roles"
+            element={<ServerSettingsPage setting="roles" />}
+          ></Route>
+          <Route
+            exact
+            path="/servers/:serverId/settings/invites"
+            element={<ServerSettingsPage setting="invites" />}
+          ></Route>
+          <Route
+            exact
+            path="/servers/:serverId/settings/bans"
+            element={<ServerSettingsPage setting="bans" />}
           ></Route>
         </Routes>
       </div>

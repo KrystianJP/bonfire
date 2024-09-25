@@ -16,19 +16,6 @@ function Appearance() {
           <span class="slider round"></span>
         </label>
       </div>
-      <div className="setting-container">
-        <div className="setting-label">TEXT SIZE</div>
-        <select
-          id="text-size-select"
-          className="setting-text-size"
-          defaultValue={"16px"}
-        >
-          <option value="14px">Small</option>
-          <option value="16px">Default</option>
-          <option value="18px">Large</option>
-          <option value="20px">X-Large</option>
-        </select>
-      </div>
     </div>
   );
 }
