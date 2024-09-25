@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function ChannelsBar() {
   return (
     <div className="channels-bar friends-bar">
@@ -5,35 +7,35 @@ function ChannelsBar() {
         <h4 className="channel-group-name">
           CHANNEL GROUP NAME that is very long
         </h4>
-        <div className="channel">
+        <Link to="/servers/1/14" className="channel">
           <span className="material-icons">tag</span>
           <span className="channel-name">Channel name that is very long</span>
-        </div>
-        <div className="channel">
+        </Link>
+        <Link to="/servers/1/14" className="channel">
           <span className="material-icons">tag</span>
-          <span className="channel-name">Channel name</span>
-        </div>
-        <div className="channel">
+          <span className="channel-name">Channel name that is very long</span>
+        </Link>
+        <Link to="/servers/1/14" className="channel">
           <span className="material-icons">tag</span>
-          <span className="channel-name">Channel name</span>
-        </div>
+          <span className="channel-name">Channel name that is very long</span>
+        </Link>
       </div>
       <div className="channel-group">
         <h4 className="channel-group-name">
           CHANNEL GROUP NAME that is very long
         </h4>
-        <div className="channel">
+        <Link to="/servers/1/14" className="channel">
           <span className="material-icons">tag</span>
           <span className="channel-name">Channel name that is very long</span>
-        </div>
-        <div className="channel">
+        </Link>
+        <Link to="/servers/1/14" className="channel">
           <span className="material-icons">tag</span>
-          <span className="channel-name">Channel name</span>
-        </div>
-        <div className="channel">
+          <span className="channel-name">Channel name </span>
+        </Link>
+        <Link to="/servers/1/14" className="channel">
           <span className="material-icons">tag</span>
-          <span className="channel-name">Channel name</span>
-        </div>
+          <span className="channel-name">Channel name </span>
+        </Link>
       </div>
     </div>
   );

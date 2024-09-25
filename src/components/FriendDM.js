@@ -1,7 +1,11 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 function FriendDM() {
+  const username = "SomeUsername";
+
   return (
-    <div className="friend-dm">
+    <Link to={`/messages/${username}`} className="friend-dm">
       <div className="friend-pfp">
         <img
           src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
@@ -10,7 +14,7 @@ function FriendDM() {
         />
       </div>
       <span className="friend-name">Pickle Juice Tartar Sauce</span>
-    </div>
+    </Link>
   );
 }
 

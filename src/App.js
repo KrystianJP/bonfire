@@ -10,15 +10,27 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+          {/* FRIENDS */}
           <Route
             exact
             path="/"
             element={
               <>
-                <ServersBar /> <FriendsPage />
+                <ServersBar /> <FriendsPage page="friends-list" />
               </>
             }
           ></Route>
+          <Route
+            exact
+            path="/messages/:username"
+            element={
+              <>
+                <ServersBar /> <FriendsPage page="dms" />
+              </>
+            }
+          ></Route>
+
+          {/* SETTINGS */}
           <Route
             exact
             path="/settings/account"
@@ -38,6 +50,17 @@ function App() {
             exact
             path="/settings/voicevideo"
             element={<SettingsPage setting="voicevideo" />}
+          ></Route>
+
+          {/* SERVERS */}
+          <Route
+            exact
+            path="/servers/:serverId/:channelId"
+            element={
+              <>
+                <ServersBar /> <ServerPage />
+              </>
+            }
           ></Route>
         </Routes>
       </div>

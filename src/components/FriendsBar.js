@@ -1,12 +1,13 @@
+import { Link } from "react-router-dom";
 import FriendDM from "./FriendDM";
 
 function FriendsBar() {
   return (
     <div className="friends-bar">
-      <div className="friend-tab">
+      <Link to="/" className="friend-tab">
         <span className="material-icons friends-icon">group</span>
         <span className="friend-text">Friends</span>
-      </div>
+      </Link>
       <div className="direct-msgs-txt">DIRECT MESSAGES</div>
       <FriendDM />
       <FriendDM />
