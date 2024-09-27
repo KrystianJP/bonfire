@@ -1130,9 +1130,18 @@ input:checked + .slider:before {
 .friends-list .role-container {
   height: 56px;
 }
+.friends-list .friend-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
 .friends-list .role {
   width: calc(100% + 20px);
   transform: translate(-10px);
+  display: grid;
+  grid-template-columns: 1fr min-content;
 }
 .role:hover {
   cursor: pointer;
