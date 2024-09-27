@@ -1049,11 +1049,15 @@ input:checked + .slider:before {
   width: 90%;
   border-top: 1px solid var(--dark-highlight);
 }
+.friends-list .role-list {
+  width: 100%;
+}
 .role-container {
   width: 100%;
   border-bottom: 1px solid var(--dark-highlight);
   height: 47px;
 }
+
 .role {
   width: calc(100% + 40px);
   margin-top: -1px;
@@ -1065,6 +1069,13 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   gap: 15px;
+}
+.friends-list .role-container {
+  height: 56px;
+}
+.friends-list .role {
+  width: calc(100% + 20px);
+  transform: translate(-10px);
 }
 .role:hover {
   cursor: pointer;
@@ -1078,7 +1089,21 @@ input:checked + .slider:before {
   display: inline-block;
   background: rgb(163, 53, 53);
 }
-
+.role-container .friend-pfp {
+  flex-shrink: 0;
+}
+.role .friend-name {
+  color: var(--dark-lighter);
+}
+.friend-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.friend-icons .material-icons:hover {
+  cursor: pointer;
+  color: var(--dark-lighter);
+}
 .invites-page .setting-toggle {
   margin-top: 20px;
 }

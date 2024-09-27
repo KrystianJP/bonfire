@@ -20,8 +20,8 @@ function DMs() {
           <span className="material-icons">call</span>
           <span className="material-icons">videocam</span>
           <span className="material-icons">notifications</span>
-          <span className="material-icons dangerous-icon">delete</span>
-          <span className="material-icons dangerous-icon">block</span>
+          <span className="material-icons ">delete</span>
+          <span className="material-icons ">block</span>
         </div>
       </div>
       <Messages />
