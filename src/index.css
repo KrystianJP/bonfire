@@ -200,10 +200,11 @@ label {
 }
 .server-icon-container .tooltip {
   transform: translateY(-50%);
-  background: var(--dark-darkest);
+  background: var(--dark-about-me);
   position: fixed;
   border-radius: 4px;
   padding: 5px 10px;
+  color: var(--dark-lighter);
 }
 .main-icon {
   width: 55px;
@@ -542,6 +543,7 @@ label {
   grid-template-rows: min-content 1fr;
   grid-template-columns: min-content min-content 1fr;
   padding: 5px 15px;
+  padding-right: max(15px, 3%);
 }
 .message-username {
   grid-area: message-username;
@@ -622,6 +624,60 @@ label {
   grid-area: server-name;
   background: var(--dark-darker);
   border-bottom: var(--dark-profile-bar) solid 2px;
+  position: relative;
+}
+
+.server-dropdown {
+  position: absolute;
+  background: var(--dark-about-me);
+  width: 224px;
+  border-radius: 5px;
+  top: 58px;
+  left: 8px;
+  padding: 20px 5px;
+}
+.server-dropdown-item {
+  color: var(--dark-msg);
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 2px;
+}
+.server-dropdown-item:hover {
+  background: var(--dark-hover);
+  cursor: pointer;
+}
+.server-dropdown .checkbox-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.server-dropdown .checkbox {
+  display: none;
+}
+.server-dropdown .checkmark {
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--dark-text);
+  border-radius: 3px;
+  display: block;
+  position: relative;
+}
+.checkmark .material-icons {
+  font-size: 15px;
+  top: -2px;
+  left: -2px;
+  position: absolute;
+  color: var(--dark-darker);
+  display: none;
+  font-weight: bold;
+}
+.server-dropdown .checkbox:checked ~ .checkmark {
+  background: var(--dark-text);
+}
+.server-dropdown .checkbox:checked ~ .checkmark .material-icons {
+  display: inline;
 }
 
 .channel-group-name {
@@ -679,6 +735,7 @@ label {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  user-select: none;
 }
 
 .server-page .top-bar {
