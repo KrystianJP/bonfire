@@ -13,16 +13,34 @@ function ChannelCreationModal({ toggleModal }) {
           <label className="radio-container">
             <span className="material-icons">tag</span>
             Text{" "}
-            <input
-              type="radio"
-              name="channel-type"
-              value="text"
-              defaultChecked
-            />
+            <label>
+              <input
+                type="radio"
+                name="channel-type"
+                value="text"
+                className="radio"
+                defaultChecked
+              />
+              <span className="radio-display">
+                <span className="radio-dot"></span>
+              </span>
+            </label>
           </label>
           <label className="radio-container">
             <span className="material-icons">volume_up</span>
-            Voice <input type="radio" name="channel-type" value="voice" />
+            Voice{" "}
+            <label>
+              <input
+                type="radio"
+                name="channel-type"
+                value="voice"
+                className="radio"
+                defaultChecked
+              />
+              <span className="radio-display">
+                <span className="radio-dot"></span>
+              </span>
+            </label>
           </label>
         </div>
         <div className="setting-container">

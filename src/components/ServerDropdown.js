@@ -12,7 +12,7 @@ function ServerDropdown() {
         Mute server
         <label className="checkbox-container">
           <input type="checkbox" className="checkbox" name="mute-server" />
-          <span className="checkmark material-icons">
+          <span className="checkmark">
             <span className=" material-icons">check</span>
           </span>
         </label>

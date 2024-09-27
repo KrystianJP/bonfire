@@ -9,7 +9,7 @@ import ChannelCreationModal from "./components/ChannelCreationModal";
 import { useState } from "react";
 
 function App() {
-  const [channelModalOpen, setChannelModalOpen] = useState(true);
+  const [channelModalOpen, setChannelModalOpen] = useState(false);
 
   function toggleChannelModal(e) {
     setChannelModalOpen(!channelModalOpen);

@@ -1128,6 +1128,10 @@ input:checked + .slider:before {
   border-bottom: 1px solid var(--dark-highlight);
   height: 47px;
 }
+.role-group-name {
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
 
 .role {
   width: calc(100% + 40px);
@@ -1307,4 +1311,34 @@ input:checked + .slider:before {
 .modal-buttons-container .create-button:hover {
   filter: brightness(80%);
   cursor: pointer;
+}
+
+.radio-container:hover {
+  background: var(--dark-highlight);
+}
+.radio {
+  display: none;
+}
+.radio-display {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--dark-lighter);
+  position: relative;
+}
+.radio-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--dark-lighter);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+.radio:checked ~ .radio-display .radio-dot {
+  display: block;
 }
