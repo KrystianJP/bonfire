@@ -5,7 +5,7 @@ import UsersBar from "./UsersBar";
 import ServerDropdown from "./ServerDropdown";
 import { useState } from "react";
 
-function ServerPage() {
+function ServerPage({ toggleChannelModal }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   function toggleDropdown() {
@@ -20,7 +20,7 @@ function ServerPage() {
         </span>
         {dropdownOpen && <ServerDropdown />}
       </div>
-      <ChannelsBar />
+      <ChannelsBar toggleChannelModal={toggleChannelModal} />
       <ProfileBar />
       <div className="top-bar top-dm-bar">
         <div className="top-bar-left-server">

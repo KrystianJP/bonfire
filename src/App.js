@@ -5,8 +5,16 @@ import SettingsPage from "./components/Settings/SettingsPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import ServerSettingsPage from "./components/ServerSettings/ServerSettingsPage";
+import ChannelCreationModal from "./components/ChannelCreationModal";
+import { useState } from "react";
 
 function App() {
+  const [channelModalOpen, setChannelModalOpen] = useState(true);
+
+  function toggleChannelModal(e) {
+    setChannelModalOpen(!channelModalOpen);
+    e.stopPropagation();
+  }
   return (
     <Router>
       <div className="App">
@@ -59,7 +67,8 @@ function App() {
             path="/servers/:serverId/:channelId"
             element={
               <>
-                <ServersBar /> <ServerPage />
+                <ServersBar />{" "}
+                <ServerPage toggleChannelModal={toggleChannelModal} />
               </>
             }
           ></Route>
@@ -84,6 +93,9 @@ function App() {
             element={<ServerSettingsPage setting="bans" />}
           ></Route>
         </Routes>
+        {channelModalOpen && (
+          <ChannelCreationModal toggleModal={toggleChannelModal} />
+        )}
       </div>
     </Router>
   );

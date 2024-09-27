@@ -680,15 +680,29 @@ label {
   display: inline;
 }
 
+.channel-group-name-container {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  margin-top: 15px;
+  width: 100%;
+  padding: 5px 0;
+}
 .channel-group-name {
   font-weight: normal;
-  padding: 5px 0;
   font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   cursor: default;
-  margin-top: 15px;
+}
+.channel-group-name-container .material-icons {
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding-left: 5px;
+}
+.channel-group-name-container .material-icons:hover {
+  color: var(--dark-lightest);
+  cursor: pointer;
 }
 .channel {
   display: flex;
@@ -893,7 +907,7 @@ label {
 .setting-bg-color:hover {
   cursor: pointer;
 }
-.settings-content button {
+.setting-container button {
   display: block;
   background: #5865f2;
   padding: 7px 15px;
@@ -904,7 +918,7 @@ label {
 
   transition-duration: 150ms;
 }
-.settings-content button:hover {
+.setting-container button:hover {
   cursor: pointer;
   filter: brightness(80%);
 }
@@ -1201,4 +1215,96 @@ input:checked + .slider:before {
 .unban-icon:hover {
   cursor: pointer;
   color: var(--dark-lightest);
+}
+
+.dark-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  transition-duration: 150ms;
+  z-index: 1000;
+}
+.channel-creation-modal {
+  opacity: 1;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--dark-main);
+  height: 400px;
+  width: 400px;
+  border-radius: 10px;
+  padding: 20px;
+  transition-duration: 150ms;
+}
+.channel-creation-modal h2 {
+  font-weight: normal;
+  color: var(--dark-lighter);
+}
+.channel-creation-modal .radio-container {
+  background: var(--dark-darker);
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+  align-items: center;
+  padding: 15px 15px;
+  margin-bottom: 8px;
+  color: var(--dark-lighter);
+}
+.channel-creation-modal .radio-container .material-icons {
+  padding-right: 10px;
+}
+.channel-creation-modal .channel-name-input {
+  padding: 12px 15px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  padding-left: 40px;
+  width: 100%;
+}
+.channel-creation-modal .channel-name-input::placeholder {
+  color: var(--dark-text);
+}
+.channel-name-input-container {
+  position: relative;
+}
+.channel-name-input-container .material-icons {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10px;
+  color: var(--dark-text);
+}
+
+.modal-buttons-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+.modal-buttons-container button {
+  display: inline-block;
+  border: none;
+  outline: none;
+  font-size: 0.85rem;
+  padding: 10px 15px;
+  color: var(--dark-lighter);
+  border-radius: 4px;
+  transition-duration: 150ms;
+}
+.modal-buttons-container .cancel-button {
+  background: none;
+  margin-right: 10px;
+}
+.modal-buttons-container .cancel-button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.modal-buttons-container .create-button {
+  background: #5865f2;
+}
+.modal-buttons-container .create-button:hover {
+  filter: brightness(80%);
+  cursor: pointer;
 }
