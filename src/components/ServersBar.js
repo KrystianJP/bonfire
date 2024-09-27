@@ -14,13 +14,30 @@ function ServersBar() {
         />
       </Link>
       <div className="hor-line"></div>
-      <Link to={`/servers/${id}/12`} className="server-icon">
-        <img
-          src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
-          alt="server icon"
-          className="pfp-img"
-        />
-      </Link>
+      <div className="server-icon-container">
+        <Link to={`/servers/${id}/12`} className="server-icon">
+          <img
+            src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
+            alt="server icon"
+            className="pfp-img"
+          />
+        </Link>
+        <div className="tooltip-wrapper">
+          <div className="tooltip">Server Name</div>
+        </div>
+      </div>
+      <div className="server-icon-container">
+        <Link to={`/servers/${id}/12`} className="server-icon">
+          <img
+            src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
+            alt="server icon"
+            className="pfp-img"
+          />
+        </Link>
+        <div className="tooltip-wrapper">
+          <div className="tooltip">Server Name</div>
+        </div>
+      </div>
     </div>
   );
 }
