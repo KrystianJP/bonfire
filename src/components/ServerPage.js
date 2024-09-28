@@ -5,7 +5,7 @@ import UsersBar from "./UsersBar";
 import ServerDropdown from "./ServerDropdown";
 import { useState } from "react";
 
-function ServerPage({ toggleChannelModal }) {
+function ServerPage({ toggleChannelModal, userProfileState }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   function toggleDropdown() {
@@ -40,7 +40,7 @@ function ServerPage({ toggleChannelModal }) {
         </div>
       </div>
       <Messages />
-      <UsersBar />
+      <UsersBar userProfileState={userProfileState} />
     </div>
   );
 }

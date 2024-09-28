@@ -5,7 +5,12 @@ function ServerUserProfile() {
   const [roleListOpen, setRoleListOpen] = useState(false);
   return (
     <div className="server-user-profile-container">
-      <div className="server-user-profile dm-profile-bar">
+      <div
+        className="server-user-profile dm-profile-bar"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <div className="dm-profile-top">
           <div className="dm-profile-pfp">
             <img

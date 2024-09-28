@@ -10,6 +10,7 @@ import { useState } from "react";
 
 function App() {
   const [channelModalOpen, setChannelModalOpen] = useState(false);
+  const [userProfileOpen, setUserProfileOpen] = useState(false);
 
   function toggleChannelModal(e) {
     setChannelModalOpen(!channelModalOpen);
@@ -18,7 +19,7 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
+      <div className="App" onClick={() => setUserProfileOpen(false)}>
         <Routes>
           {/* FRIENDS */}
           <Route
@@ -69,7 +70,10 @@ function App() {
             element={
               <>
                 <ServersBar />{" "}
-                <ServerPage toggleChannelModal={toggleChannelModal} />
+                <ServerPage
+                  toggleChannelModal={toggleChannelModal}
+                  userProfileState={[userProfileOpen, setUserProfileOpen]}
+                />
               </>
             }
           ></Route>
