@@ -1415,10 +1415,10 @@ input:checked + .slider:before {
 
 .server-user-profile .user-role-list {
   background: var(--dark-darkest);
-  border-radius: 4px;
   overflow-y: scroll;
   height: 100px;
   padding: 10px 6px;
+  transform: translateY(0.25px);
 }
 .user-role-list .checkbox-item {
   padding: 5px;
