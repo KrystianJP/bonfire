@@ -907,7 +907,7 @@ label {
 .setting-bg-color:hover {
   cursor: pointer;
 }
-.setting-container button {
+.settings-content button {
   display: block;
   background: #5865f2;
   padding: 7px 15px;
@@ -918,7 +918,7 @@ label {
 
   transition-duration: 150ms;
 }
-.setting-container button:hover {
+.settings-content button:hover {
   cursor: pointer;
   filter: brightness(80%);
 }
@@ -1148,14 +1148,16 @@ input:checked + .slider:before {
 .friends-list .role-container {
   height: 56px;
 }
-.friends-list .friend-left {
+.friends-list .friend-left,
+.channels-page .friend-left {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
   overflow: hidden;
 }
-.friends-list .role {
+.friends-list .role,
+.channels-page .role {
   width: calc(100% + 20px);
   transform: translate(-10px);
   display: grid;

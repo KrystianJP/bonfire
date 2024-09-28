@@ -84,6 +84,11 @@ function App() {
           ></Route>
           <Route
             exact
+            path="/servers/:serverId/settings/channels"
+            element={<ServerSettingsPage setting="channels" />}
+          ></Route>
+          <Route
+            exact
             path="/servers/:serverId/settings/roles"
             element={<ServerSettingsPage setting="roles" />}
           ></Route>

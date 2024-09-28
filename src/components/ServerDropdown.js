@@ -2,7 +2,12 @@ import { Link } from "react-router-dom";
 
 function ServerDropdown() {
   return (
-    <div className="server-dropdown">
+    <div
+      className="server-dropdown"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <Link to="/servers/1/settings/overview" className="server-dropdown-item">
         {" "}
         Server Settings

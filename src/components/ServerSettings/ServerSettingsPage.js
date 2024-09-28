@@ -4,6 +4,7 @@ import Overview from "./Overview";
 import Roles from "./Roles";
 import Invites from "./Invites";
 import Bans from "./Bans";
+import Channels from "./Channels";
 
 function ServerSettingsPage({ setting }) {
   return (
@@ -16,6 +17,9 @@ function ServerSettingsPage({ setting }) {
           </Link>
           <Link to="/servers/1/settings/roles" className="settings-group">
             Roles
+          </Link>
+          <Link to="/servers/1/settings/channels" className="settings-group">
+            Channels
           </Link>
           <Link to="/servers/1/settings/invites" className="settings-group">
             Invites
@@ -30,6 +34,7 @@ function ServerSettingsPage({ setting }) {
         {setting === "roles" && <Roles />}
         {setting === "invites" && <Invites />}
         {setting === "bans" && <Bans />}
+        {setting === "channels" && <Channels />}
       </div>
       <div className="settings-exit">
         <Link to="/servers/1/12" className="material-icons exit-icon">
