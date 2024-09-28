@@ -15,6 +15,7 @@ function App() {
     setChannelModalOpen(!channelModalOpen);
     e.stopPropagation();
   }
+
   return (
     <Router>
       <div className="App">

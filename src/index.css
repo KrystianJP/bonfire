@@ -648,15 +648,15 @@ label {
   background: var(--dark-hover);
   cursor: pointer;
 }
-.server-dropdown .checkbox-item {
+.checkbox-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.server-dropdown .checkbox {
+.checkbox {
   display: none;
 }
-.server-dropdown .checkmark {
+.checkmark {
   width: 15px;
   height: 15px;
   border: 2px solid var(--dark-text);
@@ -673,10 +673,10 @@ label {
   display: none;
   font-weight: bold;
 }
-.server-dropdown .checkbox:checked ~ .checkmark {
+.checkbox:checked ~ .checkmark {
   background: var(--dark-text);
 }
-.server-dropdown .checkbox:checked ~ .checkmark .material-icons {
+.checkbox:checked ~ .checkmark .material-icons {
   display: inline;
 }
 
@@ -1341,4 +1341,120 @@ input:checked + .slider:before {
 }
 .radio:checked ~ .radio-display .radio-dot {
   display: block;
+}
+
+.server-user-profile-container {
+  height: calc(100vh - 52px);
+  width: 300px;
+  position: fixed;
+  top: 52px;
+  right: 252px;
+}
+.server-user-profile {
+  height: auto !important;
+  width: 300px;
+  background: var(--dark-about-me);
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: calc(100vh - 52px);
+  padding-bottom: 20px;
+}
+.server-user-profile .dm-profile-top {
+  height: 100px;
+}
+.server-user-profile .dm-profile-pfp {
+  border-color: var(--dark-about-me);
+}
+.server-user-profile .about-me {
+  margin-top: 0;
+}
+
+.user-roles {
+  display: flexbox;
+  flex-wrap: wrap;
+}
+.user-roles .role-color {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  margin-right: 5px;
+  background: rgb(255, 107, 107);
+  display: inline-block;
+}
+.user-role {
+  color: var(--dark-lighter);
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  width: auto;
+  border-radius: 4px;
+  display: inline-flex;
+  background: var(--dark-darker);
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+.user-roles .add-role {
+  position: relative;
+}
+.user-role .material-icons {
+  font-size: 0.7rem;
+  color: var(--dark-lighter);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.user-roles .add-role .role-color {
+  visibility: hidden;
+}
+.user-roles .add-role:hover {
+  cursor: pointer;
+  background: var(--dark-highlight);
+}
+
+.server-user-profile .user-role-list {
+  background: var(--dark-darkest);
+  border-radius: 4px;
+  overflow-y: scroll;
+  height: 100px;
+  padding: 10px 6px;
+}
+.user-role-list .checkbox-item {
+  padding: 5px;
+}
+.server-user-profile .user-role-list::-webkit-scrollbar {
+  width: 5px;
+}
+.server-user-profile .user-role-list::-webkit-scrollbar-track {
+  background-color: none;
+}
+.server-user-profile .user-role-list::-webkit-scrollbar-thumb {
+  background-color: var(--dark-main);
+  border-radius: 3px;
+}
+
+.user-profile-buttons {
+  position: absolute;
+  top: 10px;
+  display: flex;
+  gap: 10px;
+  right: 10px;
+}
+.user-profile-buttons .button {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  padding: 2px;
+  height: 34px;
+  width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.user-profile-buttons .button:hover {
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.5);
+}
+.user-profile-buttons .button .material-icons {
+  color: var(--dark-lighter);
 }
