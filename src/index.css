@@ -349,6 +349,7 @@ label {
   gap: 10px;
   padding: 5px 5px;
   border-radius: 4px;
+  cursor: pointer;
 }
 .profile-container:hover {
   cursor: pointer;
@@ -1460,3 +1461,17 @@ input:checked + .slider:before {
 .user-profile-buttons .button .material-icons {
   color: var(--dark-lighter);
 }
+
+.highlight {
+  background: var(--dark-highlight) !important;
+  color: var(--dark-lightest) !important;
+}
+.highlight * {
+  color: var(--dark-lightest) !important;
+}
+
+/* @media (width < 1000px) {
+  .dm-profile-bar {
+    display: none;
+  }
+} */

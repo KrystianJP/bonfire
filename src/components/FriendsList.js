@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function FriendsList() {
+function FriendsList({ friends }) {
   return (
     <div className="friends-list">
       <div className="search-container">
@@ -15,23 +15,24 @@ function FriendsList() {
       <div className="setting-container">
         <div className="setting-label">FRIENDS</div>
         <div className="role-list">
-          <div className="role-container">
-            <Link to="/messages/SomeUsername" className="role">
-              <div className="friend-left">
-                <div className="friend-pfp">
-                  <img
-                    className="pfp-img"
-                    src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
-                  />
-                </div>
-                <span className="friend-name">Friend 1</span>
+          {friends.map((friend) => {
+            return (
+              <div className="role-container" key={friend.username}>
+                <Link to={"/messages/" + friend.username} className="role">
+                  <div className="friend-left">
+                    <div className="friend-pfp">
+                      <img className="pfp-img" src={friend.pfp} />
+                    </div>
+                    <span className="friend-name">{friend.username}</span>
+                  </div>
+                  <span className="friend-icons">
+                    <span className="material-icons ">message</span>
+                    <span className="material-icons ">delete</span>
+                  </span>
+                </Link>
               </div>
-              <span className="friend-icons">
-                <span className="material-icons ">message</span>
-                <span className="material-icons ">delete</span>
-              </span>
-            </Link>
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
