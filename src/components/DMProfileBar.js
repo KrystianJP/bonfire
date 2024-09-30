@@ -4,7 +4,11 @@ import { useParams } from "react-router-dom";
 function DMProfileBar({ friend, displayStyle }) {
   const { username } = useParams();
   return (
-    <div className="dm-profile-bar" style={{ display: displayStyle }}>
+    <div
+      className="dm-profile-bar"
+      id="dm-profile-bar"
+      style={{ display: displayStyle }}
+    >
       <div className="dm-profile-top">
         <div className="dm-profile-pfp">
           <img

@@ -32,25 +32,9 @@ function DMs() {
       pfp: "https://pics.craiyon.com/2023-10-25/37325fe41b05409d89f905897c6e0da3.webp",
       about: "somebody that you used to know SOMEBODYYY",
     },
-  };
-  const friendMessages = {
-    PickleJuice: {
-      messages: [
-        {
-          message: "Yo how you doing",
-          timestamp: new Date(2024, 8, 29, 19, 30),
-        },
-      ],
-    },
-  };
-  const yourMessages = {
-    PickleJuice: {
-      messages: [
-        {
-          message: "doing alright, u?",
-          timestamp: new Date(2024, 8, 29, 19, 32),
-        },
-      ],
+    KrysJP: {
+      pfp: "https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg",
+      about: "me like krys",
     },
   };
 
@@ -78,11 +62,7 @@ function DMs() {
           <span className="material-icons ">block</span>
         </div>
       </div>
-      <Messages
-        friendInfo={friendInfo}
-        yourMessages={yourMessages}
-        friendMessages={friendMessages}
-      />
+      <Messages friendInfo={friendInfo} />
       <DMProfileBar
         friend={friendInfo[username]}
         displayStyle={profileBarOpen ? "block" : "none"}

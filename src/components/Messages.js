@@ -1,19 +1,28 @@
 import { useParams } from "react-router-dom";
 import Message from "./Message";
 import { useState } from "react";
-function Messages({ friendInfo, friendMessages, yourMessages }) {
+function Messages({ friendInfo }) {
   const { username } = useParams();
-  const [messages, setMessages] = useState([
-    { message: yourMessages[username].messages[0], user: "user" },
-    { message: friendMessages[username].messages[0], user: "friend" },
-  ]);
+
+  const messages = [
+    {
+      username: "KrysJP",
+      message: "doing alright, u?",
+      timestamp: new Date(2024, 8, 29, 19, 32),
+    },
+    {
+      username: "PickleJuice",
+      message: "Yo how you doing",
+      timestamp: new Date(2024, 8, 29, 19, 30),
+    },
+  ];
   return (
     <div className="messages-bar">
       <div className="messages-container">
         {messages.map((message) => (
           <Message
-            friendInfo={message.user === "friend" ? friendInfo[username] : ""}
-            message={message.message}
+            friendInfo={friendInfo[message.username]}
+            message={message}
             key={message.timestamp}
           />
         ))}

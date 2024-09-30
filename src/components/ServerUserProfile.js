@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function ServerUserProfile() {
+function ServerUserProfile({ user, roles }) {
   const [roleListOpen, setRoleListOpen] = useState(false);
   return (
     <div className="server-user-profile-container">
@@ -14,7 +15,7 @@ function ServerUserProfile() {
         <div className="dm-profile-top">
           <div className="dm-profile-pfp">
             <img
-              src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
+              src={user.pfp}
               alt="user profile picture"
               className="pfp-img"
             />
@@ -22,35 +23,23 @@ function ServerUserProfile() {
         </div>
 
         <div className="dm-profile-details">
-          <span className="dm-profile-name">KrysJP</span>
+          <span className="dm-profile-name">{user.username}</span>
           <div className="about-me">
-            <div className="about-me-content">
-              Lorem ipsum dolor sit ametLorem ipsum dolor sit amet Lorem ipsum
-              dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
-              amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem
-              ipsum dolor sit amet Lorem ipsum dolor sit amet
-            </div>
+            <div className="about-me-content">{user.about}</div>
           </div>
 
           <div className="user-roles">
-            <div className="user-role">
-              <div className="role-color"></div>Role 1
-            </div>
-            <div className="user-role">
-              <div className="role-color"></div>A longer role
-            </div>
-            <div className="user-role">
-              <div className="role-color"></div>Role 1
-            </div>
-            <div className="user-role">
-              <div className="role-color"></div>Role 1
-            </div>
-            <div className="user-role">
-              <div className="role-color"></div>Role 1
-            </div>
-            <div className="user-role">
-              <div className="role-color"></div>Role 1
-            </div>
+            {user.roles.map((role) => {
+              return (
+                <div className="user-role">
+                  <div
+                    className="role-color"
+                    style={{ background: roles[role] }}
+                  ></div>
+                  {role}
+                </div>
+              );
+            })}
             <div
               className="user-role add-role"
               onClick={() => {
@@ -63,33 +52,28 @@ function ServerUserProfile() {
             </div>
           </div>
           {roleListOpen && (
-            <div className="user-role-list">
-              <label className="server-dropdown-item checkbox-item">
-                Role 1
-                <label className="checkbox-container">
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    name="mute-server"
-                  />
-                  <span className="checkmark">
-                    <span className=" material-icons">check</span>
-                  </span>
-                </label>
-              </label>
-              <label className="server-dropdown-item checkbox-item">
-                A longer role
-                <label className="checkbox-container">
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    name="mute-server"
-                  />
-                  <span className="checkmark">
-                    <span className=" material-icons">check</span>
-                  </span>
-                </label>
-              </label>
+            <div>
+              <div className="user-role-list">
+                {Object.keys(roles).map((role) => {
+                  return (
+                    <label className="server-dropdown-item checkbox-item">
+                      {role}
+                      <label className="checkbox-container">
+                        <input
+                          defaultChecked={user.roles.includes(role)}
+                          type="checkbox"
+                          className="checkbox"
+                          name="mute-server"
+                        />
+                        <span className="checkmark">
+                          <span className=" material-icons">check</span>
+                        </span>
+                      </label>
+                    </label>
+                  );
+                })}
+              </div>
+              <button className="role-apply-button">Apply</button>
             </div>
           )}
 
@@ -114,6 +98,8 @@ function ServerUserProfile() {
               </span>
             </label>
           </label>
+          <div className="server-dropdown-item dangerous-icon">Kick User</div>
+          <div className="server-dropdown-item dangerous-icon">Ban User</div>
 
           <div className="user-profile-buttons">
             <Link to="/messages/1" className="button">

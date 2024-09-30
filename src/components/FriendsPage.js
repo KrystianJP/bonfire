@@ -15,6 +15,10 @@ function FriendsPage({ page }) {
       username: "SomebodyElse",
       pfp: "https://pics.craiyon.com/2023-10-25/37325fe41b05409d89f905897c6e0da3.webp",
     },
+    {
+      username: "KrysJP",
+      pfp: "https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg",
+    },
   ];
   return (
     <div className="friends-page">

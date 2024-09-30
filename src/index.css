@@ -474,9 +474,12 @@ label {
 .about-me {
   margin-top: 15px;
   border-radius: 5px;
-  padding: 12px;
+  padding-top: 10px;
   background: var(--dark-about-me);
   min-height: 80px;
+}
+#dm-profile-bar .about-me {
+  padding: 10px 15px;
 }
 .about-me-header {
   font-size: 0.75rem;
@@ -1354,7 +1357,7 @@ input:checked + .slider:before {
   right: 252px;
 }
 .server-user-profile {
-  height: auto !important;
+  height: auto;
   width: 300px;
   background: var(--dark-about-me);
   border-radius: 10px;
@@ -1464,9 +1467,8 @@ input:checked + .slider:before {
 
 .highlight {
   background: var(--dark-highlight) !important;
-  color: var(--dark-lightest) !important;
 }
-.highlight * {
+.friends-bar .highlight * {
   color: var(--dark-lightest) !important;
 }
 
@@ -1475,3 +1477,12 @@ input:checked + .slider:before {
     display: none;
   }
 } */
+
+.server-user-profile .role-apply-button {
+  background: #5865f2;
+  color: var(--dark-lightest);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
