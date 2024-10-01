@@ -1,6 +1,9 @@
-function ChannelCreationModal({ toggleModal }) {
+import { useState } from "react";
+
+function ChannelCreationModal({ toggleModal, group }) {
+  const [type, setType] = useState("text");
   return (
-    <div className="dark-bg" onClick={toggleModal}>
+    <div className="dark-bg" onClick={(e) => toggleModal(e, "")}>
       <div
         className="channel-creation-modal"
         onClick={(e) => {
@@ -8,9 +11,17 @@ function ChannelCreationModal({ toggleModal }) {
         }}
       >
         <h2>Create Channel</h2>
+        <div>in {group}</div>
         <div className="setting-container">
           <div className="setting-label">CHANNEL TYPE</div>
-          <label className="radio-container">
+          <label
+            className={
+              "radio-container" + (type === "text" ? " highlight" : "")
+            }
+            onClick={() => {
+              setType("text");
+            }}
+          >
             <span className="material-icons">tag</span>
             Text{" "}
             <label>
@@ -26,7 +37,14 @@ function ChannelCreationModal({ toggleModal }) {
               </span>
             </label>
           </label>
-          <label className="radio-container">
+          <label
+            className={
+              "radio-container" + (type === "voice" ? " highlight" : "")
+            }
+            onClick={() => {
+              setType("voice");
+            }}
+          >
             <span className="material-icons">volume_up</span>
             Voice{" "}
             <label>
@@ -35,7 +53,6 @@ function ChannelCreationModal({ toggleModal }) {
                 name="channel-type"
                 value="voice"
                 className="radio"
-                defaultChecked
               />
               <span className="radio-display">
                 <span className="radio-dot"></span>
@@ -46,7 +63,9 @@ function ChannelCreationModal({ toggleModal }) {
         <div className="setting-container">
           <div className="setting-label">CHANNEL NAME</div>
           <div className="channel-name-input-container">
-            <span className="material-icons">tag</span>
+            <span className="material-icons">
+              {type === "text" ? "tag" : "volume_up"}
+            </span>
             <input
               type="text"
               name="channel-name"

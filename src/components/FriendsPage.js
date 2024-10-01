@@ -20,6 +20,7 @@ function FriendsPage({ page }) {
       pfp: "https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg",
     },
   ];
+
   return (
     <div className="friends-page">
       <FriendsBar

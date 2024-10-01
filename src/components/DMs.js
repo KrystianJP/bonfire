@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import { Link, useParams } from "react-router-dom";
 import DMProfileBar from "./DMProfileBar";
 import Messages from "./Messages";
@@ -37,6 +38,18 @@ function DMs() {
       about: "me like krys",
     },
   };
+  const messages = [
+    {
+      username: "KrysJP",
+      message: "doing alright, u?",
+      timestamp: new Date(2024, 8, 29, 19, 32),
+    },
+    {
+      username: "PickleJuice",
+      message: "Yo how you doing",
+      timestamp: new Date(2024, 8, 29, 19, 30),
+    },
+  ];
 
   return (
     <div className="dms">
@@ -62,7 +75,7 @@ function DMs() {
           <span className="material-icons ">block</span>
         </div>
       </div>
-      <Messages friendInfo={friendInfo} />
+      <Messages friendInfo={friendInfo} messages={messages} />
       <DMProfileBar
         friend={friendInfo[username]}
         displayStyle={profileBarOpen ? "block" : "none"}

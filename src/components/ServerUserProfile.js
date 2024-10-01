@@ -103,10 +103,7 @@ function ServerUserProfile({ user, roles }) {
 
           <div className="user-profile-buttons">
             <Link to="/messages/1" className="button">
-              <span
-                className="material-icons"
-                style={{ "font-size": "1.3rem" }}
-              >
+              <span className="material-icons" style={{ fontSize: "1.3rem" }}>
                 message
               </span>
             </Link>

@@ -11,9 +11,11 @@ import { useState } from "react";
 function App() {
   const [channelModalOpen, setChannelModalOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
+  const [currentGroup, setCurrentGroup] = useState("");
 
-  function toggleChannelModal(e) {
+  function toggleChannelModal(e, group) {
     setChannelModalOpen(!channelModalOpen);
+    setCurrentGroup(group);
     e.stopPropagation();
   }
 
@@ -104,7 +106,10 @@ function App() {
           ></Route>
         </Routes>
         {channelModalOpen && (
-          <ChannelCreationModal toggleModal={toggleChannelModal} />
+          <ChannelCreationModal
+            toggleModal={toggleChannelModal}
+            group={currentGroup}
+          />
         )}
       </div>
     </Router>

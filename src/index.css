@@ -1469,7 +1469,7 @@ input:checked + .slider:before {
   background: var(--dark-highlight) !important;
 }
 .friends-bar .highlight * {
-  color: var(--dark-lightest) !important;
+  color: var(--dark-lighter) !important;
 }
 
 /* @media (width < 1000px) {

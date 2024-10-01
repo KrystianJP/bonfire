@@ -1,21 +1,9 @@
 import { useParams } from "react-router-dom";
 import Message from "./Message";
 import { useState } from "react";
-function Messages({ friendInfo }) {
+function Messages({ friendInfo, messages, roles }) {
   const { username } = useParams();
 
-  const messages = [
-    {
-      username: "KrysJP",
-      message: "doing alright, u?",
-      timestamp: new Date(2024, 8, 29, 19, 32),
-    },
-    {
-      username: "PickleJuice",
-      message: "Yo how you doing",
-      timestamp: new Date(2024, 8, 29, 19, 30),
-    },
-  ];
   return (
     <div className="messages-bar">
       <div className="messages-container">
@@ -24,6 +12,7 @@ function Messages({ friendInfo }) {
             friendInfo={friendInfo[message.username]}
             message={message}
             key={message.timestamp}
+            roles={roles}
           />
         ))}
       </div>

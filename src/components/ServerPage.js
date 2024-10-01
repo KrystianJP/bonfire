@@ -3,10 +3,12 @@ import ProfileBar from "./ProfileBar";
 import Messages from "./Messages";
 import UsersBar from "./UsersBar";
 import ServerDropdown from "./ServerDropdown";
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { useParams } from "react-router-dom";
 
 function ServerPage({ toggleChannelModal, userProfileState }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { channelId } = useParams();
 
   function toggleDropdown() {
     setDropdownOpen(!dropdownOpen);
@@ -45,6 +47,60 @@ function ServerPage({ toggleChannelModal, userProfileState }) {
     },
   };
 
+  const groups = ["general", "other"];
+  const channels = useMemo(
+    () => [
+      {
+        name: "Channel 1",
+        id: 1,
+        type: "text",
+        group: "general",
+        messages: [
+          {
+            username: "KrysJP",
+            message: "im aight",
+            timestamp: new Date(2024, 8, 29, 19, 37),
+          },
+          {
+            username: "SomebodyElse",
+            message: "doing fantastic, u?",
+            timestamp: new Date(2024, 8, 29, 19, 32),
+          },
+          {
+            username: "PickleJuice",
+            message: "Yo how you doing",
+            timestamp: new Date(2024, 8, 29, 19, 30),
+          },
+        ],
+      },
+      {
+        name: "Channel 2",
+        id: 2,
+        type: "text",
+        group: "other",
+        messages: [
+          {
+            username: "PeanutButter",
+            message: "u kinda right mate",
+            timestamp: new Date(2024, 8, 29, 19, 32),
+          },
+          {
+            username: "KrysJP",
+            message: "looking kinda empty",
+            timestamp: new Date(2024, 8, 29, 19, 30),
+          },
+        ],
+      },
+      {
+        name: "Voice Channel",
+        id: 3,
+        group: "general",
+        type: "voice",
+      },
+    ],
+    [],
+  );
+
   const roles = {
     admin: "#ffbb00",
     something: "#ff00b3",
@@ -77,11 +133,22 @@ function ServerPage({ toggleChannelModal, userProfileState }) {
         </span>
         {dropdownOpen && <ServerDropdown />}
       </div>
-      <ChannelsBar toggleChannelModal={toggleChannelModal} />
+      <ChannelsBar
+        toggleChannelModal={toggleChannelModal}
+        groups={groups}
+        channels={channels}
+      />
       <ProfileBar />
       <div className="top-bar top-dm-bar">
         <div className="top-bar-left-server">
-          <span className="material-icons">tag</span>Channel name
+          <span className="material-icons">tag</span>
+          {channels
+            .filter((channel) => {
+              return channel.id == channelId;
+            })
+            .map((channel) => {
+              return channel.name;
+            })}
         </div>
         <div className="top-bar-right">
           <span className="material-icons">group</span>
@@ -96,7 +163,13 @@ function ServerPage({ toggleChannelModal, userProfileState }) {
           </div>
         </div>
       </div>
-      <Messages friendInfo={friendInfo} />
+      <Messages
+        friendInfo={friendInfo}
+        messages={
+          channels.filter((channel) => channel.id == channelId)[0].messages
+        }
+        roles={roles}
+      />
       <UsersBar
         userProfileState={userProfileState}
         friendInfo={friendInfo}

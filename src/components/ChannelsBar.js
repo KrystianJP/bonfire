@@ -1,31 +1,44 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-function ChannelsBar({ toggleChannelModal }) {
+function ChannelsBar({ toggleChannelModal, groups, channels }) {
+  const { channelId } = useParams();
   return (
     <div className="channels-bar friends-bar">
-      <div className="channel-group">
-        <div className="channel-group-name-container">
-          <h4 className="channel-group-name">
-            CHANNEL GROUP NAME that is very long
-          </h4>
-
-          <span className="material-icons" onClick={toggleChannelModal}>
-            add
-          </span>
-        </div>
-        <Link to="/servers/1/14" className="channel">
-          <span className="material-icons">tag</span>
-          <span className="channel-name">Channel name that is very long</span>
-        </Link>
-        <Link to="/servers/1/14" className="channel">
-          <span className="material-icons">tag</span>
-          <span className="channel-name">Channel name that is very long</span>
-        </Link>
-        <Link to="/servers/1/14" className="channel">
-          <span className="material-icons">tag</span>
-          <span className="channel-name">Channel name that is very long</span>
-        </Link>
-      </div>
+      {groups.map((group) => {
+        return (
+          <div className="channel-group" key={group}>
+            <div className="channel-group-name-container">
+              <h4 className="channel-group-name">{group.toUpperCase()}</h4>
+              <span
+                className="material-icons"
+                onClick={(e) => toggleChannelModal(e, group)}
+              >
+                add
+              </span>
+            </div>
+            {channels
+              .filter((channel) => channel.group === group)
+              .map((channel) => {
+                return (
+                  <Link
+                    to={
+                      channel.type === "text" ? `/servers/1/${channel.id}` : "#"
+                    }
+                    className={
+                      "channel" + (channelId == channel.id ? " highlight" : "")
+                    }
+                    key={channel.id}
+                  >
+                    <span className="material-icons">
+                      {channel.type === "text" ? "tag" : "volume_up"}
+                    </span>
+                    <span className="channel-name">{channel.name}</span>
+                  </Link>
+                );
+              })}
+          </div>
+        );
+      })}
     </div>
   );
 }

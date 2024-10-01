@@ -30,7 +30,7 @@ function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
         // if role in roleGroups, display the users in that group
         if (Object.keys(roleGroups).includes(role)) {
           return (
-            <div className="role-group channel-group">
+            <div className="role-group channel-group" key={role}>
               <h4 className="role-group-name channel-group-name">
                 {role.toUpperCase()}
               </h4>
@@ -50,6 +50,7 @@ function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
                         ? " highlight"
                         : "")
                     }
+                    key={user.username}
                   >
                     <div className="server-user-pfp friend-pfp">
                       <img
