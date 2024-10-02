@@ -2,22 +2,51 @@ import ServersBar from "./components/ServersBar";
 import FriendsPage from "./components/FriendsPage";
 import ServerPage from "./components/ServerPage";
 import SettingsPage from "./components/Settings/SettingsPage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+} from "react-router-dom";
 import "./index.css";
 import ServerSettingsPage from "./components/ServerSettings/ServerSettingsPage";
 import ChannelCreationModal from "./components/ChannelCreationModal";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 function App() {
   const [channelModalOpen, setChannelModalOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const [currentGroup, setCurrentGroup] = useState("");
 
+  const { serverId } = useParams();
+
   function toggleChannelModal(e, group) {
     setChannelModalOpen(!channelModalOpen);
     setCurrentGroup(group);
     e.stopPropagation();
   }
+
+  const user = useMemo(() => {
+    return {
+      username: "KrysJP",
+      pfp: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhGz3EHmtHBkrjYLUhhTWcfZaJFT1h_4M2w&s",
+    };
+  });
+
+  const servers = useMemo(() => {
+    return [
+      {
+        id: 1,
+        name: "Server for cool people",
+        icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhGz3EHmtHBkrjYLUhhTWcfZaJFT1h_4M2w&s",
+      },
+      {
+        id: 2,
+        name: "Server 2",
+        icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
+      },
+    ];
+  }, []);
 
   return (
     <Router>
@@ -29,7 +58,8 @@ function App() {
             path="/"
             element={
               <>
-                <ServersBar /> <FriendsPage page="friends-list" />
+                <ServersBar servers={servers} />{" "}
+                <FriendsPage user={user} page="friends-list" />
               </>
             }
           ></Route>
@@ -38,7 +68,8 @@ function App() {
             path="/messages/:username"
             element={
               <>
-                <ServersBar /> <FriendsPage page="dms" />
+                <ServersBar servers={servers} />{" "}
+                <FriendsPage user={user} page="dms" />
               </>
             }
           ></Route>
@@ -71,8 +102,9 @@ function App() {
             path="/servers/:serverId/:channelId"
             element={
               <>
-                <ServersBar />{" "}
+                <ServersBar servers={servers} />{" "}
                 <ServerPage
+                  user={user}
                   toggleChannelModal={toggleChannelModal}
                   userProfileState={[userProfileOpen, setUserProfileOpen]}
                 />

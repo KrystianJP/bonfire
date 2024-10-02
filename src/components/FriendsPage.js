@@ -4,7 +4,7 @@ import FriendsList from "./FriendsList";
 import DMs from "./DMs";
 import { useParams } from "react-router-dom";
 
-function FriendsPage({ page }) {
+function FriendsPage({ page, user }) {
   const { username } = useParams();
   let friends = [
     {
@@ -27,7 +27,7 @@ function FriendsPage({ page }) {
         friends={friends}
         currentFriend={page === "dms" ? username : ""}
       />
-      <ProfileBar />
+      <ProfileBar user={user} />
       {page === "friends-list" && <FriendsList friends={friends} />}
       {page === "dms" && <DMs />}
     </div>
