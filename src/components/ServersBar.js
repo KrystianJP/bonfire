@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-function ServersBar() {
-  const id = 1;
+import { Link, useParams } from "react-router-dom";
+function ServersBar({ servers }) {
+  const { serverId } = useParams();
   return (
     <div className="sidebar">
       <div className="bonfire-text">
@@ -14,30 +14,23 @@ function ServersBar() {
         />
       </Link>
       <div className="hor-line"></div>
-      <div className="server-icon-container">
-        <Link to={`/servers/${id}/1`} className="server-icon">
-          <img
-            src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
-            alt="server icon"
-            className="pfp-img"
-          />
-        </Link>
-        <div className="tooltip-wrapper">
-          <div className="tooltip">Server Name</div>
-        </div>
-      </div>
-      <div className="server-icon-container">
-        <Link to={`/servers/${id}/12`} className="server-icon">
-          <img
-            src="https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg"
-            alt="server icon"
-            className="pfp-img"
-          />
-        </Link>
-        <div className="tooltip-wrapper">
-          <div className="tooltip">Server Name</div>
-        </div>
-      </div>
+      {servers.map((server) => {
+        return (
+          <div key={server.id} className="server-icon-container">
+            <Link
+              to={`/servers/${server.id}/1`}
+              className={
+                "server-icon" + (serverId == server.id ? " current-server" : "")
+              }
+            >
+              <img src={server.icon} alt="server icon" className="pfp-img" />
+            </Link>
+            <div className="tooltip-wrapper">
+              <div className="tooltip">{server.name}</div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

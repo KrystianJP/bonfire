@@ -6,7 +6,7 @@ import ServerDropdown from "./ServerDropdown";
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 
-function ServerPage({ toggleChannelModal, userProfileState }) {
+function ServerPage({ toggleChannelModal, userProfileState, user }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { channelId } = useParams();
 
@@ -138,7 +138,7 @@ function ServerPage({ toggleChannelModal, userProfileState }) {
         groups={groups}
         channels={channels}
       />
-      <ProfileBar />
+      <ProfileBar user={user} />
       <div className="top-bar top-dm-bar">
         <div className="top-bar-left-server">
           <span className="material-icons">tag</span>
