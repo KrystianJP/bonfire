@@ -4,8 +4,25 @@ import Appearance from "./Appearance";
 import VoiceVideo from "./VoiceVideo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useMemo } from "react";
 
 function SettingsPage({ setting }) {
+  const settings = useMemo(() => {
+    return {
+      account: {
+        username: "KrysJP",
+        pfp: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhGz3EHmtHBkrjYLUhhTWcfZaJFT1h_4M2w&s",
+        banner: "#a33535",
+        about: "me like krys",
+      },
+      privacy: {
+        messages: [false, true, true],
+        friendRequests: [false, false, false],
+      },
+      appearance: { theme: "dark", roleColours: true },
+      voicevideo: {},
+    };
+  });
   return (
     <div className="settings-page">
       <div className="settings-side-bar-container">
@@ -29,8 +46,8 @@ function SettingsPage({ setting }) {
         </div>
       </div>
       <div className="settings-page-content-container">
-        {setting === "account" && <Account />}
-        {setting === "privacy" && <Privacy />}
+        {setting === "account" && <Account info={settings.account} />}
+        {setting === "privacy" && <Privacy info={settings.privacy} />}
         {setting === "appearance" && <Appearance />}
         {setting === "voicevideo" && <VoiceVideo />}
       </div>
