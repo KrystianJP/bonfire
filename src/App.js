@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import ServerSettingsPage from "./components/ServerSettings/ServerSettingsPage";
 import ChannelCreationModal from "./components/ChannelCreationModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [channelModalOpen, setChannelModalOpen] = useState(false);

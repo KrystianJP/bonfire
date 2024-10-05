@@ -37,7 +37,7 @@ function ServerSettingsPage({ setting }) {
         {setting === "channels" && <Channels />}
       </div>
       <div className="settings-exit">
-        <Link to="/servers/1/12" className="material-icons exit-icon">
+        <Link to="/servers/1/1" className="material-icons exit-icon">
           close
         </Link>
       </div>
