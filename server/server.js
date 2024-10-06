@@ -1,5 +1,12 @@
 import express from "express";
+import userRoutes from "./users/routes.js";
+
 const app = express();
+const port = 5000;
+
+app.use(express.json());
+
+app.use("/api/users", userRoutes);
 
 app.get("/api/friends", (req, res) => {
   res.json({
@@ -20,4 +27,4 @@ app.get("/api/friends", (req, res) => {
   });
 });
 
-app.listen(5000, () => console.log("Server started on port 5000"));
+app.listen(port, () => console.log("Server started on port " + port));
