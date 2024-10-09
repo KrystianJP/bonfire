@@ -1490,3 +1490,55 @@ input:checked + .slider:before {
 .current-server {
   border-radius: 30%;
 }
+
+.login-container {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--dark-hover);
+  border-radius: 10px;
+  padding: 40px;
+}
+.login-container h1 {
+  color: var(--dark-lighter);
+  font-weight: normal;
+  font-size: 1.4rem;
+}
+.login-container .input-container {
+  margin-top: 20px;
+}
+.login-container label {
+  cursor: default;
+}
+.login-container input {
+  width: 100%;
+  display: block;
+  margin-top: 5px;
+  padding: 8px 10px;
+  font-size: 1rem;
+}
+.login-container button {
+  width: 100%;
+  margin-top: 20px;
+  background: #5865f2;
+  color: var(--dark-lightest);
+  border: none;
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.login-container button:hover {
+  cursor: pointer;
+  background: #4752c4;
+}
+.login-container p {
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+.login-container .login-link {
+  color: #557ee5;
+  font-weight: bold;
+}

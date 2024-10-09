@@ -2,6 +2,8 @@ import ServersBar from "./components/ServersBar";
 import FriendsPage from "./components/FriendsPage";
 import ServerPage from "./components/ServerPage";
 import SettingsPage from "./components/Settings/SettingsPage";
+import LoginPage from "./components/LoginPage";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -135,6 +137,17 @@ function App() {
             exact
             path="/servers/:serverId/settings/bans"
             element={<ServerSettingsPage setting="bans" />}
+          ></Route>
+
+          <Route
+            exact
+            path="/login"
+            element={<LoginPage login={true} />}
+          ></Route>
+          <Route
+            exact
+            path="/register"
+            element={<LoginPage login={false} />}
           ></Route>
         </Routes>
         {channelModalOpen && (
