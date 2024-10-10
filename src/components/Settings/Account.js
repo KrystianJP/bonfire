@@ -119,7 +119,7 @@ function Account({ info, setAccount, setState, user }) {
           type="color"
           defaultValue={"#" + info.banner}
           onChange={(e) =>
-            setState(setAccount, { ...info, banner: e.target.value })
+            setState(setAccount, { ...info, banner: e.target.value.slice(1) })
           }
           className="setting-bg-color"
         ></input>

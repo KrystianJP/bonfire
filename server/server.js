@@ -1,6 +1,7 @@
 import {} from "dotenv/config.js";
 import express from "express";
 import userRoutes from "./users/routes.js";
+import friendRoutes from "./friends/routes.js";
 import jwt from "jsonwebtoken";
 import initializePassport from "./passport-config.js";
 import passport from "passport";
@@ -26,5 +27,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/api/users", userRoutes);
+app.use("/api/friends", friendRoutes);
 
 app.listen(PORT, () => console.log("Server started on port " + PORT));

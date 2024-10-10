@@ -4,6 +4,7 @@ import { useState } from "react";
 function LoginPage({ login }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -29,6 +30,7 @@ function LoginPage({ login }) {
         if (!data.accessToken) {
           setPassword("");
           setUsername("");
+          setLoginError(true);
           // error stuff
           return;
         }
@@ -74,7 +76,10 @@ function LoginPage({ login }) {
           name="username"
           id="username"
           className="search-bar"
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+            setUsername(e.target.value);
+            setLoginError(false);
+          }}
           value={username}
           required
         />
@@ -86,7 +91,10 @@ function LoginPage({ login }) {
           name="password"
           id="password"
           className="search-bar"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setLoginError(false);
+          }}
           value={password}
           required
         />
@@ -98,6 +106,9 @@ function LoginPage({ login }) {
           {login ? "Register" : "Log In"}
         </Link>
       </p>
+      {loginError && (
+        <p className="login-error">Incorrect username or password</p>
+      )}
     </form>
   );
 }

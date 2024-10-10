@@ -1569,7 +1569,6 @@ input:checked + .slider:before {
 }
 
 .search-container.add-friend-container {
-  margin-bottom: 30px;
   position: relative;
 }
 #add-friend {
@@ -1586,4 +1585,16 @@ input:checked + .slider:before {
   top: 50%;
   transform: translateY(-50%);
   right: 10px;
+}
+.add-friend-button:hover {
+  cursor: pointer;
+  background: #4752c4;
+}
+
+.search-container.search-friend-list {
+  margin-top: 30px;
+}
+
+.login-error {
+  color: rgb(221, 78, 78);
 }

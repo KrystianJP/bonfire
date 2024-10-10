@@ -84,7 +84,7 @@ function App() {
             element={
               <>
                 <ServersBar servers={servers} />{" "}
-                <FriendsPage user={user} page="friends-list" />
+                <FriendsPage token={token} user={user} page="friends-list" />
               </>
             }
           ></Route>
@@ -94,7 +94,7 @@ function App() {
             element={
               <>
                 <ServersBar servers={servers} />{" "}
-                <FriendsPage user={user} page="dms" />
+                <FriendsPage token={token} user={user} page="dms" />
               </>
             }
           ></Route>

@@ -1,5 +1,5 @@
 const getUsers = "SELECT * FROM test;";
-const getUserByName = "SELECT name FROM users WHERE name = $1;";
+const getUserByName = "SELECT name, id FROM users WHERE name = $1;";
 const getUserById = "SELECT id, name, pfp FROM users WHERE id = $1;";
 const getSettings =
   "SELECT name, pfp, about, banner, message_privacy, friend_privacy, theme, role_colours FROM users INNER JOIN user_settings ON users.id = user_settings.userid WHERE userid = $1;";
