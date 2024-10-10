@@ -7,6 +7,11 @@ import { Link } from "react-router-dom";
 import { useMemo } from "react";
 
 function SettingsPage({ setting }) {
+  function logout() {
+    localStorage.removeItem("token");
+    fetch("/api/users/logout", { method: "DELETE" });
+  }
+
   const settings = useMemo(() => {
     return {
       account: {
@@ -39,7 +44,11 @@ function SettingsPage({ setting }) {
           <Link to="/settings/voicevideo" className="settings-group">
             Voice & Video
           </Link>
-          <Link to="/logout" className="settings-group log-out-group">
+          <Link
+            to="/login"
+            onClick={logout}
+            className="settings-group log-out-group"
+          >
             Log Out
             <span className="material-icons exit-icon">exit_to_app</span>
           </Link>

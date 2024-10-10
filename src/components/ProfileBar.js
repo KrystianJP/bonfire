@@ -5,7 +5,15 @@ function ProfileBar({ user }) {
     <div className="profile-bar">
       <div className="profile-container">
         <div className="profile-pfp">
-          <img src={user.pfp} alt="user profile picture" className="pfp-img" />
+          <img
+            src={
+              user.pfp
+                ? user.pfp
+                : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+            }
+            alt="user profile picture"
+            className="pfp-img"
+          />
         </div>
         <span className="profile-name">{user.username}</span>
       </div>

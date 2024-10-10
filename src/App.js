@@ -19,8 +19,8 @@ function App() {
   const [channelModalOpen, setChannelModalOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const [currentGroup, setCurrentGroup] = useState("");
-
-  const { serverId } = useParams();
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState({});
 
   function toggleChannelModal(e, group) {
     setChannelModalOpen(!channelModalOpen);
@@ -28,27 +28,50 @@ function App() {
     e.stopPropagation();
   }
 
-  const user = useMemo(() => {
-    return {
-      username: "KrysJP",
-      pfp: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhGz3EHmtHBkrjYLUhhTWcfZaJFT1h_4M2w&s",
-    };
-  });
+  // getting user
 
-  const servers = useMemo(() => {
-    return [
-      {
-        id: 1,
-        name: "Server for cool people",
-        icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhGz3EHmtHBkrjYLUhhTWcfZaJFT1h_4M2w&s",
-      },
-      {
-        id: 2,
-        name: "Server 2",
-        icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
-      },
-    ];
-  }, []);
+  useEffect(() => {
+    const storageToken = localStorage.getItem("token");
+    if (storageToken) {
+      setToken(storageToken);
+    }
+    if (storageToken) {
+      fetch("/api/users/me", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${storageToken}` },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUser({ username: data.name, pfp: data.pfp });
+          if (
+            window.location.pathname === "/login" ||
+            window.location.pathname === "/register"
+          ) {
+            window.location.href = "/";
+          }
+        });
+    } else {
+      if (
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/register"
+      ) {
+        window.location.href = "/login";
+      }
+    }
+  }, [token]);
+
+  const servers = [
+    {
+      id: 1,
+      name: "Server for cool people",
+      icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhGz3EHmtHBkrjYLUhhTWcfZaJFT1h_4M2w&s",
+    },
+    {
+      id: 2,
+      name: "Server 2",
+      icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
+    },
+  ];
 
   return (
     <Router>
