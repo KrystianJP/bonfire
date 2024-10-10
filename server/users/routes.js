@@ -6,6 +6,7 @@ const router = Router();
 
 router.post("/login", controller.loginUser);
 router.post("/register", controller.registerUser);
+router.post("/settings", authenticateToken, controller.updateUser);
 
 router.delete("/logout", (req, res, next) => {
   req.logout((err) => {
@@ -17,6 +18,7 @@ router.delete("/logout", (req, res, next) => {
 
 router.get("/me", authenticateToken, controller.getMe);
 router.get("/settings", authenticateToken, controller.getSettings);
+router.get("/:username", controller.getUserByName);
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {

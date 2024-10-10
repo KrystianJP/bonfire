@@ -1564,6 +1564,9 @@ input:checked + .slider:before {
   font-size: 0.95rem;
   padding: 5px 10px;
 }
+.username-container .search-bar::placeholder {
+  color: var(--dark-highlight);
+}
 
 .search-container.add-friend-container {
   margin-bottom: 30px;

@@ -74,4 +74,42 @@ const getSettings = (req, res) => {
   });
 };
 
-export default { loginUser, registerUser, getSettings, getMe };
+const updateUser = (req, res) => {
+  pool.query(
+    queries.updateUser,
+    [req.user.id, req.body.name, req.body.pfp, req.body.about, req.body.banner],
+    (error, _) => {
+      if (error) throw error;
+      pool.query(
+        queries.updateSettings,
+        [
+          req.user.id,
+          req.body.message_privacy,
+          req.body.friend_privacy,
+          req.body.theme,
+          req.body.role_colours,
+        ],
+        (error, _) => {
+          if (error) throw error;
+          res.status(200).json({ message: "success" });
+        },
+      );
+    },
+  );
+};
+
+const getUserByName = (req, res) => {
+  pool.query(queries.getUserByName, [req.params.username], (error, results) => {
+    if (error) throw error;
+    res.status(200).send(results.rows);
+  });
+};
+
+export default {
+  loginUser,
+  registerUser,
+  getSettings,
+  getMe,
+  getUserByName,
+  updateUser,
+};

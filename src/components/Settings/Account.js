@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 /* eslint-disable jsx-a11y/alt-text */
-function Account({ info, setAccount, setState }) {
+function Account({ info, setAccount, setState, user }) {
   const defaultPfp =
     "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
 
@@ -26,7 +26,18 @@ function Account({ info, setAccount, setState }) {
     };
   }
 
-  function confirmUsername(username) {}
+  function confirmUsername(username) {
+    fetch("/api/users/" + username, { method: "GET" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data[0] && data[0].name !== user.username) {
+          alert("Username already taken, choose another one");
+        } else {
+          setState(setAccount, { ...info, username: username });
+          setChangingName(false);
+        }
+      });
+  }
 
   return (
     <div className="account-page settings-content">
@@ -53,15 +64,17 @@ function Account({ info, setAccount, setState }) {
             />
             <span
               className="material-icons edit-icon"
-              onClick={() => setChangingName(false)}
+              onClick={() => {
+                setChangingName(false);
+                setNameValue(info.username);
+              }}
             >
               close
             </span>
             <button
               className="button upload-button"
               onClick={() => {
-                setState(setAccount, { ...info, username: nameValue });
-                setChangingName(false);
+                confirmUsername(nameValue);
               }}
             >
               Confirm

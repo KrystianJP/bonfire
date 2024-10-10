@@ -103,7 +103,9 @@ function App() {
           <Route
             exact
             path="/settings/account"
-            element={<SettingsPage token={token} setting="account" />}
+            element={
+              <SettingsPage token={token} user={user} setting="account" />
+            }
           ></Route>
           <Route
             exact

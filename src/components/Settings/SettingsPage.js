@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
-function SettingsPage({ setting, token }) {
+function SettingsPage({ setting, token, user }) {
   const [account, setAccount] = useState({});
   const [privacy, setPrivacy] = useState({
     messages: [false, false, false],
@@ -51,6 +51,28 @@ function SettingsPage({ setting, token }) {
   function logout() {
     localStorage.removeItem("token");
     fetch("/api/users/logout", { method: "DELETE" });
+  }
+
+  function saveChanges() {
+    fetch("/api/users/settings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: account.username,
+        pfp: account.pfp,
+        banner: account.banner,
+        about: account.about,
+        message_privacy: privacy.messages,
+        friend_privacy: privacy.friendRequests,
+        theme: appearance.theme,
+        role_colours: appearance.roleColours,
+      }),
+    });
+    setChangesButton(false);
+    window.location.href = "/";
   }
 
   return (
@@ -101,7 +123,12 @@ function SettingsPage({ setting, token }) {
       </div>
       <div className="settings-page-content-container">
         {!busy && setting === "account" && (
-          <Account info={account} setAccount={setAccount} setState={setState} />
+          <Account
+            info={account}
+            setAccount={setAccount}
+            user={user}
+            setState={setState}
+          />
         )}
         {!busy && setting === "privacy" && (
           <Privacy info={privacy} setPrivacy={setPrivacy} setState={setState} />
@@ -121,7 +148,9 @@ function SettingsPage({ setting, token }) {
         </Link>
       </div>
       {!busy && changesButton && (
-        <button className="save-button">Save Changes</button>
+        <button className="save-button" onClick={saveChanges}>
+          Save Changes
+        </button>
       )}
     </div>
   );
