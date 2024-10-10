@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-function Appearance({ info }) {
-  const [theme, setTheme] = useState(info.theme);
-  const [roleColours, setRoleColours] = useState(info.roleColours);
+function Appearance({ info, setAppearance, setState }) {
+  // const [theme, setTheme] = useState(info.theme);
+  // const [roleColours, setRoleColours] = useState(info.roleColours);
 
   return (
     <div className="appearance-page settings-content">
@@ -10,13 +10,13 @@ function Appearance({ info }) {
       <div className="setting-container">
         <div className="setting-label">THEME</div>
         <div
-          className={"theme" + (theme === "dark" ? " selected" : "")}
-          onClick={() => setTheme("dark")}
+          className={"theme" + (info.theme === "dark" ? " selected" : "")}
+          onClick={() => setState(setAppearance, { ...info, theme: "dark" })}
           id="dark-theme"
         ></div>
         <div
-          className={"theme" + (theme === "light" ? " selected" : "")}
-          onClick={() => setTheme("light")}
+          className={"theme" + (info.theme === "light" ? " selected" : "")}
+          onClick={() => setState(setAppearance, { ...info, theme: "light" })}
           id="light-theme"
         ></div>
       </div>
@@ -28,8 +28,13 @@ function Appearance({ info }) {
           <input
             type="checkbox"
             id="role-colours-toggle"
-            checked={roleColours}
-            onChange={() => setRoleColours(!roleColours)}
+            checked={info.roleColours}
+            onChange={() =>
+              setState(setAppearance, {
+                ...info,
+                roleColours: !info.roleColours,
+              })
+            }
           />
           <span className="slider round"></span>
         </label>

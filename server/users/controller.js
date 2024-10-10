@@ -5,14 +5,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import passport from "passport";
 
-const getUsers = (req, res) => {
-  res.json(req.user);
-  // pool.query(queries.getUsers, (error, results) => {
-  //   if (error) throw error;
-  //   res.status(200).json(results.rows);
-  // });
-};
-
 const loginUser = (req, res, next) => {
   passport.authenticate("local", function (err, user) {
     if (err) {
@@ -42,6 +34,7 @@ const loginUser = (req, res, next) => {
 const registerUser = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    // checking if username already exists
     // inserting user
     pool.query(
       queries.insertUser,
@@ -67,6 +60,13 @@ const registerUser = async (req, res) => {
   }
 };
 
+const getMe = (req, res) => {
+  pool.query(queries.getUserById, [req.user.id], (error, results) => {
+    if (error) throw error;
+    res.status(200).json(results.rows[0]);
+  });
+};
+
 const getSettings = (req, res) => {
   pool.query(queries.getSettings, [req.user.id], (error, results) => {
     if (error) throw error;
@@ -74,4 +74,4 @@ const getSettings = (req, res) => {
   });
 };
 
-export default { getUsers, loginUser, registerUser, getSettings };
+export default { loginUser, registerUser, getSettings, getMe };

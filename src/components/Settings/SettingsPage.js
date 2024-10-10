@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
-function SettingsPage({ setting, token, user }) {
+function SettingsPage({ setting, token }) {
   const [account, setAccount] = useState({});
   const [privacy, setPrivacy] = useState({
     messages: [false, false, false],
@@ -17,6 +17,7 @@ function SettingsPage({ setting, token, user }) {
     roleColours: true,
   });
   const [busy, setBusy] = useState(true);
+  const [changesButton, setChangesButton] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -42,27 +43,16 @@ function SettingsPage({ setting, token, user }) {
     }
   }, [token]);
 
+  function setState(set, value) {
+    set(value);
+    setChangesButton(true);
+  }
+
   function logout() {
     localStorage.removeItem("token");
     fetch("/api/users/logout", { method: "DELETE" });
   }
 
-  // const settings = useMemo(() => {
-  //   return {
-  //     account: {
-  //       username: "KrysJP",
-  //       pfp: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhGz3EHmtHBkrjYLUhhTWcfZaJFT1h_4M2w&s",
-  //       banner: "#a33535",
-  //       about: "me like krys",
-  //     },
-  //     privacy: {
-  //       messages: [false, true, true],
-  //       friendRequests: [false, false, false],
-  //     },
-  //     appearance: { theme: "dark", roleColours: true },
-  //     voicevideo: {},
-  //   };
-  // });
   return (
     <div className="settings-page">
       <div className="settings-side-bar-container">
@@ -110,9 +100,19 @@ function SettingsPage({ setting, token, user }) {
         </div>
       </div>
       <div className="settings-page-content-container">
-        {!busy && setting === "account" && <Account info={account} />}
-        {!busy && setting === "privacy" && <Privacy info={privacy} />}
-        {!busy && setting === "appearance" && <Appearance info={appearance} />}
+        {!busy && setting === "account" && (
+          <Account info={account} setAccount={setAccount} setState={setState} />
+        )}
+        {!busy && setting === "privacy" && (
+          <Privacy info={privacy} setPrivacy={setPrivacy} setState={setState} />
+        )}
+        {!busy && setting === "appearance" && (
+          <Appearance
+            info={appearance}
+            setAppearance={setAppearance}
+            setState={setState}
+          />
+        )}
         {!busy && setting === "voicevideo" && <VoiceVideo />}
       </div>
       <div className="settings-exit">
@@ -120,7 +120,9 @@ function SettingsPage({ setting, token, user }) {
           close
         </Link>
       </div>
-      <button className="save-button">Save Changes</button>
+      {!busy && changesButton && (
+        <button className="save-button">Save Changes</button>
+      )}
     </div>
   );
 }

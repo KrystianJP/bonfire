@@ -1547,3 +1547,20 @@ input:checked + .slider:before {
 .theme.selected {
   border: 2px solid #ffffff;
 }
+
+.image-upload-container .search-bar {
+  width: 300px;
+  padding: 5px 10px;
+  margin-top: 5px;
+}
+.button.upload-button {
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  margin-top: 5px;
+  width: 70px;
+}
+
+.username-container .search-bar {
+  font-size: 0.95rem;
+  padding: 5px 10px;
+}

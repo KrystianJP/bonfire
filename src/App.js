@@ -103,30 +103,22 @@ function App() {
           <Route
             exact
             path="/settings/account"
-            element={
-              <SettingsPage token={token} user={user} setting="account" />
-            }
+            element={<SettingsPage token={token} setting="account" />}
           ></Route>
           <Route
             exact
             path="/settings/privacy"
-            element={
-              <SettingsPage token={token} user={user} setting="privacy" />
-            }
+            element={<SettingsPage token={token} setting="privacy" />}
           ></Route>
           <Route
             exact
             path="/settings/appearance"
-            element={
-              <SettingsPage token={token} user={user} setting="appearance" />
-            }
+            element={<SettingsPage token={token} setting="appearance" />}
           ></Route>
           <Route
             exact
             path="/settings/voicevideo"
-            element={
-              <SettingsPage token={token} user={user} setting="voicevideo" />
-            }
+            element={<SettingsPage token={token} setting="voicevideo" />}
           ></Route>
 
           {/* SERVERS */}

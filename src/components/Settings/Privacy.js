@@ -1,22 +1,17 @@
 import { useState } from "react";
 
-function Privacy({ info }) {
-  const [messages, setMessages] = useState(info.messages);
-  const [requests, setRequests] = useState(info.friendRequests);
-
-  function toggle(index, set, state) {
+function Privacy({ info, setPrivacy, setState }) {
+  function toggle(index, state) {
     if (index === 0 && !state[0]) {
-      set([true, true, true]);
-      return;
+      return [true, true, true];
     } else if (index > 0 && state[0]) {
-      set([
+      return [
         false,
         index === 1 ? !state[1] : state[1],
         index === 2 ? !state[2] : state[2],
-      ]);
-      return;
+      ];
     }
-    set([...state.slice(0, index), !state[index], ...state.slice(index + 1)]);
+    return [...state.slice(0, index), !state[index], ...state.slice(index + 1)];
   }
 
   return (
@@ -32,8 +27,13 @@ function Privacy({ info }) {
             <input
               type="checkbox"
               id="everyone-message-toggle"
-              checked={messages[0]}
-              onChange={() => toggle(0, setMessages, messages)}
+              checked={info.messages[0]}
+              onChange={() =>
+                setState(setPrivacy, {
+                  ...info,
+                  messages: toggle(0, info.messages),
+                })
+              }
             />
             <span className="slider round"></span>
           </label>
@@ -46,8 +46,13 @@ function Privacy({ info }) {
             <input
               type="checkbox"
               id="server-message-toggle"
-              checked={messages[1]}
-              onChange={() => toggle(1, setMessages, messages)}
+              checked={info.messages[1]}
+              onChange={() =>
+                setState(setPrivacy, {
+                  ...info,
+                  messages: toggle(1, info.messages),
+                })
+              }
             />
             <span className="slider round"></span>
           </label>
@@ -60,8 +65,13 @@ function Privacy({ info }) {
             <input
               type="checkbox"
               id="friend-message-toggle"
-              checked={messages[2]}
-              onChange={() => toggle(2, setMessages, messages)}
+              checked={info.messages[2]}
+              onChange={() =>
+                setState(setPrivacy, {
+                  ...info,
+                  messages: toggle(2, info.messages),
+                })
+              }
             />
             <span className="slider round"></span>
           </label>
@@ -77,8 +87,13 @@ function Privacy({ info }) {
             <input
               type="checkbox"
               id="everyone-friend-toggle"
-              checked={requests[0]}
-              onChange={() => toggle(0, setRequests, requests)}
+              checked={info.friendRequests[0]}
+              onChange={() =>
+                setState(setPrivacy, {
+                  ...info,
+                  friendRequests: toggle(0, info.friendRequests),
+                })
+              }
             />
             <span className="slider round"></span>
           </label>
@@ -91,8 +106,13 @@ function Privacy({ info }) {
             <input
               type="checkbox"
               id="friend-friend-toggle"
-              checked={requests[1]}
-              onChange={() => toggle(1, setRequests, requests)}
+              checked={info.friendRequests[1]}
+              onChange={() =>
+                setState(setPrivacy, {
+                  ...info,
+                  friendRequests: toggle(1, info.friendRequests),
+                })
+              }
             />
             <span className="slider round"></span>
           </label>
@@ -105,8 +125,13 @@ function Privacy({ info }) {
             <input
               type="checkbox"
               id="server-friend-toggle"
-              checked={requests[2]}
-              onChange={() => toggle(2, setRequests, requests)}
+              checked={info.friendRequests[2]}
+              onChange={() =>
+                setState(setPrivacy, {
+                  ...info,
+                  friendRequests: toggle(2, info.friendRequests),
+                })
+              }
             />
             <span className="slider round"></span>
           </label>
