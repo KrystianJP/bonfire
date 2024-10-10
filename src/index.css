@@ -159,7 +159,7 @@ label {
   color: var(--dark-msg);
   border-radius: 4px;
 }
-#friend-search-bar {
+.friends-list .search-bar {
   width: 100%;
   padding: 8px 10px;
   color: var(--dark-msg);
@@ -1563,4 +1563,24 @@ input:checked + .slider:before {
 .username-container .search-bar {
   font-size: 0.95rem;
   padding: 5px 10px;
+}
+
+.search-container.add-friend-container {
+  margin-bottom: 30px;
+  position: relative;
+}
+#add-friend {
+  padding: 15px 15px;
+}
+.add-friend-button {
+  background: #5865f2;
+  color: var(--dark-lightest);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
 }
