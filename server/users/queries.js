@@ -1,6 +1,6 @@
 const getUsers = "SELECT * FROM test;";
 const getUserByName = "SELECT * FROM users WHERE name = $1;";
-const getUserById = "SELECT * FROM users WHERE id = $1;";
+const getUserById = "SELECT name, pfp FROM users WHERE id = $1;";
 const insertUser =
   "INSERT INTO users (name, password) VALUES ($1, $2) RETURNING id; ";
 const insertSettings =
