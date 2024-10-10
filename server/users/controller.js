@@ -42,18 +42,23 @@ const loginUser = (req, res, next) => {
 const registerUser = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    // inserting user
     pool.query(
       queries.insertUser,
       [req.body.username, hashedPassword],
       (error, results) => {
         if (error) throw error;
-        const accessToken = jwt.sign(
-          { name: req.body.username, id: results.rows[0].id },
-          process.env.ACCESS_TOKEN_SECRET,
-        );
+        // inserting the user's settings (separate because can't have multiple queries with parameters for some reason)
+        pool.query(queries.insertSettings, [results.rows[0].id], (error, _) => {
+          if (error) throw error;
+          const accessToken = jwt.sign(
+            { name: req.body.username, id: results.rows[0].id },
+            process.env.ACCESS_TOKEN_SECRET,
+          );
 
-        return res.json({
-          accessToken,
+          return res.json({
+            accessToken,
+          });
         });
       },
     );
@@ -62,4 +67,11 @@ const registerUser = async (req, res) => {
   }
 };
 
-export default { getUsers, loginUser, registerUser };
+const getSettings = (req, res) => {
+  pool.query(queries.getSettings, [req.user.id], (error, results) => {
+    if (error) throw error;
+    res.status(200).json(results.rows[0]);
+  });
+};
+
+export default { getUsers, loginUser, registerUser, getSettings };

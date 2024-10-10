@@ -18,6 +18,7 @@ router.delete("/logout", (req, res, next) => {
 router.get("/me", authenticateToken, (req, res) => {
   res.json(req.user);
 });
+router.get("/settings", authenticateToken, controller.getSettings);
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {

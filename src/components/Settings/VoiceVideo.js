@@ -2,7 +2,7 @@ function VoiceVideo() {
   return (
     <div className="settings-content voice-video-page">
       <h1>Voice & Video</h1>
-      <div className="setting-container">
+      {/* <div className="setting-container">
         <div className="setting-label">INPUT DEVICE</div>
         <select
           id="input-device-select"
@@ -14,8 +14,8 @@ function VoiceVideo() {
           <option value="18px">Large</option>
           <option value="20px">X-Large</option>
         </select>
-      </div>
-      <div className="setting-container">
+      </div> */}
+      {/* <div className="setting-container">
         <div className="setting-label">OUTPUT DEVICE</div>
         <select
           id="output-device-select"
@@ -27,10 +27,10 @@ function VoiceVideo() {
           <option value="18px">Large</option>
           <option value="20px">X-Large</option>
         </select>
-      </div>
+      </div> */}
 
       <button className="test-mic-button">Test Microphone</button>
-      <div className="setting-container">
+      {/* <div className="setting-container">
         <div className="setting-label">VIDEO DEVICE</div>
         <select
           id="video-device-select"
@@ -42,7 +42,7 @@ function VoiceVideo() {
           <option value="18px">Large</option>
           <option value="20px">X-Large</option>
         </select>
-      </div>
+      </div> */}
       <button className="test-video-button">Test Video Device</button>
     </div>
   );

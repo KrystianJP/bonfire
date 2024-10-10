@@ -1468,7 +1468,8 @@ input:checked + .slider:before {
 .highlight {
   background: var(--dark-highlight) !important;
 }
-.friends-bar .highlight * {
+.friends-bar .highlight *,
+.settings-group.highlight {
   color: var(--dark-lighter) !important;
 }
 
@@ -1541,4 +1542,8 @@ input:checked + .slider:before {
 .login-container .login-link {
   color: #557ee5;
   font-weight: bold;
+}
+
+.theme.selected {
+  border: 2px solid #ffffff;
 }
