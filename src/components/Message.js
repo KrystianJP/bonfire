@@ -3,9 +3,20 @@ import { useParams } from "react-router-dom";
 function Message({ userInfo, message, roles }) {
   message.timestamp = new Date(message.msg_timestamp.replace(" ", "T"));
   const msgMonth = message.timestamp.getMonth() + 1;
-  const formattedTimestamp = `${message.timestamp.getDate()}/${
-    msgMonth < 10 ? `0${msgMonth}` : msgMonth
-  }/${message.timestamp.getFullYear()} ${message.timestamp.getHours()}:${message.timestamp.getMinutes()}`;
+  const formattedTimestamp = `${message.timestamp.getDate()}/${doubleDigit(
+    msgMonth,
+  )}/${message.timestamp.getFullYear()} ${doubleDigit(
+    message.timestamp.getHours(),
+  )}:${doubleDigit(message.timestamp.getMinutes())}
+  `;
+
+  function doubleDigit(num) {
+    if (num < 10) {
+      return `0${num}`;
+    } else {
+      return num;
+    }
+  }
 
   return (
     <div className="message-container-container">

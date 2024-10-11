@@ -117,7 +117,7 @@ function Account({ info, setAccount, setState, user }) {
         <div className="setting-label">BANNER COLOUR</div>
         <input
           type="color"
-          defaultValue={"#" + info.banner}
+          defaultValue={info.banner ? "#" + info.banner : "#a33535"}
           onChange={(e) =>
             setState(setAccount, { ...info, banner: e.target.value.slice(1) })
           }

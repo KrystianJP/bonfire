@@ -54,7 +54,10 @@ const acceptFriendRequest = (req, res) => {
       }
       pool.query(
         queries.insertFriendship,
-        [results.rows[0].sender, results.rows[0].receiver],
+        [
+          Math.min(results.rows[0].sender, results.rows[0].receiver),
+          Math.max(results.rows[0].sender, results.rows[0].receiver),
+        ],
         (error, _) => {
           if (error) throw error;
           pool.query(
@@ -97,9 +100,20 @@ const sendMessage = (req, res) => {
   pool.query(
     queries.sendMessage,
     [req.user.id, req.params.friendId, req.body.message, Date.now()],
-    (error, _) => {
+    (error, results) => {
       if (error) throw error;
-      res.status(200).json({ message: "success" });
+      pool.query(
+        queries.updateLastMessage,
+        [
+          Date.now(),
+          Math.min(req.user.id, req.params.friendId),
+          Math.max(req.user.id, req.params.friendId),
+        ],
+        (error, _) => {
+          if (error) throw error;
+          res.status(200).json({ message: results.rows[0] });
+        },
+      );
     },
   );
 };

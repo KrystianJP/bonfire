@@ -8,7 +8,12 @@ function DMProfileBar({ friend, displayStyle }) {
       id="dm-profile-bar"
       style={{ display: displayStyle }}
     >
-      <div className="dm-profile-top">
+      <div
+        className="dm-profile-top"
+        style={{
+          background: friend.banner ? "#" + friend.banner : "rgb(163, 53, 53)",
+        }}
+      >
         <div className="dm-profile-pfp">
           <img
             src={friend.pfp}

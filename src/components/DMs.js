@@ -3,8 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import DMProfileBar from "./DMProfileBar";
 import Messages from "./Messages";
 import { useEffect, useState } from "react";
+import { useContext } from "react";
 function DMs({ friendInfo, token, user }) {
-  const { friendId } = useParams();
+  var { friendId } = useParams();
   const [profileBarOpen, setProfileBarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
 
@@ -17,6 +18,10 @@ function DMs({ friendInfo, token, user }) {
   }
 
   useEffect(() => {
+    if (window.innerWidth > 1000) {
+      setProfileBarOpen(true);
+    }
+
     window.addEventListener("resize", widthListener);
 
     return () => {
@@ -25,7 +30,7 @@ function DMs({ friendInfo, token, user }) {
   }, []);
 
   useEffect(() => {
-    setMessages([]);
+    // setMessages([]);
     if (!token) return;
     if (friendId != friendInfo.id) return;
     fetch("/api/friends/messages/" + friendId, {
@@ -65,11 +70,13 @@ function DMs({ friendInfo, token, user }) {
       </div>
 
       <Messages
+        user={user}
         token={token}
         users={{ [friendInfo.id]: friendInfo, [user.id]: user }}
         messages={messages}
         placeholder={friendInfo.name}
         pageId={friendInfo.id}
+        setMessages={setMessages}
       />
 
       <DMProfileBar

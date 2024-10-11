@@ -1,10 +1,26 @@
 import { useParams } from "react-router-dom";
 import Message from "./Message";
-import { useState, useEffect } from "react";
-function Messages({ users, messages, roles, placeholder, token, pageId }) {
+import { useState, useEffect, useContext } from "react";
+import { io } from "socket.io-client";
+
+import { socket } from "../socket.js";
+function Messages({
+  users,
+  messages,
+  roles,
+  placeholder,
+  token,
+  pageId,
+  user,
+  setMessages,
+}) {
   const { friendId } = useParams();
   const { channelId } = useParams();
   const [msgText, setMsgText] = useState("");
+  const roomId =
+    Math.min(user.id, Number(friendId)).toString() +
+    Math.max(user.id, Number(friendId)).toString();
+  const [stateMessages, setStateMessages] = useState([]);
 
   function sendMessage() {
     if (!token || !msgText) return;
@@ -13,6 +29,25 @@ function Messages({ users, messages, roles, placeholder, token, pageId }) {
       sendDM();
     }
   }
+
+  useEffect(() => {
+    if (!token) return;
+    socket.emit("join_room", roomId);
+    socket.on("receive_message", (data) => {
+      const newMessage = data.message.message;
+      setStateMessages([newMessage, ...stateMessages]);
+    });
+
+    return () => {
+      socket.emit("leave_room", roomId);
+      socket.off("receive_message");
+    };
+  }, [token, roomId, stateMessages]);
+
+  useEffect(() => {
+    setMessages([]);
+    setStateMessages([]);
+  }, [friendId, channelId]);
 
   function sendDM() {
     fetch("/api/friends/message/" + friendId, {
@@ -25,8 +60,14 @@ function Messages({ users, messages, roles, placeholder, token, pageId }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setMsgText("");
+        // send message to socket
+        socket.emit("send_message", {
+          roomId:
+            Math.min(user.id, Number(friendId)).toString() +
+            Math.max(user.id, Number(friendId)).toString(),
+          message: data,
+        });
       })
       .catch((err) => console.log(err));
   }
@@ -34,15 +75,26 @@ function Messages({ users, messages, roles, placeholder, token, pageId }) {
   return (
     <div className="messages-bar">
       <div className="messages-container">
-        {(friendId == pageId || channelId == pageId) &&
-          messages.map((message) => (
-            <Message
-              userInfo={users[message.authorid]}
-              message={message}
-              key={[message.timestamp, message.authorid].join("-")}
-              roles={roles}
-            />
-          ))}
+        {stateMessages.map((message) => (
+          <Message
+            userInfo={users[message.authorid]}
+            message={message}
+            key={[message.msg_timestamp, message.authorid, Math.random()].join(
+              "-",
+            )}
+            roles={roles}
+          />
+        ))}
+        {messages.map((message) => (
+          <Message
+            userInfo={users[message.authorid]}
+            message={message}
+            key={[message.msg_timestamp, message.authorid, Math.random()].join(
+              "-",
+            )}
+            roles={roles}
+          />
+        ))}
       </div>
       <form
         onSubmit={(e) => {

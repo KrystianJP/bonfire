@@ -7,6 +7,7 @@ import initializePassport from "./passport-config.js";
 import passport from "passport";
 import flash from "express-flash";
 import session from "express-session";
+import { Server } from "socket.io";
 
 initializePassport(passport);
 
@@ -29,4 +30,34 @@ app.use(passport.session());
 app.use("/api/users", userRoutes);
 app.use("/api/friends", friendRoutes);
 
-app.listen(PORT, () => console.log("Server started on port " + PORT));
+const expressServer = app.listen(PORT, () =>
+  console.log("Server started on port " + PORT),
+);
+
+const io = new Server(expressServer, {
+  cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
+});
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+
+  socket.on("join_room", (roomId) => {
+    socket.join(roomId);
+    console.log("User joined room " + roomId);
+  });
+
+  socket.on("send_message", (data) => {
+    io.to(data.roomId).emit("receive_message", data);
+    console.log("message sent to " + data.roomId);
+    console.log(socket.rooms);
+  });
+
+  socket.on("leave_room", (roomId) => {
+    socket.leave(roomId);
+    console.log("User left room " + roomId);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});

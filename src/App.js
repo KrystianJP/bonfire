@@ -14,6 +14,7 @@ import "./index.css";
 import ServerSettingsPage from "./components/ServerSettings/ServerSettingsPage";
 import ChannelCreationModal from "./components/ChannelCreationModal";
 import { useState, useMemo, useEffect } from "react";
+import { io } from "socket.io-client";
 
 function App() {
   const [channelModalOpen, setChannelModalOpen] = useState(false);
@@ -43,6 +44,7 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           setUser(data);
+
           if (
             window.location.pathname === "/login" ||
             window.location.pathname === "/register"
