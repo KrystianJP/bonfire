@@ -30,7 +30,7 @@ function Account({ info, setAccount, setState, user }) {
     fetch("/api/users/" + username, { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
-        if (data[0] && data[0].name !== user.username) {
+        if (data[0] && data[0].name !== user.name) {
           alert("Username already taken, choose another one");
         } else {
           setState(setAccount, { ...info, username: username });

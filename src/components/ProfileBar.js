@@ -14,7 +14,7 @@ function ProfileBar({ user }) {
             className="pfp-img"
           />
         </div>
-        <span className="profile-name">{user.username}</span>
+        <span className="profile-name">{user.name}</span>
       </div>
       <div className="profile-icons">
         <span className="material-icons">mic</span>

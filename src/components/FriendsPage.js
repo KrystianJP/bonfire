@@ -6,9 +6,10 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function FriendsPage({ page, user, token }) {
-  const { friendUsername } = useParams();
+  const { friendId } = useParams();
   const [friends, setFriends] = useState([]);
   const [refresh, setRefresh] = useState(0);
+  const [currentFriend, setCurrentFriend] = useState({});
 
   useEffect(() => {
     if (!token) return;
@@ -20,17 +21,25 @@ function FriendsPage({ page, user, token }) {
       .then((data) => setFriends(data));
   }, [token, refresh]);
 
+  useEffect(() => {
+    if (friendId && friends.length > 0) {
+      setCurrentFriend(friends.filter((friend) => friend.id == friendId)[0]);
+    }
+  }, [friendId, friends]);
+
   return (
     <div className="friends-page">
       <FriendsBar
         friends={friends}
-        currentFriend={page === "dms" ? friendUsername : ""}
+        currentFriend={page === "dms" ? currentFriend : ""}
       />
       <ProfileBar user={user} />
       {page === "friends-list" && (
         <FriendsList token={token} setRefresh={setRefresh} friends={friends} />
       )}
-      {page === "dms" && <DMs />}
+      {page === "dms" && (
+        <DMs user={user} token={token} friendInfo={currentFriend} />
+      )}
     </div>
   );
 }

@@ -6,6 +6,7 @@ const router = Router();
 
 router.get("/", authenticateToken, controller.getFriends);
 router.get("/requests", authenticateToken, controller.getFriendRequests);
+router.get("/messages/:friendId", authenticateToken, controller.getMessages);
 
 router.post("/:friendName", authenticateToken, controller.addFriendRequest);
 router.post(
@@ -13,6 +14,7 @@ router.post(
   authenticateToken,
   controller.acceptFriendRequest,
 );
+router.post("/message/:friendId", authenticateToken, controller.sendMessage);
 
 router.delete(
   "/decline/:friendId",

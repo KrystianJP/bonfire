@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 
 /* eslint-disable jsx-a11y/img-redundant-alt */
 function DMProfileBar({ friend, displayStyle }) {
-  const { username } = useParams();
   return (
     <div
       className="dm-profile-bar"
@@ -19,7 +18,7 @@ function DMProfileBar({ friend, displayStyle }) {
         </div>
       </div>
       <div className="dm-profile-details">
-        <span className="dm-profile-name">{username}</span>
+        <span className="dm-profile-name">{friend.name}</span>
         <div className="about-me">
           <span className="about-me-header">About Me</span>
           <div className="about-me-content">{friend.about}</div>

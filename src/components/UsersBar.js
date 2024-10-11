@@ -38,7 +38,7 @@ function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
                 return (
                   <div
                     onClick={(e) => {
-                      if (user.username === currentUser.username) {
+                      if (user.name === currentUser.name) {
                         closeUserProfile();
                         return;
                       }
@@ -46,11 +46,9 @@ function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
                     }}
                     className={
                       "server-user friend-dm" +
-                      (user.username === currentUser.username
-                        ? " highlight"
-                        : "")
+                      (user.name === currentUser.name ? " highlight" : "")
                     }
-                    key={user.username}
+                    key={user.name}
                   >
                     <div className="server-user-pfp friend-pfp">
                       <img
@@ -63,7 +61,7 @@ function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
                       className="server-user-name friend-name"
                       style={{ color: roles[role] }}
                     >
-                      {user.username}
+                      {user.name}
                     </span>
                   </div>
                 );

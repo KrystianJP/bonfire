@@ -82,10 +82,34 @@ const declineFriendRequest = (req, res) => {
   );
 };
 
+const getMessages = (req, res) => {
+  pool.query(
+    queries.getMessages,
+    [req.user.id, req.params.friendId],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json(results.rows);
+    },
+  );
+};
+
+const sendMessage = (req, res) => {
+  pool.query(
+    queries.sendMessage,
+    [req.user.id, req.params.friendId, req.body.message, Date.now()],
+    (error, _) => {
+      if (error) throw error;
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
 export default {
   getFriends,
   addFriendRequest,
   getFriendRequests,
   acceptFriendRequest,
   declineFriendRequest,
+  getMessages,
+  sendMessage,
 };

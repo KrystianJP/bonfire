@@ -3,9 +3,10 @@ import { Link, useParams } from "react-router-dom";
 import DMProfileBar from "./DMProfileBar";
 import Messages from "./Messages";
 import { useEffect, useState } from "react";
-function DMs() {
-  let { username } = useParams();
+function DMs({ friendInfo, token, user }) {
+  const { friendId } = useParams();
   const [profileBarOpen, setProfileBarOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
 
   function widthListener() {
     if (window.innerWidth > 1000) {
@@ -17,39 +18,26 @@ function DMs() {
 
   useEffect(() => {
     window.addEventListener("resize", widthListener);
+
     return () => {
       window.removeEventListener("resize", widthListener);
     };
   }, []);
 
-  // THIS WILL FIND THE FRIENDS INFO BASED ON USERNAME
-  // AND ONLY STORE THEIR INFO, THIS IS FOR DEMONSTRATION
-  const friendInfo = {
-    PickleJuice: {
-      pfp: "https://imgcdn.stablediffusionweb.com/2024/4/16/7263bda6-c6d4-46f5-90d7-9a659e42bce1.jpg",
-      about: "me like pickles wowowowowoowowowow whoopee",
-    },
-    SomebodyElse: {
-      pfp: "https://pics.craiyon.com/2023-10-25/37325fe41b05409d89f905897c6e0da3.webp",
-      about: "somebody that you used to know SOMEBODYYY",
-    },
-    KrysJP: {
-      pfp: "https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg",
-      about: "me like krys",
-    },
-  };
-  const messages = [
-    {
-      username: "KrysJP",
-      message: "doing alright, u?",
-      timestamp: new Date(2024, 8, 29, 19, 32),
-    },
-    {
-      username: "PickleJuice",
-      message: "Yo how you doing",
-      timestamp: new Date(2024, 8, 29, 19, 30),
-    },
-  ];
+  useEffect(() => {
+    setMessages([]);
+    if (!token) return;
+    if (friendId != friendInfo.id) return;
+    fetch("/api/friends/messages/" + friendId, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMessages(data);
+      })
+      .catch((err) => console.log(err));
+  }, [token, friendInfo.id, friendId]);
 
   return (
     <div className="dms">
@@ -60,12 +48,12 @@ function DMs() {
         >
           <div className="profile-pfp friend-dm-pfp">
             <img
-              src={friendInfo[username].pfp}
+              src={friendInfo.pfp}
               alt="friend profile picture"
               className="pfp-img"
             />
           </div>
-          <span className="friend-name friend-name-dm">{username}</span>
+          <span className="friend-name friend-name-dm">{friendInfo.name}</span>
         </div>
         <div className="top-bar-right">
           <span className="material-icons">call</span>
@@ -75,9 +63,17 @@ function DMs() {
           <span className="material-icons ">block</span>
         </div>
       </div>
-      <Messages friendInfo={friendInfo} messages={messages} />
+
+      <Messages
+        token={token}
+        users={{ [friendInfo.id]: friendInfo, [user.id]: user }}
+        messages={messages}
+        placeholder={friendInfo.name}
+        pageId={friendInfo.id}
+      />
+
       <DMProfileBar
-        friend={friendInfo[username]}
+        friend={friendInfo}
         displayStyle={profileBarOpen ? "block" : "none"}
       />
     </div>

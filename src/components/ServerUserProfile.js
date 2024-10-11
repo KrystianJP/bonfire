@@ -23,7 +23,7 @@ function ServerUserProfile({ user, roles }) {
         </div>
 
         <div className="dm-profile-details">
-          <span className="dm-profile-name">{user.username}</span>
+          <span className="dm-profile-name">{user.name}</span>
           <div className="about-me">
             <div className="about-me-content">{user.about}</div>
           </div>

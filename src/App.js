@@ -42,7 +42,7 @@ function App() {
       })
         .then((res) => res.json())
         .then((data) => {
-          setUser({ username: data.name, pfp: data.pfp });
+          setUser(data);
           if (
             window.location.pathname === "/login" ||
             window.location.pathname === "/register"
@@ -90,7 +90,7 @@ function App() {
           ></Route>
           <Route
             exact
-            path="/messages/:username"
+            path="/messages/:friendId"
             element={
               <>
                 <ServersBar servers={servers} />{" "}

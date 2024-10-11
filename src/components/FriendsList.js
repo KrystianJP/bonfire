@@ -109,7 +109,7 @@ function FriendsList({ friends, token, setRefresh }) {
           {friends.map((friend) => {
             return (
               <div className="role-container" key={friend.name}>
-                <Link to={"/messages/" + friend.username} className="role">
+                <Link to={"/messages/" + friend.id} className="role">
                   <div className="friend-left">
                     <div className="friend-pfp">
                       <img
@@ -136,7 +136,7 @@ function FriendsList({ friends, token, setRefresh }) {
           {friendRequests.map((friend) => {
             return (
               <div className="role-container" key={friend.name}>
-                <Link to={"/messages/" + friend.username} className="role">
+                <Link to={"/messages/" + friend.id} className="role">
                   <div className="friend-left">
                     <div className="friend-pfp">
                       <img
