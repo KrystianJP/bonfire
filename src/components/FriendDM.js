@@ -5,7 +5,7 @@ function FriendDM({ friend, currentFriend }) {
   const [highlight, setHighlight] = useState("");
 
   useEffect(() => {
-    if (friend.username === currentFriend) {
+    if (friend.name === currentFriend) {
       setHighlight("highlight");
     } else {
       setHighlight("");
@@ -13,14 +13,11 @@ function FriendDM({ friend, currentFriend }) {
   }, [currentFriend]);
 
   return (
-    <Link
-      to={`/messages/${friend.username}`}
-      className={"friend-dm " + highlight}
-    >
+    <Link to={`/messages/${friend.name}`} className={"friend-dm " + highlight}>
       <div className="friend-pfp">
         <img src={friend.pfp} alt="user profile picture" className="pfp-img" />
       </div>
-      <span className="friend-name">{friend.username}</span>
+      <span className="friend-name">{friend.name}</span>
     </Link>
   );
 }

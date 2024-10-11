@@ -42,4 +42,50 @@ const addFriendRequest = (req, res) => {
   );
 };
 
-export default { getFriends, addFriendRequest, getFriendRequests };
+const acceptFriendRequest = (req, res) => {
+  pool.query(
+    queries.findRequest,
+    [req.params.friendId, req.user.id],
+    (error, results) => {
+      if (error) throw error;
+      if (results.rows.length === 0) {
+        res.status(404).json({ message: "Request not found" });
+        return;
+      }
+      pool.query(
+        queries.insertFriendship,
+        [results.rows[0].sender, results.rows[0].receiver],
+        (error, _) => {
+          if (error) throw error;
+          pool.query(
+            queries.deleteFriendRequest,
+            [results.rows[0].sender, results.rows[0].receiver],
+            (error, _) => {
+              if (error) throw error;
+              res.status(200).json({ message: "success" });
+            },
+          );
+        },
+      );
+    },
+  );
+};
+
+const declineFriendRequest = (req, res) => {
+  pool.query(
+    queries.deleteFriendRequest,
+    [req.params.friendId, req.user.id],
+    (error, _) => {
+      if (error) throw error;
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
+export default {
+  getFriends,
+  addFriendRequest,
+  getFriendRequests,
+  acceptFriendRequest,
+  declineFriendRequest,
+};

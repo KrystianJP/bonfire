@@ -4,6 +4,7 @@ import {} from "dotenv/config.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import passport from "passport";
+import { body, validationResult } from "express-validator";
 
 const loginUser = (req, res, next) => {
   passport.authenticate("local", function (err, user) {
@@ -31,34 +32,73 @@ const loginUser = (req, res, next) => {
   })(req, res, next);
 };
 
-const registerUser = async (req, res) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    // checking if username already exists
-    // inserting user
-    pool.query(
-      queries.insertUser,
-      [req.body.username, hashedPassword],
-      (error, results) => {
-        if (error) throw error;
-        // inserting the user's settings (separate because can't have multiple queries with parameters for some reason)
-        pool.query(queries.insertSettings, [results.rows[0].id], (error, _) => {
-          if (error) throw error;
-          const accessToken = jwt.sign(
-            { name: req.body.username, id: results.rows[0].id },
-            process.env.ACCESS_TOKEN_SECRET,
-          );
+const registerUser = [
+  body("username")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Username is required")
+    .escape(),
+  body("username")
+    .trim()
+    .isLength({ max: 32 })
+    .withMessage("Username cannot be longer than 32 characters")
+    .escape(),
+  body("password")
+    .trim()
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .escape(),
+  async (req, res) => {
+    try {
+      var errors = validationResult(req);
+      var errorsArray = errors.array().map((error) => error.msg);
 
-          return res.json({
-            accessToken,
-          });
-        });
-      },
-    );
-  } catch {
-    res.redirect("/register");
-  }
-};
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      // checking if username already exists
+      pool.query(
+        queries.getUserByName,
+        [req.body.username],
+        (error, results) => {
+          if (error) throw error;
+          if (results.rows.length > 0) {
+            return res
+              .status(400)
+              .json({ errors: errorsArray.concat("Username already exists") });
+          }
+          if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errorsArray });
+          }
+          // inserting user
+          pool.query(
+            queries.insertUser,
+            [req.body.username, hashedPassword],
+            (error, results) => {
+              if (error) throw error;
+              // inserting the user's settings (separate because can't have multiple queries with parameters for some reason)
+              pool.query(
+                queries.insertSettings,
+                [results.rows[0].id],
+                (error, _) => {
+                  if (error) throw error;
+                  const accessToken = jwt.sign(
+                    { name: req.body.username, id: results.rows[0].id },
+                    process.env.ACCESS_TOKEN_SECRET,
+                  );
+
+                  return res.json({
+                    accessToken,
+                  });
+                },
+              );
+            },
+          );
+        },
+      );
+    } catch {
+      res.redirect("/register");
+    }
+  },
+];
 
 const getMe = (req, res) => {
   pool.query(queries.getUserById, [req.user.id], (error, results) => {

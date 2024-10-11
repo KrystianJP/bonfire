@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-function FriendsList({ friends, token }) {
+function FriendsList({ friends, token, setRefresh }) {
   const defaultPfp =
     "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   const [newFriend, setNewFriend] = useState("");
   const [sentMsg, setSentMsg] = useState(false);
   const [friendRequests, setFriendRequests] = useState([]);
+  const [refreshRequests, setRefreshRequests] = useState(0);
 
   function sendFriendRequest(name) {
     if (!token) return;
@@ -26,6 +27,38 @@ function FriendsList({ friends, token }) {
       .catch((err) => console.log(err));
   }
 
+  function acceptFriendRequest(friendId) {
+    if (!token) return;
+    fetch("api/friends/accept/" + friendId, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "success") {
+          setRefresh(Math.random());
+          setRefreshRequests(Math.random());
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function declineFriendRequest(friendId) {
+    if (!token) return;
+    fetch("api/friends/decline/" + friendId, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "success") {
+          setRefresh(Math.random());
+          setRefreshRequests(Math.random());
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   useEffect(() => {
     if (!token) return;
     fetch("api/friends/requests", {
@@ -34,7 +67,7 @@ function FriendsList({ friends, token }) {
     })
       .then((res) => res.json())
       .then((data) => setFriendRequests(data));
-  }, [token]);
+  }, [token, refreshRequests]);
 
   return (
     <div className="friends-list">
@@ -115,8 +148,26 @@ function FriendsList({ friends, token }) {
                     <span className="friend-name">{friend.name}</span>
                   </div>
                   <span className="friend-icons">
-                    <span className="material-icons ">check</span>
-                    <span className="material-icons ">close</span>
+                    <span
+                      className="material-icons "
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        acceptFriendRequest(friend.id);
+                      }}
+                    >
+                      check
+                    </span>
+                    <span
+                      className="material-icons "
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        declineFriendRequest(friend.id);
+                      }}
+                    >
+                      close
+                    </span>
                   </span>
                 </Link>
               </div>

@@ -5,6 +5,7 @@ function LoginPage({ login }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
+  const [registerErrors, setRegisterErrors] = useState([]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -56,6 +57,9 @@ function LoginPage({ login }) {
           setPassword("");
           setUsername("");
           // error stuff
+          if (data.errors) {
+            setRegisterErrors(data.errors);
+          }
           return;
         }
         localStorage.setItem("token", data.accessToken);
@@ -109,6 +113,11 @@ function LoginPage({ login }) {
       {loginError && (
         <p className="login-error">Incorrect username or password</p>
       )}
+      {registerErrors.map((error) => (
+        <p className="login-error" key={error}>
+          {error}
+        </p>
+      ))}
     </form>
   );
 }

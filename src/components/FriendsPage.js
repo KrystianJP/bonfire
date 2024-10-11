@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 function FriendsPage({ page, user, token }) {
   const { friendUsername } = useParams();
   const [friends, setFriends] = useState([]);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     if (!token) return;
@@ -17,7 +18,7 @@ function FriendsPage({ page, user, token }) {
     })
       .then((res) => res.json())
       .then((data) => setFriends(data));
-  }, [token]);
+  }, [token, refresh]);
 
   return (
     <div className="friends-page">
@@ -27,7 +28,7 @@ function FriendsPage({ page, user, token }) {
       />
       <ProfileBar user={user} />
       {page === "friends-list" && (
-        <FriendsList token={token} friends={friends} />
+        <FriendsList token={token} setRefresh={setRefresh} friends={friends} />
       )}
       {page === "dms" && <DMs />}
     </div>

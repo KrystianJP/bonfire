@@ -17,7 +17,7 @@ function FriendsBar({ friends, currentFriend }) {
           <FriendDM
             friend={friend}
             currentFriend={currentFriend}
-            key={friend.username}
+            key={friend.name}
           />
         );
       })}
