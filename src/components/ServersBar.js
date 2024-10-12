@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-function ServersBar({ servers }) {
+function ServersBar({ servers, toggleModal }) {
   const { serverId } = useParams();
   return (
     <div className="sidebar">
@@ -31,6 +31,10 @@ function ServersBar({ servers }) {
           </div>
         );
       })}
+
+      <div className="server-icon-container add-server" onClick={toggleModal}>
+        <span className="material-icons">add</span>
+      </div>
     </div>
   );
 }

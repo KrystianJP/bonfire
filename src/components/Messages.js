@@ -18,6 +18,7 @@ function Messages({
   const { channelId } = useParams();
   const [msgText, setMsgText] = useState("");
   const roomId =
+    "friend" +
     Math.min(user.id, Number(friendId)).toString() +
     Math.max(user.id, Number(friendId)).toString();
   const [stateMessages, setStateMessages] = useState([]);
@@ -63,9 +64,7 @@ function Messages({
         setMsgText("");
         // send message to socket
         socket.emit("send_message", {
-          roomId:
-            Math.min(user.id, Number(friendId)).toString() +
-            Math.max(user.id, Number(friendId)).toString(),
+          roomId,
           message: data,
         });
       })

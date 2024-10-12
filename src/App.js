@@ -3,6 +3,7 @@ import FriendsPage from "./components/FriendsPage";
 import ServerPage from "./components/ServerPage";
 import SettingsPage from "./components/Settings/SettingsPage";
 import LoginPage from "./components/LoginPage";
+import ServerCreationModal from "./components/ServerCreationModal";
 
 import {
   BrowserRouter as Router,
@@ -18,6 +19,7 @@ import { io } from "socket.io-client";
 
 function App() {
   const [channelModalOpen, setChannelModalOpen] = useState(false);
+  const [serverModalOpen, setServerModalOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const [currentGroup, setCurrentGroup] = useState("");
   const [token, setToken] = useState("");
@@ -26,6 +28,11 @@ function App() {
   function toggleChannelModal(e, group) {
     setChannelModalOpen(!channelModalOpen);
     setCurrentGroup(group);
+    e.stopPropagation();
+  }
+
+  function toggleServerModal(e) {
+    setServerModalOpen(!serverModalOpen);
     e.stopPropagation();
   }
 
@@ -85,7 +92,7 @@ function App() {
             path="/"
             element={
               <>
-                <ServersBar servers={servers} />{" "}
+                <ServersBar toggleModal={toggleServerModal} servers={servers} />{" "}
                 <FriendsPage token={token} user={user} page="friends-list" />
               </>
             }
@@ -95,7 +102,7 @@ function App() {
             path="/messages/:friendId"
             element={
               <>
-                <ServersBar servers={servers} />{" "}
+                <ServersBar toggleModal={toggleServerModal} servers={servers} />{" "}
                 <FriendsPage token={token} user={user} page="dms" />
               </>
             }
@@ -131,7 +138,7 @@ function App() {
             path="/servers/:serverId/:channelId"
             element={
               <>
-                <ServersBar servers={servers} />{" "}
+                <ServersBar toggleModal={toggleServerModal} servers={servers} />{" "}
                 <ServerPage
                   user={user}
                   toggleChannelModal={toggleChannelModal}
@@ -182,6 +189,9 @@ function App() {
             toggleModal={toggleChannelModal}
             group={currentGroup}
           />
+        )}
+        {serverModalOpen && (
+          <ServerCreationModal toggleModal={toggleServerModal} />
         )}
       </div>
     </Router>

@@ -1598,3 +1598,47 @@ input:checked + .slider:before {
 .login-error {
   color: rgb(221, 78, 78);
 }
+
+.server-icon-container {
+  position: relative;
+}
+.server-icon-container.add-server {
+  background: var(--dark-darker);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+  transform: translateX(2px);
+  transition-duration: 250ms;
+}
+.server-icon-container.add-server:hover {
+  cursor: pointer;
+  background: #2fa05e;
+  border-radius: 30%;
+}
+.server-icon-container.add-server:hover span {
+  color: var(--dark-lightest);
+}
+.server-icon-container.add-server span {
+  color: #23a55a;
+  font-size: 1.6rem;
+}
+
+.server-name-input-container .search-bar {
+  padding-left: 10px;
+}
+
+.server-creation-modal .button {
+  background: #5865f2;
+  color: var(--dark-lightest);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+.server-creation-modal .button:hover {
+  cursor: pointer;
+  background: #4752c4;
+}

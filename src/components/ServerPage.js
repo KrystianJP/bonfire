@@ -163,13 +163,13 @@ function ServerPage({ toggleChannelModal, userProfileState, user }) {
           </div>
         </div>
       </div>
-      <Messages
+      {/* <Messages
         friendInfo={friendInfo}
         messages={
           channels.filter((channel) => channel.id == channelId)[0].messages
         }
         roles={roles}
-      />
+      /> */}
       <UsersBar
         userProfileState={userProfileState}
         friendInfo={friendInfo}
