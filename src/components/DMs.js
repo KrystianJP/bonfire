@@ -39,9 +39,10 @@ function DMs({ friendInfo, token, user }) {
       .then((res) => res.json())
       .then((data) => {
         setMessages(data);
+        friendInfo.unread = false;
       })
       .catch((err) => console.log(err));
-  }, [token, friendInfo.id, friendId]);
+  }, [token, friendInfo, friendId]);
 
   return (
     <div className="dms">

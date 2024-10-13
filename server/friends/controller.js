@@ -149,6 +149,17 @@ const sendMessage = (req, res) => {
   );
 };
 
+const updateUnread = (req, res) => {
+  pool.query(
+    queries.updateUnread,
+    [req.body.unread, req.user.id, req.params.friendId],
+    (error, _) => {
+      if (error) throw error;
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
 export default {
   getFriends,
   addFriendRequest,
@@ -157,4 +168,5 @@ export default {
   declineFriendRequest,
   getMessages,
   sendMessage,
+  updateUnread,
 };

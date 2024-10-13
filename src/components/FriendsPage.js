@@ -42,6 +42,7 @@ function FriendsPage({ page, user, token }) {
   return (
     <div className="friends-page">
       <FriendsBar
+        token={token}
         friends={friends}
         currentFriend={page === "dms" ? currentFriend : ""}
       />

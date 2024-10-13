@@ -66,6 +66,8 @@ function Messages({
         socket.emit("send_message", {
           roomId,
           message: data,
+          sender: user.id,
+          receiver: Number(friendId),
         });
       })
       .catch((err) => console.log(err));

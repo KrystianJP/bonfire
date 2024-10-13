@@ -19,7 +19,9 @@ function FriendDM({ friend, currentFriend }) {
         <img src={friend.pfp} alt="user profile picture" className="pfp-img" />
       </div>
       <span className="friend-name">{friend.name}</span>
-      {friend.unread ? <div className="unread-dot"></div> : null}
+      {friend.unread && friend.id != friendId ? (
+        <div className="unread-dot"></div>
+      ) : null}
     </Link>
   );
 }

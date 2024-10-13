@@ -40,26 +40,42 @@ const io = new Server(expressServer, {
   cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
 });
 
+let users = {};
+
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new Error("Invalid token"));
+  }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      return next(new Error("Invalid token"));
+    }
+    socket.user = user;
+    next();
+  });
+});
+
 io.on("connection", (socket) => {
-  console.log("New client connected");
+  users[socket.user.id] = socket.id;
 
   socket.on("join_room", (roomId) => {
     socket.join(roomId);
-    console.log("User joined room " + roomId);
   });
 
   socket.on("send_message", (data) => {
     io.to(data.roomId).emit("receive_message", data);
+    io.to(users[data.receiver]).emit("unread", data);
     console.log("message sent to " + data.roomId);
-    console.log(socket.rooms);
   });
 
   socket.on("leave_room", (roomId) => {
     socket.leave(roomId);
-    console.log("User left room " + roomId);
   });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
+    delete users[socket.user.id];
   });
 });

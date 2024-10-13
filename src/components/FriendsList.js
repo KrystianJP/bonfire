@@ -70,7 +70,13 @@ function FriendsList({ friends, token, setRefresh }) {
   }, [token, refreshRequests]);
 
   return (
-    <div className="friends-list">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        sendFriendRequest(newFriend);
+      }}
+      className="friends-list"
+    >
       <div className="search-container add-friend-container">
         <input
           id="add-friend"
@@ -84,10 +90,7 @@ function FriendsList({ friends, token, setRefresh }) {
           type="text"
           placeholder="Enter username to add"
         />
-        <button
-          className="add-friend-button"
-          onClick={() => sendFriendRequest(newFriend)}
-        >
+        <button className="add-friend-button" type="submit">
           Send Friend Request
         </button>
       </div>
@@ -175,7 +178,7 @@ function FriendsList({ friends, token, setRefresh }) {
           })}
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
