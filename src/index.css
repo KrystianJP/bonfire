@@ -176,7 +176,6 @@ label {
 }
 
 .server-icon-container {
-  position: relative;
   border-radius: 50%;
 }
 .server-icon {
@@ -193,15 +192,14 @@ label {
   visibility: visible;
 }
 .server-icon-container .tooltip-wrapper {
-  position: absolute;
+  position: fixed;
   visibility: hidden;
   left: 80px;
-  top: 50%;
+  /* top: 50%; */
 }
 .server-icon-container .tooltip {
   transform: translateY(-50%);
   background: var(--dark-about-me);
-  position: fixed;
   border-radius: 4px;
   padding: 5px 10px;
   color: var(--dark-lighter);

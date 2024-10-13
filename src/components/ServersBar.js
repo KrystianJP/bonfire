@@ -1,6 +1,16 @@
 import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
 function ServersBar({ servers, toggleModal }) {
   const { serverId } = useParams();
+  const [tooltipTop, setTooltipTop] = useState(0);
+
+  function calculateTop(serverId) {
+    const container = document.querySelector("#server-container-" + serverId);
+
+    const rect = container.getBoundingClientRect();
+    setTooltipTop(rect.top + 30);
+  }
+
   return (
     <div className="sidebar">
       <div className="bonfire-text">
@@ -16,7 +26,14 @@ function ServersBar({ servers, toggleModal }) {
       <div className="hor-line"></div>
       {servers.map((server) => {
         return (
-          <div key={server.id} className="server-icon-container">
+          <div
+            key={server.id}
+            className="server-icon-container"
+            id={"server-container-" + server.id}
+            onMouseEnter={() => {
+              calculateTop(server.id);
+            }}
+          >
             <Link
               to={`/servers/${server.id}/1`}
               className={
@@ -25,7 +42,7 @@ function ServersBar({ servers, toggleModal }) {
             >
               <img src={server.icon} alt="server icon" className="pfp-img" />
             </Link>
-            <div className="tooltip-wrapper">
+            <div className="tooltip-wrapper" style={{ top: tooltipTop }}>
               <div className="tooltip">{server.name}</div>
             </div>
           </div>
