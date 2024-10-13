@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import DMProfileBar from "./DMProfileBar";
 import Messages from "./Messages";
 import { useEffect, useState } from "react";
-import { useContext } from "react";
 function DMs({ friendInfo, token, user }) {
   var { friendId } = useParams();
   const [profileBarOpen, setProfileBarOpen] = useState(false);

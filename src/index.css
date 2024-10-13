@@ -302,6 +302,7 @@ label {
   overflow: hidden;
 }
 .friend-dm {
+  position: relative;
   display: grid;
   grid-template-columns: 32px 1fr;
   width: 100%;
@@ -1639,4 +1640,15 @@ input:checked + .slider:before {
 .server-creation-modal .button:hover {
   cursor: pointer;
   background: #4752c4;
+}
+
+.unread-dot {
+  background: rgb(221, 78, 78);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
 }

@@ -7,6 +7,15 @@ const getFriendRequests =
 const getMessages =
   "SELECT msg_text, authorid, msg_timestamp FROM direct_messages WHERE (authorid = $1 AND receiverid = $2) OR (authorid = $2 AND receiverid = $1) ORDER BY msg_timestamp DESC;";
 
+const updateUnread =
+  "UPDATE dms_unread SET unread=$1 WHERE sender = $2 AND receiver = $3;";
+
+const getUnread =
+  "SELECT sender FROM dms_unread WHERE receiver = $1 AND unread = true;";
+
+const insertUnread =
+  "INSERT INTO dms_unread (sender, receiver, unread) VALUES ($1, $2, false);";
+
 const deleteFriendRequest =
   "DELETE FROM friend_requests WHERE sender = $1 AND receiver = $2 OR sender = $2 AND receiver = $1;";
 
@@ -35,4 +44,7 @@ export default {
   getMessages,
   sendMessage,
   updateLastMessage,
+  updateUnread,
+  getUnread,
+  insertUnread,
 };
