@@ -1490,6 +1490,7 @@ input:checked + .slider:before {
 
 .current-server {
   border-radius: 30%;
+  background: #5865f2;
 }
 
 .login-container {

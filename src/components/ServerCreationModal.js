@@ -1,15 +1,16 @@
 import { useState } from "react";
 
-function ServerCreationModal({ toggleModal }) {
+function ServerCreationModal({ toggleModal, token }) {
   const [uploadURLDisplay, setUploadURLDisplay] = useState(false);
   const [pfpURL, setPfpURL] = useState("");
   const [pfpPlaceholderText, setPfpPlaceholderText] = useState(
     "Paste image URL here...",
   );
+  const [namePlaceholder, setNamePlaceholder] = useState("Enter Server Name");
   const [uploadedPfp, setUploadedPfp] = useState("");
   const [serverName, setServerName] = useState("");
   const defaultPfp =
-    "https://cdn-icons-png.flaticon.com/512/16745/16745664.png ";
+    "https://cdn-icons-png.flaticon.com/512/16745/16745664.png";
 
   function uploadPfp(url) {
     var image = new Image();
@@ -23,6 +24,29 @@ function ServerCreationModal({ toggleModal }) {
       setUploadedPfp("");
       setPfpPlaceholderText("Invalid URL, Try again...");
     };
+  }
+
+  function createServer() {
+    if (!serverName) {
+      setNamePlaceholder("Please " + namePlaceholder);
+      return;
+    }
+    fetch("/api/servers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: serverName,
+        icon: uploadedPfp,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        toggleModal();
+        window.location.href = `/servers/${data.id}/1`;
+      });
   }
 
   return (
@@ -42,7 +66,7 @@ function ServerCreationModal({ toggleModal }) {
             className="search-bar channel-name-input"
             onChange={(e) => setServerName(e.target.value)}
             value={serverName}
-            placeholder="Server Name"
+            placeholder={namePlaceholder}
           />{" "}
         </div>
         <div className="setting-container">
@@ -84,7 +108,9 @@ function ServerCreationModal({ toggleModal }) {
           <button className="cancel-button" onClick={toggleModal}>
             Cancel
           </button>
-          <button className="create-button">Create Server</button>
+          <button className="create-button" onClick={createServer}>
+            Create Server
+          </button>
         </div>
       </div>
     </div>

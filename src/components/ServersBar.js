@@ -1,6 +1,26 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-function ServersBar({ servers, toggleModal }) {
+function ServersBar({ toggleModal, token }) {
   const { serverId } = useParams();
+  const [servers, setServers] = useState([]);
+  const defaultIcon =
+    "https://cdn-icons-png.flaticon.com/512/16745/16745664.png";
+
+  useEffect(() => {
+    if (!token) return;
+
+    fetch("/api/servers", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setServers(data);
+      });
+  }, [token]);
+
   return (
     <div className="sidebar">
       <div className="bonfire-text">
@@ -23,7 +43,11 @@ function ServersBar({ servers, toggleModal }) {
                 "server-icon" + (serverId == server.id ? " current-server" : "")
               }
             >
-              <img src={server.icon} alt="server icon" className="pfp-img" />
+              <img
+                src={server.icon ? server.icon : defaultIcon}
+                alt="server icon"
+                className="pfp-img"
+              />
             </Link>
             <div className="tooltip-wrapper">
               <div className="tooltip">{server.name}</div>

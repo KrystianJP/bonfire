@@ -33,7 +33,9 @@ function App() {
 
   function toggleServerModal(e) {
     setServerModalOpen(!serverModalOpen);
-    e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
   }
 
   // getting user
@@ -92,7 +94,11 @@ function App() {
             path="/"
             element={
               <>
-                <ServersBar toggleModal={toggleServerModal} servers={servers} />{" "}
+                <ServersBar
+                  toggleModal={toggleServerModal}
+                  servers={servers}
+                  token={token}
+                />{" "}
                 <FriendsPage token={token} user={user} page="friends-list" />
               </>
             }
@@ -102,7 +108,11 @@ function App() {
             path="/messages/:friendId"
             element={
               <>
-                <ServersBar toggleModal={toggleServerModal} servers={servers} />{" "}
+                <ServersBar
+                  toggleModal={toggleServerModal}
+                  servers={servers}
+                  token={token}
+                />{" "}
                 <FriendsPage token={token} user={user} page="dms" />
               </>
             }
@@ -138,7 +148,11 @@ function App() {
             path="/servers/:serverId/:channelId"
             element={
               <>
-                <ServersBar toggleModal={toggleServerModal} servers={servers} />{" "}
+                <ServersBar
+                  token={token}
+                  toggleModal={toggleServerModal}
+                  servers={servers}
+                />{" "}
                 <ServerPage
                   user={user}
                   toggleChannelModal={toggleChannelModal}
@@ -188,10 +202,11 @@ function App() {
           <ChannelCreationModal
             toggleModal={toggleChannelModal}
             group={currentGroup}
+            token={token}
           />
         )}
         {serverModalOpen && (
-          <ServerCreationModal toggleModal={toggleServerModal} />
+          <ServerCreationModal token={token} toggleModal={toggleServerModal} />
         )}
       </div>
     </Router>
