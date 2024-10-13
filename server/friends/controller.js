@@ -9,7 +9,10 @@ import userQueries from "../users/queries.js";
 const getFriends = (req, res) => {
   pool.query(queries.getFriends, [req.user.id], (error, results) => {
     if (error) throw error;
-    res.status(200).json(results.rows);
+    pool.query(queries.getUnread, [req.user.id], (error, unread) => {
+      if (error) throw error;
+      res.status(200).json({ friends: results.rows, unread: unread.rows });
+    });
   });
 };
 
@@ -65,7 +68,21 @@ const acceptFriendRequest = (req, res) => {
             [results.rows[0].sender, results.rows[0].receiver],
             (error, _) => {
               if (error) throw error;
-              res.status(200).json({ message: "success" });
+              pool.query(
+                queries.insertUnread,
+                [req.user.id, req.params.friendId],
+                (error, _) => {
+                  if (error) throw error;
+                  pool.query(
+                    queries.insertUnread,
+                    [req.params.friendId, req.user.id],
+                    (error, _) => {
+                      if (error) throw error;
+                      res.status(200).json({ message: "success" });
+                    },
+                  );
+                },
+              );
             },
           );
         },
@@ -91,7 +108,14 @@ const getMessages = (req, res) => {
     [req.user.id, req.params.friendId],
     (error, results) => {
       if (error) throw error;
-      res.status(200).json(results.rows);
+      pool.query(
+        queries.updateUnread,
+        [false, req.params.friendId, req.user.id],
+        (error, _) => {
+          if (error) throw error;
+          res.status(200).json(results.rows);
+        },
+      );
     },
   );
 };
@@ -111,7 +135,14 @@ const sendMessage = (req, res) => {
         ],
         (error, _) => {
           if (error) throw error;
-          res.status(200).json({ message: results.rows[0] });
+          pool.query(
+            queries.updateUnread,
+            [true, req.user.id, req.params.friendId],
+            (error, _) => {
+              if (error) throw error;
+              res.status(200).json({ message: results.rows[0] });
+            },
+          );
         },
       );
     },

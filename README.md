@@ -24,3 +24,4 @@ Discord clone project
 - PostgreSQL database hosted on Neon.tech used to store data
 - JWT used to generate and verify secure web token for session management and API authentication
 - Passport.js handles authentication flow, with bcrypt used to hash user passwords
+- socket.io used to make WebSockets (for Real-time chatting)

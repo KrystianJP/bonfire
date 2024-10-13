@@ -18,7 +18,19 @@ function FriendsPage({ page, user, token }) {
       headers: { authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => setFriends(data));
+      .then((data) => {
+        setFriends(
+          data.friends.map((friend) => {
+            for (let i = 0; i < data.unread.length; i++) {
+              if (data.unread[i].sender === friend.id) {
+                friend.unread = true;
+                break;
+              }
+            }
+            return friend;
+          }),
+        );
+      });
   }, [token, refresh]);
 
   useEffect(() => {

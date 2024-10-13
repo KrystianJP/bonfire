@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+
 function ServersBar({ toggleModal, token }) {
   const { serverId } = useParams();
   const [servers, setServers] = useState([]);
   const defaultIcon =
     "https://cdn-icons-png.flaticon.com/512/16745/16745664.png";
+  const [tooltipTop, setTooltipTop] = useState(0);
+
+  function calculateTop(serverId) {
+    const container = document.querySelector("#server-container-" + serverId);
+
+    const rect = container.getBoundingClientRect();
+    setTooltipTop(rect.top + 30);
+  }
 
   useEffect(() => {
     if (!token) return;
@@ -36,7 +45,14 @@ function ServersBar({ toggleModal, token }) {
       <div className="hor-line"></div>
       {servers.map((server) => {
         return (
-          <div key={server.id} className="server-icon-container">
+          <div
+            key={server.id}
+            className="server-icon-container"
+            id={"server-container-" + server.id}
+            onMouseEnter={() => {
+              calculateTop(server.id);
+            }}
+          >
             <Link
               to={`/servers/${server.id}/1`}
               className={
@@ -49,7 +65,7 @@ function ServersBar({ toggleModal, token }) {
                 className="pfp-img"
               />
             </Link>
-            <div className="tooltip-wrapper">
+            <div className="tooltip-wrapper" style={{ top: tooltipTop }}>
               <div className="tooltip">{server.name}</div>
             </div>
           </div>
