@@ -5,6 +5,7 @@ import authenticateToken from "../authenticateToken.js";
 const router = Router();
 
 router.get("/", authenticateToken, controller.getServers);
+router.get("/:serverId", authenticateToken, controller.getServer);
 
 router.post("/", authenticateToken, controller.createServer);
 

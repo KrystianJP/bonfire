@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
   const [currentUser, setCurrentUser] = useState({});
+  console.log(roles);
 
   // run when user clicks on user
   function openUserProfile(e, user) {
@@ -22,19 +23,19 @@ function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
     if (!userProfileState[0]) {
       setCurrentUser({});
     }
-  }, [userProfileState[0]]);
+  }, [userProfileState]);
 
   return (
     <div className="users-bar">
-      {Object.keys(roles).map((role) => {
+      {roles.map((role) => {
         // if role in roleGroups, display the users in that group
-        if (Object.keys(roleGroups).includes(role)) {
+        if (Object.keys(roleGroups).includes(role.name)) {
           return (
             <div className="role-group channel-group" key={role}>
               <h4 className="role-group-name channel-group-name">
-                {role.toUpperCase()}
+                {role.name.toUpperCase()}
               </h4>
-              {roleGroups[role].map((user) => {
+              {roleGroups[role.name].map((user) => {
                 return (
                   <div
                     onClick={(e) => {
@@ -59,7 +60,7 @@ function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
                     </div>
                     <span
                       className="server-user-name friend-name"
-                      style={{ color: roles[role] }}
+                      style={{ color: role.colour }}
                     >
                       {user.name}
                     </span>

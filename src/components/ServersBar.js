@@ -20,6 +20,7 @@ function ServersBar({ toggleModal, token }) {
 
     fetch("/api/servers", {
       method: "GET",
+
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -46,17 +47,18 @@ function ServersBar({ toggleModal, token }) {
       {servers.map((server) => {
         return (
           <div
-            key={server.id}
+            key={server.serverid}
             className="server-icon-container"
-            id={"server-container-" + server.id}
+            id={"server-container-" + server.serverid}
             onMouseEnter={() => {
-              calculateTop(server.id);
+              calculateTop(server.serverid);
             }}
           >
             <Link
-              to={`/servers/${server.id}/1`}
+              to={`/servers/${server.serverid}/${server.default_channel}`}
               className={
-                "server-icon" + (serverId == server.id ? " current-server" : "")
+                "server-icon" +
+                (serverId == server.serverid ? " current-server" : "")
               }
             >
               <img

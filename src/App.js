@@ -184,6 +184,7 @@ function App() {
                   user={user}
                   toggleChannelModal={toggleChannelModal}
                   userProfileState={[userProfileOpen, setUserProfileOpen]}
+                  token={token}
                 />
               </>
             }

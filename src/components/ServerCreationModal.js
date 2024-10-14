@@ -45,7 +45,7 @@ function ServerCreationModal({ toggleModal, token }) {
       .then((res) => res.json())
       .then((data) => {
         toggleModal();
-        window.location.href = `/servers/${data.id}/1`;
+        window.location.href = `/servers/${data.serverid}/${data.default_channel}`;
       });
   }
 

@@ -17,7 +17,7 @@ function ChannelsBar({ toggleChannelModal, groups, channels }) {
               </span>
             </div>
             {channels
-              .filter((channel) => channel.group === group)
+              .filter((channel) => channel.channel_group === group)
               .map((channel) => {
                 return (
                   <Link
@@ -30,7 +30,7 @@ function ChannelsBar({ toggleChannelModal, groups, channels }) {
                     key={channel.id}
                   >
                     <span className="material-icons">
-                      {channel.type === "text" ? "tag" : "volume_up"}
+                      {channel.voice ? "volume_up" : "tag"}
                     </span>
                     <span className="channel-name">{channel.name}</span>
                   </Link>
