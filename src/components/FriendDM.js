@@ -6,7 +6,7 @@ function FriendDM({ friend, currentFriend }) {
   const [highlight, setHighlight] = useState("");
 
   useEffect(() => {
-    if (friend.id === currentFriend.id) {
+    if (currentFriend && friend.id === currentFriend.id) {
       setHighlight("highlight");
     } else {
       setHighlight("");

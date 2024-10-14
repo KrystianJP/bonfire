@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FriendDM from "./FriendDM";
 import { useEffect, useState } from "react";
 import { socket } from "../socket.js";
 
-function FriendsBar({ friends, currentFriend, token }) {
+function FriendsBar({ friends, token }) {
+  const { friendId } = useParams();
   const [newFriends, setNewFriends] = useState(friends);
+  const [currentFriend, setCurrentFriend] = useState({});
 
   useEffect(() => {
     if (!token || friends.length === 0) return;
@@ -23,6 +25,7 @@ function FriendsBar({ friends, currentFriend, token }) {
           setNewFriends((friends) => {
             return friends.map((friend) => {
               if (friend.id === data.sender) {
+                console.log("setting unread to false");
                 friend.unread = false;
               }
               return friend;
@@ -40,7 +43,12 @@ function FriendsBar({ friends, currentFriend, token }) {
         });
       });
     });
-  }, [token, friends, currentFriend]);
+  }, [token, friends]);
+
+  useEffect(() => {
+    if (friends.length === 0) return;
+    setCurrentFriend(friends.filter((friend) => friend.id == friendId)[0]);
+  }, [friends, friendId]);
 
   useEffect(() => {
     setNewFriends(friends);
@@ -50,7 +58,7 @@ function FriendsBar({ friends, currentFriend, token }) {
     <div className="friends-bar">
       <Link
         to="/"
-        className={"friend-tab " + (currentFriend === "" ? "highlight" : "")}
+        className={"friend-tab " + (!currentFriend ? "highlight" : "")}
       >
         <span className="material-icons friends-icon">group</span>
         <span className="friend-text">Friends</span>

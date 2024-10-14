@@ -17,10 +17,6 @@ function Message({ userInfo, message, roles }) {
     return roles.filter((role) => role.name === userInfo.roles[0])[0].colour;
   }
 
-  useEffect(() => {
-    console.log("rerendering message");
-  }, []);
-
   function doubleDigit(num) {
     if (num < 10) {
       return `0${num}`;

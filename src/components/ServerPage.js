@@ -63,7 +63,6 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("set messages");
         setMessages(data);
       });
   }, [channelId, token]);
