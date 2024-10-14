@@ -116,7 +116,6 @@ const getServer = (req, res) => {
                   [servers.rows[0].id],
                   (error, groups) => {
                     if (error) throw error;
-                    console.log(users.rows);
                     res.status(200).json({
                       server: servers.rows[0],
                       users: users.rows,

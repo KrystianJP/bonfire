@@ -4,15 +4,7 @@ import { useState, useEffect, useContext } from "react";
 import { io } from "socket.io-client";
 
 import { socket } from "../socket.js";
-function Messages({
-  users,
-  messages,
-  roles,
-  placeholder,
-  token,
-  user,
-  setMessages,
-}) {
+function Messages({ users, messages, roles, placeholder, token, user }) {
   const { friendId } = useParams();
   const { channelId } = useParams();
   const [msgText, setMsgText] = useState("");
@@ -37,19 +29,23 @@ function Messages({
     }
   }
 
+  // useEffect(() => {
+  //   console.log("rerendered message");
+  // }, []);
+
   useEffect(() => {
     if (!token) return;
     socket.emit("join_room", roomId);
     socket.on("receive_message", (data) => {
       const newMessage = data.message.message;
-      setStateMessages([newMessage, ...stateMessages]);
+      setStateMessages((prevMessages) => [newMessage, ...prevMessages]);
     });
 
     return () => {
       socket.emit("leave_room", roomId);
       socket.off("receive_message");
     };
-  }, [token, roomId, stateMessages]);
+  }, [token, roomId]);
 
   useEffect(() => {
     // setMessages([]);
@@ -108,9 +104,7 @@ function Messages({
           <Message
             userInfo={users[message.authorid]}
             message={message}
-            key={[message.msg_timestamp, message.authorid, Math.random()].join(
-              "-",
-            )}
+            key={message.id}
             roles={roles}
           />
         ))}
@@ -118,9 +112,7 @@ function Messages({
           <Message
             userInfo={users[message.authorid]}
             message={message}
-            key={[message.msg_timestamp, message.authorid, Math.random()].join(
-              "-",
-            )}
+            key={message.id}
             roles={roles}
           />
         ))}

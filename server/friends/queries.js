@@ -5,7 +5,7 @@ const getFriendRequests =
   "SELECT id,name,pfp FROM users JOIN friend_requests ON users.id = friend_requests.sender WHERE friend_requests.receiver = $1;";
 
 const getMessages =
-  "SELECT msg_text, authorid, msg_timestamp FROM direct_messages WHERE (authorid = $1 AND receiverid = $2) OR (authorid = $2 AND receiverid = $1) ORDER BY msg_timestamp DESC;";
+  "SELECT id,msg_text, authorid, msg_timestamp FROM direct_messages WHERE (authorid = $1 AND receiverid = $2) OR (authorid = $2 AND receiverid = $1) ORDER BY msg_timestamp DESC;";
 
 const updateUnread =
   "UPDATE dms_unread SET unread=$1 WHERE sender = $2 AND receiver = $3;";

@@ -48,7 +48,7 @@ function UsersBar({ userProfileState, roles, roleGroups }) {
                       "server-user friend-dm" +
                       (user.name === currentUser.name ? " highlight" : "")
                     }
-                    key={Math.random()}
+                    key={user.id}
                   >
                     <div className="server-user-pfp friend-pfp">
                       <img
