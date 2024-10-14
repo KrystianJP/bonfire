@@ -66,7 +66,9 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", (data) => {
     io.to(data.roomId).emit("receive_message", data);
-    io.to(users[data.receiver]).emit("unread", data);
+    if (data.receiver) {
+      io.to(users[data.receiver]).emit("unread", data);
+    }
     console.log("message sent to " + data.roomId);
   });
 

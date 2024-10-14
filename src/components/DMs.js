@@ -29,7 +29,7 @@ function DMs({ friendInfo, token, user }) {
   }, []);
 
   useEffect(() => {
-    // setMessages([]);
+    setMessages([]);
     if (!token) return;
     if (friendId != friendInfo.id) return;
     fetch("/api/friends/messages/" + friendId, {
@@ -75,7 +75,6 @@ function DMs({ friendInfo, token, user }) {
         users={{ [friendInfo.id]: friendInfo, [user.id]: user }}
         messages={messages}
         placeholder={friendInfo.name}
-        pageId={friendInfo.id}
         setMessages={setMessages}
       />
 

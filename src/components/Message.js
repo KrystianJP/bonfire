@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 /* eslint-disable jsx-a11y/img-redundant-alt */
 function Message({ userInfo, message, roles }) {
   message.timestamp = new Date(message.msg_timestamp.replace(" ", "T"));
@@ -10,6 +11,12 @@ function Message({ userInfo, message, roles }) {
   )}:${doubleDigit(message.timestamp.getMinutes())}
   `;
 
+  function getRoleColour() {
+    if (!roles) return "var(--dark-lightest)";
+
+    return roles.filter((role) => role.name === userInfo.roles[0])[0].colour;
+  }
+
   function doubleDigit(num) {
     if (num < 10) {
       return `0${num}`;
@@ -17,7 +24,6 @@ function Message({ userInfo, message, roles }) {
       return num;
     }
   }
-
   return (
     <div className="message-container-container">
       <div className="message-container">
@@ -31,7 +37,7 @@ function Message({ userInfo, message, roles }) {
         <span
           className="message-username"
           style={{
-            color: roles ? roles[userInfo.roles[0]] : "var(--dark-lightest)",
+            color: getRoleColour(),
           }}
         >
           {userInfo.name}

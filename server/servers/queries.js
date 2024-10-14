@@ -23,6 +23,11 @@ const createChannelGroup =
 const getUserRoles =
   "SELECT * FROM user_roles JOIN roles ON user_roles.roleid = roles.id JOIN servers ON roles.serverid = servers.id WHERE roles.serverid = $2 AND user_roles.userid = $1;";
 
+const getMessages =
+  "SELECT msg_text, authorid, msg_timestamp FROM channel_messages WHERE channelid=$1 ORDER BY msg_timestamp DESC;";
+const sendMessage =
+  "INSERT INTO channel_messages (authorid, channelid, msg_text, msg_timestamp) VALUES ($1, $2, $3, to_timestamp($4 / 1000.0)) RETURNING *;";
+
 export default {
   getServers,
   createServer,
@@ -36,4 +41,6 @@ export default {
   getUserRoles,
   getChannelGroups,
   createChannelGroup,
+  getMessages,
+  sendMessage,
 };

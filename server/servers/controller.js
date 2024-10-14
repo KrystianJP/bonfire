@@ -87,34 +87,46 @@ const getServer = (req, res) => {
             [req.params.serverId],
             (error, roles) => {
               if (error) throw error;
+              let promiseArray = [];
               users.rows.forEach((user) => {
                 user.roles = [];
               });
               for (let i = 0; i < users.rows.length; i++) {
-                pool.query(
-                  queries.getUserRoles,
-                  [users.rows[i].id, servers.rows[0].id],
-                  (error, results) => {
-                    if (error) throw error;
-                    users.rows[i].roles = results.rows;
-                  },
+                promiseArray.push(
+                  new Promise((resolve, reject) => {
+                    pool.query(
+                      queries.getUserRoles,
+                      [users.rows[i].id, servers.rows[0].id],
+                      (error, results) => {
+                        if (error) reject(error);
+                        resolve([...results.rows, "online"]);
+                      },
+                    );
+                  }),
                 );
               }
-              pool.query(
-                queries.getChannelGroups,
-                [servers.rows[0].id],
-                (error, groups) => {
-                  if (error) throw error;
 
-                  res.status(200).json({
-                    server: servers.rows[0],
-                    users: users.rows,
-                    channels: channels.rows,
-                    roles: roles.rows,
-                    channel_groups: groups.rows,
-                  });
-                },
-              );
+              Promise.all(promiseArray).then((values) => {
+                for (let i = 0; i < users.rows.length; i++) {
+                  users.rows[i].roles = values[i];
+                }
+
+                pool.query(
+                  queries.getChannelGroups,
+                  [servers.rows[0].id],
+                  (error, groups) => {
+                    if (error) throw error;
+                    console.log(users.rows);
+                    res.status(200).json({
+                      server: servers.rows[0],
+                      users: users.rows,
+                      channels: channels.rows,
+                      roles: roles.rows,
+                      channel_groups: groups.rows,
+                    });
+                  },
+                );
+              });
             },
           );
         },
@@ -123,4 +135,29 @@ const getServer = (req, res) => {
   });
 };
 
-export default { getServers, createServer, joinServer, getServer };
+const getMessages = (req, res) => {
+  pool.query(queries.getMessages, [req.params.channelId], (error, results) => {
+    if (error) throw error;
+    res.status(200).json(results.rows);
+  });
+};
+
+const sendMessage = (req, res) => {
+  pool.query(
+    queries.sendMessage,
+    [req.user.id, req.params.channelId, req.body.message, Date.now()],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json({ message: results.rows[0] });
+    },
+  );
+};
+
+export default {
+  getServers,
+  createServer,
+  joinServer,
+  getServer,
+  getMessages,
+  sendMessage,
+};

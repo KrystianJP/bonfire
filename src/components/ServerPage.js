@@ -12,6 +12,7 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
   const { serverId } = useParams();
 
   const [users, setUsers] = useState([]);
+  const [usersMap, setUsersMap] = useState({});
   const [channels, setChannels] = useState([]);
   const [channelGroups, setChannelGroups] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -19,6 +20,8 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
     online: [],
     offline: [],
   });
+
+  const [messages, setMessages] = useState([]);
 
   function toggleDropdown() {
     setDropdownOpen(!dropdownOpen);
@@ -35,6 +38,13 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.users);
+        // map id: user for messages
+        let tempUsers = {};
+        data.users.forEach((user) => {
+          tempUsers[user.id] = user;
+        });
+        setUsersMap(tempUsers);
+
         setChannels(data.channels);
         setRoles([
           ...data.roles,
@@ -43,6 +53,20 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
         setChannelGroups(data.channel_groups);
       });
   }, [token, serverId]);
+
+  useEffect(() => {
+    if (!token || !channelId) return;
+    setMessages([]);
+    fetch("/api/servers/messages/" + channelId, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("set messages");
+        setMessages(data);
+      });
+  }, [channelId, token]);
 
   // make role groups { group_name: [users] }
   useEffect(() => {
@@ -106,13 +130,20 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
           </div>
         </div>
       </div>
-      {/* <Messages
-        friendInfo={friendInfo}
-        messages={
-          channels.filter((channel) => channel.id == channelId)[0].messages
-        }
-        roles={roles}
-      /> */}
+      {channels.length > 0 && users.length > 0 && users[0] && (
+        <Messages
+          users={usersMap}
+          messages={messages}
+          user={usersMap[user.id]}
+          roles={roles}
+          placeholder={
+            "#" + channels.filter((channel) => channel.id == channelId)[0].name
+          }
+          setMessages={setMessages}
+          token={token}
+        />
+      )}
+
       <UsersBar
         userProfileState={userProfileState}
         roles={roles}

@@ -10,17 +10,21 @@ function Messages({
   roles,
   placeholder,
   token,
-  pageId,
   user,
   setMessages,
 }) {
   const { friendId } = useParams();
   const { channelId } = useParams();
   const [msgText, setMsgText] = useState("");
-  const roomId =
-    "friend" +
-    Math.min(user.id, Number(friendId)).toString() +
-    Math.max(user.id, Number(friendId)).toString();
+  let roomId;
+  if (!roles) {
+    roomId =
+      "friend" +
+      Math.min(user.id, Number(friendId)).toString() +
+      Math.max(user.id, Number(friendId)).toString();
+  } else {
+    roomId = "channel" + channelId;
+  }
   const [stateMessages, setStateMessages] = useState([]);
 
   function sendMessage() {
@@ -28,6 +32,8 @@ function Messages({
     // send message to friend
     if (friendId) {
       sendDM();
+    } else if (channelId) {
+      sendChannelMessage();
     }
   }
 
@@ -46,7 +52,7 @@ function Messages({
   }, [token, roomId, stateMessages]);
 
   useEffect(() => {
-    setMessages([]);
+    // setMessages([]);
     setStateMessages([]);
   }, [friendId, channelId]);
 
@@ -68,6 +74,28 @@ function Messages({
           message: data,
           sender: user.id,
           receiver: Number(friendId),
+        });
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function sendChannelMessage() {
+    fetch("/api/servers/message/" + channelId, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ message: msgText }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMsgText("");
+        // send message to socket
+        socket.emit("send_message", {
+          roomId,
+          message: data,
+          sender: user.id,
         });
       })
       .catch((err) => console.log(err));
