@@ -73,44 +73,6 @@ function App() {
     }
   }, [token]);
 
-  const servers = [
-    {
-      id: 1,
-      name: "Server for cool people",
-      icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhGz3EHmtHBkrjYLUhhTWcfZaJFT1h_4M2w&s",
-    },
-    {
-      id: 2,
-      name: "Server 2",
-      icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
-    },
-    {
-      id: 7,
-      name: "Server 2",
-      icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
-    },
-    {
-      id: 3,
-      name: "Server 2",
-      icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
-    },
-    {
-      id: 4,
-      name: "Server 2",
-      icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
-    },
-    {
-      id: 5,
-      name: "Server 2",
-      icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
-    },
-    {
-      id: 6,
-      name: "Server 2",
-      icon: "https://www.mensjournal.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MjA3NzM1MTMxNzYxMjg5MTg5/shrek-5-announcement.jpg",
-    },
-  ];
-
   return (
     <Router>
       <div className="App" onClick={() => setUserProfileOpen(false)}>
@@ -121,11 +83,7 @@ function App() {
             path="/"
             element={
               <>
-                <ServersBar
-                  toggleModal={toggleServerModal}
-                  servers={servers}
-                  token={token}
-                />{" "}
+                <ServersBar toggleModal={toggleServerModal} token={token} />{" "}
                 <FriendsPage token={token} user={user} page="friends-list" />
               </>
             }
@@ -135,11 +93,7 @@ function App() {
             path="/messages/:friendId"
             element={
               <>
-                <ServersBar
-                  toggleModal={toggleServerModal}
-                  servers={servers}
-                  token={token}
-                />{" "}
+                <ServersBar toggleModal={toggleServerModal} token={token} />{" "}
                 <FriendsPage token={token} user={user} page="dms" />
               </>
             }
@@ -175,11 +129,7 @@ function App() {
             path="/servers/:serverId/:channelId"
             element={
               <>
-                <ServersBar
-                  token={token}
-                  toggleModal={toggleServerModal}
-                  servers={servers}
-                />{" "}
+                <ServersBar token={token} toggleModal={toggleServerModal} />{" "}
                 <ServerPage
                   user={user}
                   toggleChannelModal={toggleChannelModal}

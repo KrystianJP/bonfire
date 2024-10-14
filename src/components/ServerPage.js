@@ -40,9 +40,11 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
           ...data.roles,
           { name: "online", colour: "var(--dark-text)" },
         ]);
+        setChannelGroups(data.channel_groups);
       });
   }, [token, serverId]);
 
+  // make role groups { group_name: [users] }
   useEffect(() => {
     if (!users) return;
     let tempRoleGroups = {
@@ -66,102 +68,6 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
     setRoleGroups(tempRoleGroups);
   }, [users]);
 
-  // // THIS WILL FIND THE FRIENDS INFO BASED ON USERNAME
-  // // AND ONLY STORE THEIR INFO, THIS IS FOR DEMONSTRATION
-  // const friendInfo = {
-  //   PickleJuice: {
-  //     username: "PickleJuice",
-  //     pfp: "https://imgcdn.stablediffusionweb.com/2024/4/16/7263bda6-c6d4-46f5-90d7-9a659e42bce1.jpg",
-  //     about: "me like pickles wowowowowoowowowow whoopee",
-  //     online: true,
-  //     roles: ["admin", "something", "very cool"],
-  //   },
-  //   SomebodyElse: {
-  //     username: "SomebodyElse",
-  //     pfp: "https://pics.craiyon.com/2023-10-25/37325fe41b05409d89f905897c6e0da3.webp",
-  //     about: "somebody that you used to know SOMEBODYYY",
-  //     online: true,
-  //     roles: ["cool"],
-  //   },
-  //   KrysJP: {
-  //     username: "KrysJP",
-  //     pfp: "https://i.pinimg.com/originals/d5/7c/eb/d57ceb9546385b8d5c224c34502ddcf6.jpg",
-  //     about: "me like krys",
-  //     online: true,
-  //     roles: ["admin"],
-  //   },
-  //   PeanutButter: {
-  //     username: "PeanutButter",
-  //     pfp: "https://domf5oio6qrcr.cloudfront.net/medialibrary/1980/peanut-butter-healthy.jpg",
-  //     about: "me like krys",
-  //     online: false,
-  //     roles: [],
-  //   },
-  // };
-
-  const groups = ["general", "other"];
-  // const channels = useMemo(
-  //   () => [
-  //     {
-  //       name: "Channel 1",
-  //       id: 1,
-  //       type: "text",
-  //       group: "general",
-  //       messages: [
-  //         {
-  //           username: "KrysJP",
-  //           message: "im aight",
-  //           timestamp: new Date(2024, 8, 29, 19, 37),
-  //         },
-  //         {
-  //           username: "SomebodyElse",
-  //           message: "doing fantastic, u?",
-  //           timestamp: new Date(2024, 8, 29, 19, 32),
-  //         },
-  //         {
-  //           username: "PickleJuice",
-  //           message: "Yo how you doing",
-  //           timestamp: new Date(2024, 8, 29, 19, 30),
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       name: "Channel 2",
-  //       id: 2,
-  //       type: "text",
-  //       group: "other",
-  //       messages: [
-  //         {
-  //           username: "PeanutButter",
-  //           message: "u kinda right mate",
-  //           timestamp: new Date(2024, 8, 29, 19, 32),
-  //         },
-  //         {
-  //           username: "KrysJP",
-  //           message: "looking kinda empty",
-  //           timestamp: new Date(2024, 8, 29, 19, 30),
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       name: "Voice Channel",
-  //       id: 3,
-  //       group: "general",
-  //       type: "voice",
-  //     },
-  //   ],
-  //   [],
-  // );
-
-  // const roles = {
-  //   admin: "#ffbb00",
-  //   something: "#ff00b3",
-  //   "very cool": "#ff0008",
-  //   cool: "#00d9ff",
-  //   online: "var(--dark-text)",
-  //   offline: "var(--dark-highlight)",
-  // };
-
   return (
     <div className="server-page">
       <div className="server-name-container" onClick={toggleDropdown}>
@@ -172,7 +78,7 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
       </div>
       <ChannelsBar
         toggleChannelModal={toggleChannelModal}
-        groups={groups}
+        groups={channelGroups}
         channels={channels}
       />
       <ProfileBar user={user} />
@@ -209,7 +115,6 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
       /> */}
       <UsersBar
         userProfileState={userProfileState}
-        friendInfo={users}
         roles={roles}
         roleGroups={roleGroups}
       />

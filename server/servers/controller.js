@@ -20,21 +20,32 @@ const createServer = (req, res) => {
     (error, results) => {
       if (error) throw error;
       pool.query(
-        queries.createChannel,
-        ["general", results.rows[0].id, false, "general"],
-        (error, channels) => {
+        queries.createChannelGroup,
+        ["general", results.rows[0].id, 0],
+        (error, groups) => {
           if (error) throw error;
           pool.query(
-            queries.setDefaultChannel,
-            [channels.rows[0].id, results.rows[0].id],
-            (error, _) => {
+            queries.createChannel,
+            ["general", results.rows[0].id, false, groups.rows[0].id],
+            (error, channels) => {
               if (error) throw error;
               pool.query(
-                queries.joinServer,
-                [results.rows[0].id, req.user.id],
+                queries.setDefaultChannel,
+                [channels.rows[0].id, results.rows[0].id],
                 (error, _) => {
                   if (error) throw error;
-                  res.status(200).json(results.rows[0]);
+
+                  pool.query(
+                    queries.joinServer,
+                    [results.rows[0].id, req.user.id],
+                    (error, _) => {
+                      if (error) throw error;
+                      res.status(200).json({
+                        serverid: results.rows[0].id,
+                        default_channel: channels.rows[0].id,
+                      });
+                    },
+                  );
                 },
               );
             },
@@ -61,6 +72,9 @@ const joinServer = (req, res) => {
 const getServer = (req, res) => {
   pool.query(queries.getServer, [req.params.serverId], (error, servers) => {
     if (error) throw error;
+    if (servers.rows.length === 0) {
+      res.status(404).json({ message: "Server not found" });
+    }
     pool.query(queries.getUsers, [req.params.serverId], (error, users) => {
       if (error) throw error;
       pool.query(
@@ -86,12 +100,21 @@ const getServer = (req, res) => {
                   },
                 );
               }
-              res.status(200).json({
-                server: servers.rows[0],
-                users: users.rows,
-                channels: channels.rows,
-                roles: roles.rows,
-              });
+              pool.query(
+                queries.getChannelGroups,
+                [servers.rows[0].id],
+                (error, groups) => {
+                  if (error) throw error;
+
+                  res.status(200).json({
+                    server: servers.rows[0],
+                    users: users.rows,
+                    channels: channels.rows,
+                    roles: roles.rows,
+                    channel_groups: groups.rows,
+                  });
+                },
+              );
             },
           );
         },

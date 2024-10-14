@@ -8,7 +8,7 @@ function ChannelsBar({ toggleChannelModal, groups, channels }) {
         return (
           <div className="channel-group" key={group}>
             <div className="channel-group-name-container">
-              <h4 className="channel-group-name">{group.toUpperCase()}</h4>
+              <h4 className="channel-group-name">{group.name.toUpperCase()}</h4>
               <span
                 className="material-icons"
                 onClick={(e) => toggleChannelModal(e, group)}
@@ -17,7 +17,7 @@ function ChannelsBar({ toggleChannelModal, groups, channels }) {
               </span>
             </div>
             {channels
-              .filter((channel) => channel.channel_group === group)
+              .filter((channel) => channel.channel_group === group.id)
               .map((channel) => {
                 return (
                   <Link

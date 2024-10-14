@@ -2,9 +2,8 @@
 import ServerUserProfile from "./ServerUserProfile";
 import { useState, useEffect } from "react";
 
-function UsersBar({ userProfileState, friendInfo, roles, roleGroups }) {
+function UsersBar({ userProfileState, roles, roleGroups }) {
   const [currentUser, setCurrentUser] = useState({});
-  console.log(roles);
 
   // run when user clicks on user
   function openUserProfile(e, user) {
