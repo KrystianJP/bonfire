@@ -28,6 +28,10 @@ const getMessages =
 const sendMessage =
   "INSERT INTO channel_messages (authorid, channelid, msg_text, msg_timestamp) VALUES ($1, $2, $3, to_timestamp($4 / 1000.0)) RETURNING *;";
 
+const getBans = "SELECT * FROM bans WHERE serverid = $1;";
+
+const findServer = "SELECT name FROM servers WHERE name = $1;";
+
 export default {
   getServers,
   createServer,
@@ -43,4 +47,6 @@ export default {
   createChannelGroup,
   getMessages,
   sendMessage,
+  getBans,
+  findServer,
 };

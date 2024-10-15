@@ -20,6 +20,8 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
     online: [],
     offline: [],
   });
+  const [server, setServer] = useState({});
+  const [usersBarOpen, setUsersBarOpen] = useState(true);
 
   const [messages, setMessages] = useState([]);
 
@@ -44,6 +46,8 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
           tempUsers[user.id] = user;
         });
         setUsersMap(tempUsers);
+
+        setServer(data.server);
 
         setChannels(data.channels);
         setRoles([
@@ -94,9 +98,7 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
   return (
     <div className="server-page">
       <div className="server-name-container" onClick={toggleDropdown}>
-        <span className="server-name">
-          Server Name that is very very very long
-        </span>
+        <span className="server-name">{server.name}</span>
         {dropdownOpen && <ServerDropdown />}
       </div>
       <ChannelsBar
@@ -117,7 +119,12 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
             })}
         </div>
         <div className="top-bar-right">
-          <span className="material-icons">group</span>
+          <span
+            className="material-icons"
+            onClick={() => setUsersBarOpen(!usersBarOpen)}
+          >
+            group
+          </span>
           <div className="search-container">
             <span className="material-icons search-icon">search</span>
             <input
@@ -142,12 +149,13 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
           token={token}
         />
       )}
-
-      <UsersBar
-        userProfileState={userProfileState}
-        roles={roles}
-        roleGroups={roleGroups}
-      />
+      {usersBarOpen && (
+        <UsersBar
+          userProfileState={userProfileState}
+          roles={roles}
+          roleGroups={roleGroups}
+        />
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ const router = Router();
 router.get("/", authenticateToken, controller.getServers);
 router.get("/:serverId", authenticateToken, controller.getServer);
 router.get("/messages/:channelId", authenticateToken, controller.getMessages);
+router.get("/find/:serverName", controller.findServer);
 
 router.post("/", authenticateToken, controller.createServer);
 

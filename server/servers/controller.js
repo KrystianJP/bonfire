@@ -75,61 +75,69 @@ const getServer = (req, res) => {
     if (servers.rows.length === 0) {
       res.status(404).json({ message: "Server not found" });
     }
-    pool.query(queries.getUsers, [req.params.serverId], (error, users) => {
+    pool.query(queries.getBans, [req.params.serverId], (error, bans) => {
       if (error) throw error;
-      pool.query(
-        queries.getChannels,
-        [req.params.serverId],
-        (error, channels) => {
-          if (error) throw error;
-          pool.query(
-            queries.getRoles,
-            [req.params.serverId],
-            (error, roles) => {
-              if (error) throw error;
-              let promiseArray = [];
-              users.rows.forEach((user) => {
-                user.roles = [];
-              });
-              for (let i = 0; i < users.rows.length; i++) {
-                promiseArray.push(
-                  new Promise((resolve, reject) => {
-                    pool.query(
-                      queries.getUserRoles,
-                      [users.rows[i].id, servers.rows[0].id],
-                      (error, results) => {
-                        if (error) reject(error);
-                        resolve([...results.rows, "online"]);
-                      },
-                    );
-                  }),
-                );
-              }
-
-              Promise.all(promiseArray).then((values) => {
+      // check if user is banned
+      if (bans.rows.some((ban) => ban.userid === req.user.id)) {
+        res.status(403).json({ message: "You are banned from this server" });
+      }
+      pool.query(queries.getUsers, [req.params.serverId], (error, users) => {
+        if (error) throw error;
+        pool.query(
+          queries.getChannels,
+          [req.params.serverId],
+          (error, channels) => {
+            if (error) throw error;
+            pool.query(
+              queries.getRoles,
+              [req.params.serverId],
+              (error, roles) => {
+                if (error) throw error;
+                let promiseArray = [];
+                users.rows.forEach((user) => {
+                  user.roles = [];
+                });
                 for (let i = 0; i < users.rows.length; i++) {
-                  users.rows[i].roles = values[i];
+                  promiseArray.push(
+                    new Promise((resolve, reject) => {
+                      pool.query(
+                        queries.getUserRoles,
+                        [users.rows[i].id, servers.rows[0].id],
+                        (error, results) => {
+                          if (error) reject(error);
+                          resolve([...results.rows, "online"]);
+                        },
+                      );
+                    }),
+                  );
                 }
 
-                pool.query(
-                  queries.getChannelGroups,
-                  [servers.rows[0].id],
-                  (error, groups) => {
-                    if (error) throw error;
-                    res.status(200).json({
-                      server: servers.rows[0],
-                      users: users.rows,
-                      channels: channels.rows,
-                      roles: roles.rows,
-                      channel_groups: groups.rows,
-                    });
-                  },
-                );
-              });
-            },
-          );
-        },
-      );
+                Promise.all(promiseArray).then((values) => {
+                  for (let i = 0; i < users.rows.length; i++) {
+                    users.rows[i].roles = values[i];
+                  }
+
+                  pool.query(
+                    queries.getChannelGroups,
+                    [servers.rows[0].id],
+                    (error, groups) => {
+                      if (error) throw error;
+                      res.status(200).json({
+                        server: servers.rows[0],
+                        users: users.rows,
+                        channels: channels.rows,
+                        roles: roles.rows,
+                        channel_groups: groups.rows,
+                        bans: bans.rows,
+                      });
+                    },
+                  );
+                });
+              },
+            );
+          },
+        );
+      });
     });
   });
 };
@@ -152,6 +160,13 @@ const sendMessage = (req, res) => {
   );
 };
 
+const findServer = (req, res) => {
+  pool.query(queries.findServer, [req.params.serverName], (error, results) => {
+    if (error) throw error;
+    res.status(200).json(results.rows);
+  });
+};
+
 export default {
   getServers,
   createServer,
@@ -159,4 +174,5 @@ export default {
   getServer,
   getMessages,
   sendMessage,
+  findServer,
 };

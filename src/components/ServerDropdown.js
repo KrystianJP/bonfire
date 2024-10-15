@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function ServerDropdown() {
+  const { serverId } = useParams();
   return (
     <div
       className="server-dropdown"
@@ -8,7 +9,10 @@ function ServerDropdown() {
         e.stopPropagation();
       }}
     >
-      <Link to="/servers/1/settings/overview" className="server-dropdown-item">
+      <Link
+        to={`/servers/${serverId}/settings/overview`}
+        className="server-dropdown-item"
+      >
         {" "}
         Server Settings
       </Link>
