@@ -189,13 +189,28 @@ const updateSettings = (req, res) => {
         );
       });
       req.body.roles.forEach((role) => {
-        pool.query(queries.updateRoles, [role.name, role.id], (error, _) => {
-          if (error) throw error;
-        });
+        if (role.id) {
+          pool.query(queries.updateRoles, [role.name, role.id], (error, _) => {
+            if (error) throw error;
+          });
+        }
       });
       res.status(200).json({ message: "success" });
     },
   );
+};
+
+const addRoles = (req, res) => {
+  req.body.roles.forEach((role) => {
+    pool.query(
+      queries.addRole,
+      [role.name, role.colour, role.rolenr, req.params.serverId],
+      (error, _) => {
+        if (error) throw error;
+      },
+    );
+  });
+  res.status(200).json({ message: "success" });
 };
 
 export default {
@@ -207,4 +222,5 @@ export default {
   sendMessage,
   findServer,
   updateSettings,
+  addRoles,
 };

@@ -1168,7 +1168,6 @@ input:checked + .slider:before {
   grid-template-columns: 1fr min-content;
 }
 .role:hover {
-  cursor: pointer;
   background: var(--dark-highlight);
 }
 .role-container .role-color {
@@ -1178,6 +1177,9 @@ input:checked + .slider:before {
   border: 1px solid var(--dark-highlight);
   display: inline-block;
   background: rgb(163, 53, 53);
+}
+.role-container .role-color:hover {
+  cursor: pointer;
 }
 .role-container .friend-pfp {
   flex-shrink: 0;
@@ -1653,4 +1655,11 @@ input:checked + .slider:before {
   top: 50%;
   right: 5px;
   transform: translateY(-50%);
+}
+
+.create-role {
+  padding: 5px 10px !important;
+  font-size: 0.85rem !important;
+  margin-top: 10px;
+  margin-bottom: -10px;
 }

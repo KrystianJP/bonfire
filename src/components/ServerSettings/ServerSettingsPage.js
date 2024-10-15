@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Overview from "./Overview";
 import Roles from "./Roles";
 import Invites from "./Invites";
@@ -8,7 +8,7 @@ import Bans from "./Bans";
 import Channels from "./Channels";
 
 function ServerSettingsPage({ setting, token }) {
-  // will have deletedRoles, deletedChannels... etc. state later
+  // will have deletedRoles, deletedChannels... etc. state later (and added)
   const { serverId } = useParams();
   const [overview, setOverview] = useState({
     name: "",
@@ -21,6 +21,17 @@ function ServerSettingsPage({ setting, token }) {
   const [channels, setChannels] = useState([]);
   const [channelGroups, setChannelGroups] = useState([]);
   const [bans, setBans] = useState([]);
+
+  // addition
+  let addedRoles = useRef([]);
+  let addedChannels = [];
+  let addedGroups = [];
+
+  // deletion
+  let deletedRoles = [];
+  let deletedChannels = [];
+  let deletedGroups = [];
+  let deletedBans = [];
 
   const [changesButton, setChangesButton] = useState(false);
   const [busy, setBusy] = useState(true);
@@ -41,6 +52,7 @@ function ServerSettingsPage({ setting, token }) {
           });
           setAnyoneInvite(data.server.anyone_invite);
           setRoles(data.roles);
+
           setChannels(data.channels);
           setChannelGroups(data.channel_groups);
           setBans(data.bans);
@@ -54,7 +66,7 @@ function ServerSettingsPage({ setting, token }) {
     setChangesButton(true);
   }
 
-  // will also include delete functionality
+  // will also include delete and add functionality
   function saveChanges() {
     fetch("/api/servers/settings/" + serverId, {
       method: "POST",
@@ -71,6 +83,18 @@ function ServerSettingsPage({ setting, token }) {
         roles,
       }),
     });
+    console.log(addedRoles);
+    if (addedRoles.current.length > 0) {
+      fetch("/api/servers/roles/" + serverId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ roles: addedRoles.current }),
+      });
+    }
+
     setChangesButton(false);
     window.location.href =
       "/servers/" + serverId + "/" + overview.defaultChannel;
@@ -133,7 +157,12 @@ function ServerSettingsPage({ setting, token }) {
           />
         )}
         {!busy && setting === "roles" && (
-          <Roles info={roles} setRoles={setRoles} setState={setState} />
+          <Roles
+            roles={roles}
+            setRoles={setRoles}
+            setState={setState}
+            addedRoles={addedRoles}
+          />
         )}
         {!busy && setting === "invites" && (
           <Invites

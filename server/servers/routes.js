@@ -15,6 +15,8 @@ router.post("/join/:serverId", authenticateToken, controller.joinServer);
 
 router.post("/message/:channelId", authenticateToken, controller.sendMessage);
 
+router.post("/roles/:serverId", authenticateToken, controller.addRoles);
+
 router.post(
   "/settings/:serverId",
   authenticateToken,
