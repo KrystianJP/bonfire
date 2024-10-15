@@ -167,6 +167,37 @@ const findServer = (req, res) => {
   });
 };
 
+const updateSettings = (req, res) => {
+  pool.query(
+    queries.updateServer,
+    [
+      req.body.name,
+      req.body.icon,
+      req.body.default_channel,
+      req.body.anyone_invite,
+      req.params.serverId,
+    ],
+    (error, results) => {
+      if (error) throw error;
+      req.body.channels.forEach((channel) => {
+        pool.query(
+          queries.updateChannels,
+          [channel.name, channel.id],
+          (error, _) => {
+            if (error) throw error;
+          },
+        );
+      });
+      req.body.roles.forEach((role) => {
+        pool.query(queries.updateRoles, [role.name, role.id], (error, _) => {
+          if (error) throw error;
+        });
+      });
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
 export default {
   getServers,
   createServer,
@@ -175,4 +206,5 @@ export default {
   getMessages,
   sendMessage,
   findServer,
+  updateSettings,
 };

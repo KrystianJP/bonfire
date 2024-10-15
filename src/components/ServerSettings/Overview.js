@@ -16,7 +16,7 @@ function Overview({ info, setOverview, setState, channels }) {
     var image = new Image();
     image.src = url;
     image.onload = () => {
-      setState(setOverview, { ...info, pfp: url });
+      setState(setOverview, { ...info, icon: url });
       setUploadURLDisplay(false);
     };
     image.onerror = () => {

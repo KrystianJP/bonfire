@@ -32,6 +32,17 @@ const getBans = "SELECT * FROM bans WHERE serverid = $1;";
 
 const findServer = "SELECT name FROM servers WHERE name = $1;";
 
+const updateServer =
+  "UPDATE servers SET name = $1, icon = $2, default_channel= $3, anyone_invite = $4 WHERE id = $5;";
+const updateChannels = "UPDATE channels SET name = $1 WHERE id = $2;";
+const updateRoles = "UPDATE roles SET name = $1, color = $2 WHERE id = $3;";
+
+const deleteChannel = "DELETE FROM channels WHERE id = $1;";
+const deleteGroup = "DELETE FROM channel_groups WHERE id = $1;";
+const deleteBan = "DELETE FROM bans WHERE id = $1;";
+const deleteRole = "DELETE FROM roles WHERE id = $1;";
+const deleteServer = "DELETE FROM servers WHERE id = $1;";
+
 export default {
   getServers,
   createServer,
@@ -49,4 +60,12 @@ export default {
   sendMessage,
   getBans,
   findServer,
+  updateServer,
+  updateChannels,
+  updateRoles,
+  deleteChannel,
+  deleteGroup,
+  deleteBan,
+  deleteRole,
+  deleteServer,
 };

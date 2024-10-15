@@ -15,4 +15,10 @@ router.post("/join/:serverId", authenticateToken, controller.joinServer);
 
 router.post("/message/:channelId", authenticateToken, controller.sendMessage);
 
+router.post(
+  "/settings/:serverId",
+  authenticateToken,
+  controller.updateSettings,
+);
+
 export default router;

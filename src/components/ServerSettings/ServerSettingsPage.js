@@ -8,6 +8,7 @@ import Bans from "./Bans";
 import Channels from "./Channels";
 
 function ServerSettingsPage({ setting, token }) {
+  // will have deletedRoles, deletedChannels... etc. state later
   const { serverId } = useParams();
   const [overview, setOverview] = useState({
     name: "",
@@ -53,18 +54,26 @@ function ServerSettingsPage({ setting, token }) {
     setChangesButton(true);
   }
 
+  // will also include delete functionality
   function saveChanges() {
-    fetch("/api/servers/settings", {
+    fetch("/api/servers/settings/" + serverId, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({}),
+      body: JSON.stringify({
+        name: overview.name,
+        icon: overview.icon,
+        default_channel: overview.defaultChannel,
+        anyone_invite: anyoneInvite,
+        channels,
+        roles,
+      }),
     });
     setChangesButton(false);
     window.location.href =
-      "/servers" + serverId + "/" + overview.defaultChannel;
+      "/servers/" + serverId + "/" + overview.defaultChannel;
   }
 
   return (
