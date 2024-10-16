@@ -28,7 +28,7 @@ function ServerSettingsPage({ setting, token }) {
   let addedGroups = [];
 
   // deletion
-  let deletedRoles = [];
+  let deletedRoles = useRef([]);
   let deletedChannels = [];
   let deletedGroups = [];
   let deletedBans = [];
@@ -83,21 +83,39 @@ function ServerSettingsPage({ setting, token }) {
         roles,
       }),
     });
-    console.log(addedRoles);
     if (addedRoles.current.length > 0) {
-      fetch("/api/servers/roles/" + serverId, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      sendRequest(
+        "/api/servers/roles/" + serverId,
+        {
+          roles: addedRoles.current,
         },
-        body: JSON.stringify({ roles: addedRoles.current }),
-      });
+        "POST",
+      );
+    }
+    if (deletedRoles.current.length > 0) {
+      sendRequest(
+        "/api/servers/roles/" + serverId,
+        {
+          roles: deletedRoles.current,
+        },
+        "DELETE",
+      );
     }
 
     setChangesButton(false);
-    window.location.href =
-      "/servers/" + serverId + "/" + overview.defaultChannel;
+    // window.location.href =
+    //   "/servers/" + serverId + "/" + overview.defaultChannel;
+  }
+
+  function sendRequest(url, data, method) {
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
   }
 
   return (
@@ -162,6 +180,7 @@ function ServerSettingsPage({ setting, token }) {
             setRoles={setRoles}
             setState={setState}
             addedRoles={addedRoles}
+            deletedRoles={deletedRoles}
           />
         )}
         {!busy && setting === "invites" && (

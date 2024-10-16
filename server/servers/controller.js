@@ -190,9 +190,14 @@ const updateSettings = (req, res) => {
       });
       req.body.roles.forEach((role) => {
         if (role.id) {
-          pool.query(queries.updateRoles, [role.name, role.id], (error, _) => {
-            if (error) throw error;
-          });
+          console.log(role);
+          pool.query(
+            queries.updateRoles,
+            [role.name, role.colour, role.rolenr, role.server_admin, role.id],
+            (error, _) => {
+              if (error) throw error;
+            },
+          );
         }
       });
       res.status(200).json({ message: "success" });
@@ -212,6 +217,14 @@ const addRoles = (req, res) => {
   });
   res.status(200).json({ message: "success" });
 };
+const deleteRoles = (req, res) => {
+  req.body.roles.forEach((role) => {
+    pool.query(queries.deleteRole, [role.id], (error, _) => {
+      if (error) throw error;
+    });
+  });
+  res.status(200).json({ message: "success" });
+};
 
 export default {
   getServers,
@@ -223,4 +236,5 @@ export default {
   findServer,
   updateSettings,
   addRoles,
+  deleteRoles,
 };

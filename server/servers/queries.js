@@ -7,7 +7,7 @@ const joinServer =
 
 const getServer = "SELECT * FROM servers WHERE id = $1;";
 const getUsers =
-  "SELECT users.id,name,pfp FROM users JOIN serverships ON users.id = serverships.userid WHERE serverships.serverid = $1;";
+  "SELECT users.id,name,pfp,about,banner FROM users JOIN serverships ON users.id = serverships.userid WHERE serverships.serverid = $1;";
 const getChannels = "SELECT * FROM channels WHERE serverid = $1;";
 const getRoles = "SELECT * FROM roles WHERE serverid = $1 ORDER BY rolenr;";
 const getChannelGroups =
@@ -35,7 +35,8 @@ const findServer = "SELECT name FROM servers WHERE name = $1;";
 const updateServer =
   "UPDATE servers SET name = $1, icon = $2, default_channel= $3, anyone_invite = $4 WHERE id = $5;";
 const updateChannels = "UPDATE channels SET name = $1 WHERE id = $2;";
-const updateRoles = "UPDATE roles SET name = $1, colour = $2 WHERE id = $3;";
+const updateRoles =
+  "UPDATE roles SET name = $1, colour = $2, rolenr = $3, server_admin = $4 WHERE id = $5;";
 
 const deleteChannel = "DELETE FROM channels WHERE id = $1;";
 const deleteGroup = "DELETE FROM channel_groups WHERE id = $1;";

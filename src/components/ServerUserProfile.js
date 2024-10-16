@@ -12,7 +12,10 @@ function ServerUserProfile({ user, roles }) {
           e.stopPropagation();
         }}
       >
-        <div className="dm-profile-top">
+        <div
+          className="dm-profile-top"
+          style={{ background: "#" + user.banner }}
+        >
           <div className="dm-profile-pfp">
             <img
               src={user.pfp}
@@ -31,10 +34,13 @@ function ServerUserProfile({ user, roles }) {
           <div className="user-roles">
             {user.roles.map((role) => {
               return (
-                <div className="user-role">
+                <div className="user-role" key={user.roles.indexOf(role)}>
                   <div
                     className="role-color"
-                    style={{ background: roles[role] }}
+                    style={{
+                      background: roles.filter((r) => r.name === role)[0]
+                        .colour,
+                    }}
                   ></div>
                   {role}
                 </div>
@@ -54,13 +60,17 @@ function ServerUserProfile({ user, roles }) {
           {roleListOpen && (
             <div>
               <div className="user-role-list">
-                {Object.keys(roles).map((role) => {
+                {roles.map((role) => {
+                  if (role.name === "online") return null;
                   return (
-                    <label className="server-dropdown-item checkbox-item">
-                      {role}
+                    <label
+                      key={role.id}
+                      className="server-dropdown-item checkbox-item"
+                    >
+                      {role.name}
                       <label className="checkbox-container">
                         <input
-                          defaultChecked={user.roles.includes(role)}
+                          defaultChecked={user.roles.includes(role.name)}
                           type="checkbox"
                           className="checkbox"
                           name="mute-server"
@@ -79,7 +89,7 @@ function ServerUserProfile({ user, roles }) {
 
           <label
             className="server-dropdown-item checkbox-item"
-            style={{ "margin-top": "15px" }}
+            style={{ marginTop: "15px" }}
           >
             Mute
             <label className="checkbox-container">
@@ -89,15 +99,15 @@ function ServerUserProfile({ user, roles }) {
               </span>
             </label>
           </label>
-          <label className="server-dropdown-item checkbox-item">
-            Disable voice
+          {/* <label className="server-dropdown-item checkbox-item">
+            Disable video
             <label className="checkbox-container">
               <input type="checkbox" className="checkbox" name="mute-server" />
               <span className="checkmark">
                 <span className=" material-icons">check</span>
               </span>
             </label>
-          </label>
+          </label> */}
           <div className="server-dropdown-item dangerous-icon">Kick User</div>
           <div className="server-dropdown-item dangerous-icon">Ban User</div>
 
@@ -108,10 +118,7 @@ function ServerUserProfile({ user, roles }) {
               </span>
             </Link>
             <div className="button">
-              <span
-                className="material-icons"
-                style={{ "font-size": "1.3rem" }}
-              >
+              <span className="material-icons" style={{ fontSize: "1.3rem" }}>
                 person_add
               </span>
             </div>
