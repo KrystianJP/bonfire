@@ -20,6 +20,17 @@ router.post("/roles/add/:serverId", authenticateToken, controller.addRoles);
 router.delete("/roles/:serverId", authenticateToken, controller.deleteRoles);
 
 router.post(
+  "/settings/channel_group/:serverId",
+  authenticateToken,
+  controller.addChannelGroup,
+);
+router.delete(
+  "/settings/channel_groups",
+  authenticateToken,
+  controller.removeChannelGroups,
+);
+
+router.post(
   "/settings/:serverId",
   authenticateToken,
   controller.updateSettings,

@@ -718,7 +718,6 @@ label {
 }
 .channel:hover {
   background: var(--dark-highlight);
-  cursor: pointer;
 }
 .channel-name {
   font-size: 0.95rem;
@@ -1675,10 +1674,37 @@ input:checked + .slider:before {
 .arrows-container {
   width: 40px;
 }
+.arrows-container .material-icons {
+  display: inline;
+}
 
 .roles-page .edit-icon {
   visibility: hidden;
 }
 .roles-page .role-container:hover .edit-icon {
   visibility: visible !important;
+}
+
+.channels-page .channel-group-name-container .material-icons {
+  font-size: 1rem;
+}
+
+.channel {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  align-items: center;
+}
+.channel-group-name-container .edit-icon {
+  font-size: 0.8rem !important;
+}
+.channel .edit-icon:hover {
+  cursor: pointer;
+  color: var(--dark-lightest);
+}
+.channel .edit-icon {
+  font-size: 1.1rem;
+  visibility: hidden;
+}
+.channel:hover .edit-icon {
+  visibility: visible;
 }

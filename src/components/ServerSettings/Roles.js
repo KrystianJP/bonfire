@@ -102,15 +102,6 @@ function Roles({ roles, setRoles, setState, addedRoles, deletedRoles }) {
                     {changingName !== role.rolenr ? (
                       <div className="username-container">
                         <span className="username">{role.name}</span>
-                        <span
-                          className="material-icons edit-icon"
-                          onClick={() => {
-                            setChangingName(role.rolenr);
-                            setNameValue(role.name);
-                          }}
-                        >
-                          edit
-                        </span>
                       </div>
                     ) : (
                       <form
@@ -169,7 +160,7 @@ function Roles({ roles, setRoles, setState, addedRoles, deletedRoles }) {
                       {role.server_admin ? "star" : "star_outline"}
                     </span>
                     <span className="arrows-container">
-                      {role.rolenr !== 0 && (
+                      {role.rolenr !== roles[0].rolenr && (
                         <span
                           className="material-icons"
                           onClick={() => moveUp(role.rolenr)}

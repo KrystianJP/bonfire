@@ -37,6 +37,8 @@ const updateServer =
 const updateChannels = "UPDATE channels SET name = $1 WHERE id = $2;";
 const updateRoles =
   "UPDATE roles SET name = $1, colour = $2, rolenr = $3, server_admin = $4 WHERE id = $5;";
+const updateChannelGroup =
+  "UPDATE channel_groups SET name = $1, groupnr = $2 WHERE id = $3;";
 
 const deleteChannel = "DELETE FROM channels WHERE id = $1;";
 const deleteGroup = "DELETE FROM channel_groups WHERE id = $1;";
@@ -51,6 +53,10 @@ const giveUserRole =
   "INSERT INTO user_roles (userid, roleid) VALUES ($1, $2) ON CONFLICT DO NOTHING;";
 const removeUserRole =
   "DELETE FROM user_roles WHERE userid = $1 AND roleid = $2;";
+
+const addChannelGroup =
+  "INSERT INTO channel_groups (name, serverid, groupnr) VALUES ($1, $2, $3) RETURNING *;";
+const removeChannelGroup = "DELETE FROM channel_groups WHERE id = $1";
 
 export default {
   getServers,
@@ -72,6 +78,7 @@ export default {
   updateServer,
   updateChannels,
   updateRoles,
+  updateChannelGroup,
   deleteChannel,
   deleteGroup,
   deleteBan,
@@ -80,4 +87,6 @@ export default {
   addRole,
   giveUserRole,
   removeUserRole,
+  addChannelGroup,
+  removeChannelGroup,
 };

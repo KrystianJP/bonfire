@@ -24,14 +24,13 @@ function ServerSettingsPage({ setting, token }) {
 
   // addition
   let addedRoles = useRef([]);
-  let addedChannels = [];
-  let addedGroups = [];
+  let addedChannels = useRef([]);
 
   // deletion
   let deletedRoles = useRef([]);
-  let deletedChannels = [];
-  let deletedGroups = [];
-  let deletedBans = [];
+  let deletedChannels = useRef([]);
+  let deletedGroups = useRef([]); // just the ids
+  let deletedBans = useRef([]);
 
   const [changesButton, setChangesButton] = useState(false);
   const [busy, setBusy] = useState(true);
@@ -79,6 +78,7 @@ function ServerSettingsPage({ setting, token }) {
         icon: overview.icon,
         default_channel: overview.defaultChannel,
         anyone_invite: anyoneInvite,
+        groups: channelGroups,
         channels,
         roles,
       }),
@@ -97,6 +97,15 @@ function ServerSettingsPage({ setting, token }) {
         "/api/servers/roles/" + serverId,
         {
           roles: deletedRoles.current,
+        },
+        "DELETE",
+      );
+    }
+    if (deletedGroups.current.length > 0) {
+      sendRequest(
+        "/api/servers/settings/channel_groups",
+        {
+          groups: deletedGroups.current,
         },
         "DELETE",
       );
@@ -200,6 +209,11 @@ function ServerSettingsPage({ setting, token }) {
             setChannelGroups={setChannelGroups}
             setChannels={setChannels}
             setState={setState}
+            addedChannels={addedChannels}
+            deletedChannels={deletedChannels}
+            deletedGroups={deletedGroups}
+            token={token}
+            serverId={serverId}
           />
         )}
       </div>
