@@ -1393,7 +1393,6 @@ input:checked + .slider:before {
   height: 13px;
   border-radius: 50%;
   margin-right: 5px;
-  background: rgb(255, 107, 107);
   display: inline-block;
 }
 .user-role {

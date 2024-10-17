@@ -72,7 +72,7 @@ function DMs({ friendInfo, token, user }) {
       <Messages
         user={user}
         token={token}
-        users={{ [friendInfo.id]: friendInfo, [user.id]: user }}
+        users={[friendInfo, user]}
         messages={messages}
         placeholder={friendInfo.name}
         setMessages={setMessages}

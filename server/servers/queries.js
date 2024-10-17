@@ -21,7 +21,7 @@ const createChannelGroup =
   "INSERT INTO channel_groups (name, serverid, groupnr) VALUES ($1, $2, $3) RETURNING id;";
 
 const getUserRoles =
-  "SELECT * FROM user_roles JOIN roles ON user_roles.roleid = roles.id JOIN servers ON roles.serverid = servers.id WHERE roles.serverid = $2 AND user_roles.userid = $1;";
+  "SELECT roles.* FROM user_roles JOIN roles ON user_roles.roleid = roles.id JOIN servers ON roles.serverid = servers.id WHERE roles.serverid = $2 AND user_roles.userid = $1;";
 
 const getMessages =
   "SELECT id,msg_text, authorid, msg_timestamp FROM channel_messages WHERE channelid=$1 ORDER BY msg_timestamp DESC;";
@@ -46,6 +46,11 @@ const deleteServer = "DELETE FROM servers WHERE id = $1;";
 
 const addRole =
   "INSERT INTO roles (name, colour, rolenr, serverid) VALUES ($1, $2, $3, $4);";
+
+const giveUserRole =
+  "INSERT INTO user_roles (userid, roleid) VALUES ($1, $2) ON CONFLICT DO NOTHING;";
+const removeUserRole =
+  "DELETE FROM user_roles WHERE userid = $1 AND roleid = $2;";
 
 export default {
   getServers,
@@ -73,4 +78,6 @@ export default {
   deleteRole,
   deleteServer,
   addRole,
+  giveUserRole,
+  removeUserRole,
 };

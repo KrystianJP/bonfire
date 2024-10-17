@@ -85,7 +85,7 @@ function ServerSettingsPage({ setting, token }) {
     });
     if (addedRoles.current.length > 0) {
       sendRequest(
-        "/api/servers/roles/" + serverId,
+        "/api/servers/roles/add/" + serverId,
         {
           roles: addedRoles.current,
         },

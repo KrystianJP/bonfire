@@ -102,7 +102,7 @@ function Messages({ users, messages, roles, placeholder, token, user }) {
       <div className="messages-container">
         {stateMessages.map((message) => (
           <Message
-            userInfo={users[message.authorid]}
+            userInfo={users.filter((user) => user.id == message.authorid)[0]}
             message={message}
             key={message.id}
             roles={roles}
@@ -110,7 +110,7 @@ function Messages({ users, messages, roles, placeholder, token, user }) {
         ))}
         {messages.map((message) => (
           <Message
-            userInfo={users[message.authorid]}
+            userInfo={users.filter((user) => user.id == message.authorid)[0]}
             message={message}
             key={message.id}
             roles={roles}

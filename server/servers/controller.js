@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import userQueries from "../users/queries.js";
 
+// *** make sure user is admin before allowing certain actions
+
 const getServers = (req, res) => {
   pool.query(queries.getServers, [req.user.id], (error, results) => {
     if (error) throw error;
@@ -105,7 +107,14 @@ const getServer = (req, res) => {
                         [users.rows[i].id, servers.rows[0].id],
                         (error, results) => {
                           if (error) reject(error);
-                          resolve([...results.rows, "online"]);
+                          resolve([
+                            ...results.rows,
+                            {
+                              rolenr: Infinity,
+                              name: "online",
+                              colour: "aaaaaa",
+                            },
+                          ]);
                         },
                       );
                     }),
@@ -226,6 +235,39 @@ const deleteRoles = (req, res) => {
   res.status(200).json({ message: "success" });
 };
 
+const applyRoles = (req, res) => {
+  req.body.roles.forEach((role) => {
+    if (role.name === "online") {
+      return;
+    }
+    pool.query(queries.giveUserRole, [req.body.userid, role.id], (error, _) => {
+      if (error) throw error;
+    });
+  });
+  pool.query(
+    queries.getUserRoles,
+    [req.body.userid, req.params.serverId],
+    (error, results) => {
+      if (error) throw error;
+      results.rows.forEach((role) => {
+        if (role.name === "online") {
+          return;
+        }
+        if (!req.body.roles.includes(role)) {
+          pool.query(
+            queries.removeUserRole,
+            [req.body.userid, role.id],
+            (error, _) => {
+              if (error) throw error;
+            },
+          );
+        }
+      });
+    },
+  );
+  res.status(200).json({ message: "success" });
+};
+
 export default {
   getServers,
   createServer,
@@ -237,4 +279,5 @@ export default {
   updateSettings,
   addRoles,
   deleteRoles,
+  applyRoles,
 };

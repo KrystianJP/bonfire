@@ -1,9 +1,48 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-function ServerUserProfile({ user, roles }) {
+function ServerUserProfile({ user, roles, configureRoleGroups }) {
+  const { serverId } = useParams();
   const [roleListOpen, setRoleListOpen] = useState(false);
+  const [roleList, setRoleList] = useState(user.roles);
+
+  function applyRoles() {
+    setRoleListOpen(false);
+    fetch("/api/servers/roles/apply/" + serverId, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ roles: roleList, userid: user.id }),
+    });
+    user.roles = roleList;
+    configureRoleGroups();
+  }
+
+  function checkBoxChange(e) {
+    if (e.target.checked) {
+      let tempList = [
+        ...roleList,
+        roles.filter((role) => role.id == e.target.value)[0],
+      ];
+      tempList.sort((a, b) => {
+        if (a.rolenr === null) {
+          return 1;
+        } else if (b.rolenr === null) {
+          return -1;
+        } else {
+          return a.rolenr - b.rolenr;
+        }
+      });
+
+      setRoleList(tempList);
+    } else {
+      setRoleList(roleList.filter((role) => role.id != e.target.value));
+    }
+  }
+
   return (
     <div className="server-user-profile-container">
       <div
@@ -33,16 +72,16 @@ function ServerUserProfile({ user, roles }) {
 
           <div className="user-roles">
             {user.roles.map((role) => {
+              if (role.name === "online") return null;
               return (
-                <div className="user-role" key={user.roles.indexOf(role)}>
+                <div className="user-role" key={role.id}>
                   <div
                     className="role-color"
                     style={{
-                      background: roles.filter((r) => r.name === role)[0]
-                        .colour,
+                      backgroundColor: "#" + role.colour,
                     }}
                   ></div>
-                  {role}
+                  {role.name}
                 </div>
               );
             })}
@@ -70,8 +109,12 @@ function ServerUserProfile({ user, roles }) {
                       {role.name}
                       <label className="checkbox-container">
                         <input
-                          defaultChecked={user.roles.includes(role.name)}
+                          defaultChecked={user.roles.some(
+                            (r) => r.id == role.id,
+                          )}
                           type="checkbox"
+                          value={role.id}
+                          onChange={checkBoxChange}
                           className="checkbox"
                           name="mute-server"
                         />
@@ -83,7 +126,9 @@ function ServerUserProfile({ user, roles }) {
                   );
                 })}
               </div>
-              <button className="role-apply-button">Apply</button>
+              <button className="role-apply-button" onClick={applyRoles}>
+                Apply
+              </button>
             </div>
           )}
 

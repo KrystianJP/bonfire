@@ -12,7 +12,6 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
   const { serverId } = useParams();
 
   const [users, setUsers] = useState([]);
-  const [usersMap, setUsersMap] = useState({});
   const [channels, setChannels] = useState([]);
   const [channelGroups, setChannelGroups] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -40,19 +39,13 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.users);
-        // map id: user for messages
-        let tempUsers = {};
-        data.users.forEach((user) => {
-          tempUsers[user.id] = user;
-        });
-        setUsersMap(tempUsers);
 
         setServer(data.server);
 
         setChannels(data.channels);
         setRoles([
           ...data.roles,
-          { name: "online", colour: "var(--dark-text)" },
+          { id: Infinity, name: "online", colour: "var(--dark-text)" },
         ]);
         setChannelGroups(data.channel_groups);
       });
@@ -71,28 +64,32 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
       });
   }, [channelId, token]);
 
-  // make role groups { group_name: [users] }
-  useEffect(() => {
-    if (!users) return;
+  function configureRoleGroups() {
     let tempRoleGroups = {
       online: [],
       offline: [],
     };
     users.forEach((friend) => {
-      if (!friend.online) {
-        // *** CHANGE THIS TO OFFLINE ONCE IMPLEMENTED
-        tempRoleGroups["online"].push(friend);
-      } else if (friend.roles.length === 0) {
+      console.log(friend.roles);
+      // *** add offline part later
+      if (friend.roles.length === 1) {
         tempRoleGroups.online.push(friend);
       }
       // if user's first role is not in roleGroups, add it
-      else if (!Object.keys(tempRoleGroups).includes(friend.roles[0])) {
-        tempRoleGroups[friend.roles[0]] = [friend];
+      else if (!tempRoleGroups[friend.roles[0]]) {
+        tempRoleGroups[friend.roles[0].name] = [friend];
       } else {
         tempRoleGroups[friend.roles[0]].push(friend);
       }
     });
+    console.log(tempRoleGroups);
     setRoleGroups(tempRoleGroups);
+  }
+
+  // make role groups { group_name: [users] }
+  useEffect(() => {
+    if (!users) return;
+    configureRoleGroups();
   }, [users]);
 
   return (
@@ -138,9 +135,9 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
       </div>
       {channels.length > 0 && users.length > 0 && users[0] && (
         <Messages
-          users={usersMap}
+          users={users}
           messages={messages}
-          user={usersMap[user.id]}
+          user={user}
           roles={roles}
           placeholder={
             "#" + channels.filter((channel) => channel.id == channelId)[0].name
@@ -154,6 +151,7 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
           userProfileState={userProfileState}
           roles={roles}
           roleGroups={roleGroups}
+          configureRoleGroups={configureRoleGroups}
         />
       )}
     </div>

@@ -14,7 +14,7 @@ function Message({ userInfo, message, roles }) {
   function getRoleColour() {
     if (!roles) return "var(--dark-lightest)";
 
-    return roles.filter((role) => role.name === userInfo.roles[0])[0].colour;
+    return "#" + userInfo.roles[0].colour;
   }
 
   function doubleDigit(num) {
