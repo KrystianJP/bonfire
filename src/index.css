@@ -1708,3 +1708,12 @@ input:checked + .slider:before {
 .channel:hover .edit-icon {
   visibility: visible;
 }
+
+.channels-page .channel .arrows-container,
+.channels-page .channel .delete-button {
+  visibility: hidden;
+}
+.channels-page .channel:hover .arrows-container,
+.channels-page .channel:hover .delete-button {
+  visibility: visible;
+}

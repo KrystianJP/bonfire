@@ -110,7 +110,7 @@ const getServer = (req, res) => {
                           resolve([
                             ...results.rows,
                             {
-                              rolenr: Infinity,
+                              rolenr: null,
                               name: "online",
                               colour: "aaaaaa",
                             },
@@ -123,6 +123,15 @@ const getServer = (req, res) => {
 
                 Promise.all(promiseArray).then((values) => {
                   for (let i = 0; i < users.rows.length; i++) {
+                    values[i].sort((a, b) => {
+                      if (a.rolenr === null) {
+                        return 1;
+                      } else if (b.rolenr === null) {
+                        return -1;
+                      } else {
+                        return a.rolenr - b.rolenr;
+                      }
+                    });
                     users.rows[i].roles = values[i];
                   }
 
@@ -265,7 +274,7 @@ const applyRoles = (req, res) => {
         if (role.name === "online") {
           return;
         }
-        if (!req.body.roles.includes(role)) {
+        if (!req.body.roles.some((r) => r.id === role.id)) {
           pool.query(
             queries.removeUserRole,
             [req.body.userid, role.id],

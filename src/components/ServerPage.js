@@ -81,6 +81,7 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
         tempRoleGroups[friend.roles[0]].push(friend);
       }
     });
+
     setRoleGroups(tempRoleGroups);
   }
 

@@ -192,7 +192,8 @@ function Roles({ roles, setRoles, setState, deletedRoles, serverId, token }) {
                         <span
                           className="material-icons"
                           style={{
-                            marginLeft: role.rolenr === 0 ? "24px" : "0px",
+                            marginLeft:
+                              role.rolenr === roles[0].rolenr ? "24px" : "0px",
                           }}
                           onClick={() => moveDown(role.rolenr)}
                         >

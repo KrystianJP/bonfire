@@ -257,6 +257,31 @@ function Channels({
     return false;
   }
 
+  function moveGroupUp(groupnr) {
+    let index = channelGroups.findIndex((group) => group.groupnr === groupnr);
+    let groupsCopy = [...channelGroups];
+    let newGroupNr = groupsCopy[index - 1].groupnr;
+    let temp = groupsCopy[index];
+    groupsCopy[index] = groupsCopy[index - 1];
+    groupsCopy[index - 1] = temp;
+    channelGroups[index - 1].groupnr = groupnr;
+    channelGroups[index].groupnr = newGroupNr;
+    setState(setChannelGroups, groupsCopy);
+    disableChangingName(-1);
+  }
+  function moveGroupDown(groupnr) {
+    let index = channelGroups.findIndex((group) => group.groupnr === groupnr);
+    let groupsCopy = [...channelGroups];
+    let newGroupNr = groupsCopy[index + 1].groupnr;
+    let temp = groupsCopy[index];
+    groupsCopy[index] = groupsCopy[index + 1];
+    groupsCopy[index + 1] = temp;
+    channelGroups[index + 1].groupnr = groupnr;
+    channelGroups[index].groupnr = newGroupNr;
+    setState(setChannelGroups, groupsCopy);
+    disableChangingName(-1);
+  }
+
   return (
     <div className="channels-page settings-content">
       <h1>Channels</h1>
@@ -336,8 +361,28 @@ function Channels({
                   delete
                 </span>
                 <span className="arrows-container">
-                  <span className="material-icons">arrow_upward</span>
-                  <span className="material-icons">arrow_downward</span>
+                  {group.groupnr !== channelGroups[0].groupnr && (
+                    <span
+                      className="material-icons"
+                      onClick={() => moveGroupUp(group.groupnr)}
+                    >
+                      expand_less
+                    </span>
+                  )}
+
+                  {group.groupnr !==
+                    channelGroups[channelGroups.length - 1].groupnr && (
+                    <span
+                      className="material-icons"
+                      onClick={() => moveGroupDown(group.groupnr)}
+                      style={{
+                        marginLeft:
+                          group.groupnr === channelGroups[0].groupnr ? 24 : 0,
+                      }}
+                    >
+                      expand_more
+                    </span>
+                  )}
                 </span>
               </span>
             </div>
@@ -398,7 +443,9 @@ function Channels({
                         </form>
                       )}
                       <span className="friend-icons">
-                        <span className="material-icons">delete</span>
+                        <span className="material-icons delete-button">
+                          delete
+                        </span>
                         <span
                           className="arrows-container"
                           style={{ marginRight: "15px" }}
