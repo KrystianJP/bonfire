@@ -326,6 +326,15 @@ const addChannel = (req, res) => {
   );
 };
 
+const deleteChannels = (req, res) => {
+  req.body.channels.forEach((channel) => {
+    pool.query(queries.deleteChannel, [channel], (error, _) => {
+      if (error) throw error;
+    });
+  });
+  res.status(200).json({ message: "success" });
+};
+
 export default {
   getServers,
   createServer,
@@ -341,4 +350,5 @@ export default {
   addChannelGroup,
   removeChannelGroups,
   addChannel,
+  deleteChannels,
 };

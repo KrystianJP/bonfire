@@ -26,8 +26,8 @@ function ServerSettingsPage({ setting, token }) {
 
   // deletion
   let deletedRoles = useRef([]);
-  let deletedChannels = useRef([]);
-  let deletedGroups = useRef([]); // just the ids
+  let deletedChannels = useRef([]); // just ids
+  let deletedGroups = useRef([]); // just ids
   let deletedBans = useRef([]);
 
   const [changesButton, setChangesButton] = useState(false);

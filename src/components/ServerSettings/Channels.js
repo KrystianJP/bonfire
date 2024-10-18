@@ -78,6 +78,13 @@ function Channels({
       })
       .catch((err) => console.log(err));
   }
+  function deleteChannel(channelid) {
+    deletedChannels.current.push(channelid);
+    setState(
+      setChannels,
+      channels.filter((c) => c.id !== channelid),
+    );
+  }
 
   function addGroup() {
     let groupnr = channelGroups[channelGroups.length - 1].groupnr + 1;
@@ -443,7 +450,10 @@ function Channels({
                         </form>
                       )}
                       <span className="friend-icons">
-                        <span className="material-icons delete-button">
+                        <span
+                          className="material-icons delete-button"
+                          onClick={() => deleteChannel(channel.id)}
+                        >
                           delete
                         </span>
                         <span

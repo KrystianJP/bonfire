@@ -31,6 +31,7 @@ router.delete(
 );
 
 router.post("/channel/add", authenticateToken, controller.addChannel);
+router.delete("/channels", authenticateToken, controller.deleteChannels);
 
 router.post(
   "/settings/:serverId",
