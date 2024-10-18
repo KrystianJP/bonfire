@@ -9,7 +9,6 @@ function ServerUserProfile({ user, roles, configureRoleGroups }) {
 
   function applyRoles() {
     setRoleListOpen(false);
-    console.log(roleList);
     fetch("/api/servers/roles/apply/" + serverId, {
       method: "POST",
       headers: {

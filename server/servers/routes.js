@@ -11,7 +11,11 @@ router.get("/find/:serverName", controller.findServer);
 
 router.post("/", authenticateToken, controller.createServer);
 
-router.post("/join/:serverId", authenticateToken, controller.joinServer);
+router.post(
+  "/join/:serverId/:inviteCode",
+  authenticateToken,
+  controller.joinServer,
+);
 
 router.post("/message/:channelId", authenticateToken, controller.sendMessage);
 
@@ -38,5 +42,7 @@ router.post(
   authenticateToken,
   controller.updateSettings,
 );
+
+router.get("/invite/:serverId", authenticateToken, controller.createInvite);
 
 export default router;

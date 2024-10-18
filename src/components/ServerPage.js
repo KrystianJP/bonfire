@@ -52,6 +52,13 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
   }, [token, serverId]);
 
   useEffect(() => {
+    if (!server.default_channel) return;
+    if (!channelId) {
+      window.location.href = `/servers/${serverId}/${server.default_channel}`;
+    }
+  }, [server, serverId, channelId]);
+
+  useEffect(() => {
     if (!token || !channelId) return;
     setMessages([]);
     fetch("/api/servers/messages/" + channelId, {
@@ -75,10 +82,10 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
         tempRoleGroups.online.push(friend);
       }
       // if user's first role is not in roleGroups, add it
-      else if (!tempRoleGroups[friend.roles[0]]) {
+      else if (!tempRoleGroups[friend.roles[0].name]) {
         tempRoleGroups[friend.roles[0].name] = [friend];
       } else {
-        tempRoleGroups[friend.roles[0]].push(friend);
+        tempRoleGroups[friend.roles[0].name].push(friend);
       }
     });
 
@@ -132,7 +139,7 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
           </div>
         </div>
       </div>
-      {channels.length > 0 && users.length > 0 && users[0] && (
+      {channelId && channels.length > 0 && users.length > 0 && users[0] && (
         <Messages
           users={users}
           messages={messages}

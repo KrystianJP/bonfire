@@ -4,6 +4,8 @@ const createServer =
   "INSERT INTO servers (name, icon, owner, anyone_invite) VALUES ($1, $2, $3, false) RETURNING *;";
 const joinServer =
   "INSERT INTO serverships (serverid, userid) VALUES ($1, $2);";
+const findServership =
+  "SELECT * FROM serverships WHERE serverid = $1 AND userid = $2;";
 
 const getServer = "SELECT * FROM servers WHERE id = $1;";
 const getUsers =
@@ -63,10 +65,17 @@ const removeChannelGroup = "DELETE FROM channel_groups WHERE id = $1";
 const addChannel =
   "INSERT INTO channels (name, voice, serverid, channel_group, channelnr) VALUES ($1, $2, $3, $4, $5) RETURNING *;";
 
+const newInvite =
+  "INSERT INTO invites (serverid, invite_code, expiry) VALUES ($1, $2, $3) RETURNING *;";
+const findInvite = "SELECT * FROM invites WHERE invite_code = $1;";
+const checkForInvite =
+  "SELECT * FROM invites WHERE serverid = $1 AND invite_code = $2;";
+
 export default {
   getServers,
   createServer,
   joinServer,
+  findServership,
   getServer,
   getUsers,
   getChannels,
@@ -95,4 +104,7 @@ export default {
   addChannelGroup,
   removeChannelGroup,
   addChannel,
+  newInvite,
+  findInvite,
+  checkForInvite,
 };

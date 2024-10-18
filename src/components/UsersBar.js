@@ -37,7 +37,7 @@ function UsersBar({
         }
         // if role in roleGroups, display the users in that group
         return (
-          <div className="role-group channel-group" key={roleGroups[role.name]}>
+          <div className="role-group channel-group" key={role.id}>
             <h4 className="role-group-name channel-group-name">
               {role.name.toUpperCase()}
             </h4>

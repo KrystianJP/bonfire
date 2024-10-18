@@ -1,10 +1,7 @@
 import pool from "../db.js";
 import queries from "./queries.js";
 import {} from "dotenv/config.js";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import passport from "passport";
-import userQueries from "../users/queries.js";
+import crypto from "crypto";
 
 // *** make sure user is admin before allowing certain actions
 
@@ -58,106 +55,147 @@ const createServer = (req, res) => {
   );
 };
 
-// need to add check for server request before joining
+// need to add check for ban before allowing ***
 const joinServer = (req, res) => {
   pool.query(
-    queries.joinServer,
-    [req.body.serverId, req.user.id],
+    queries.findServership,
+    [req.params.serverId, req.user.id],
     (error, results) => {
       if (error) throw error;
-      res.status(200).json({ message: "success" });
+      if (results.rows.length > 0) {
+        res.status(400).json({ message: "Already joined server" });
+      }
+      pool.query(
+        queries.checkForInvite,
+        [req.params.serverId, req.params.inviteCode],
+        (error, results) => {
+          if (error) throw error;
+          if (results.rows.length === 0) {
+            res
+              .status(404)
+              .json({ message: "Invite not found (may be expired)" });
+          }
+          let invite = results.rows[0];
+          if (invite.expiry < Date.now()) {
+            res.status(404).json({ message: "Invite expired" });
+          }
+          pool.query(
+            queries.joinServer,
+            [req.params.serverId, req.user.id],
+            (error, results) => {
+              if (error) throw error;
+              res.status(200).json({ message: "success" });
+            },
+          );
+        },
+      );
     },
   );
 };
 
-// need to check for existing servership before allowing
 const getServer = (req, res) => {
-  pool.query(queries.getServer, [req.params.serverId], (error, servers) => {
-    if (error) throw error;
-    if (servers.rows.length === 0) {
-      res.status(404).json({ message: "Server not found" });
-    }
-    pool.query(queries.getBans, [req.params.serverId], (error, bans) => {
+  pool.query(
+    queries.findServership,
+    [req.params.serverId, req.user.id],
+    (error, results) => {
       if (error) throw error;
-      // check if user is banned
-      if (bans.rows.some((ban) => ban.userid === req.user.id)) {
-        res.status(403).json({ message: "You are banned from this server" });
+      if (results.rows.length === 0) {
+        res.status(403).json({ message: "Not a member of this server" });
       }
-      pool.query(queries.getUsers, [req.params.serverId], (error, users) => {
+      pool.query(queries.getServer, [req.params.serverId], (error, servers) => {
         if (error) throw error;
-        pool.query(
-          queries.getChannels,
-          [req.params.serverId],
-          (error, channels) => {
-            if (error) throw error;
-            pool.query(
-              queries.getRoles,
-              [req.params.serverId],
-              (error, roles) => {
-                if (error) throw error;
-                let promiseArray = [];
-                users.rows.forEach((user) => {
-                  user.roles = [];
-                });
-                for (let i = 0; i < users.rows.length; i++) {
-                  promiseArray.push(
-                    new Promise((resolve, reject) => {
-                      pool.query(
-                        queries.getUserRoles,
-                        [users.rows[i].id, servers.rows[0].id],
-                        (error, results) => {
-                          if (error) reject(error);
-                          resolve([
-                            ...results.rows,
-                            {
-                              rolenr: null,
-                              name: "online",
-                              colour: "aaaaaa",
-                            },
-                          ]);
-                        },
-                      );
-                    }),
-                  );
-                }
-
-                Promise.all(promiseArray).then((values) => {
-                  for (let i = 0; i < users.rows.length; i++) {
-                    values[i].sort((a, b) => {
-                      if (a.rolenr === null) {
-                        return 1;
-                      } else if (b.rolenr === null) {
-                        return -1;
-                      } else {
-                        return a.rolenr - b.rolenr;
-                      }
-                    });
-                    users.rows[i].roles = values[i];
-                  }
-
+        if (servers.rows.length === 0) {
+          res.status(404).json({ message: "Server not found" });
+        }
+        pool.query(queries.getBans, [req.params.serverId], (error, bans) => {
+          if (error) throw error;
+          // check if user is banned
+          if (bans.rows.some((ban) => ban.userid === req.user.id)) {
+            res
+              .status(403)
+              .json({ message: "You are banned from this server" });
+          }
+          pool.query(
+            queries.getUsers,
+            [req.params.serverId],
+            (error, users) => {
+              if (error) throw error;
+              pool.query(
+                queries.getChannels,
+                [req.params.serverId],
+                (error, channels) => {
+                  if (error) throw error;
                   pool.query(
-                    queries.getChannelGroups,
-                    [servers.rows[0].id],
-                    (error, groups) => {
+                    queries.getRoles,
+                    [req.params.serverId],
+                    (error, roles) => {
                       if (error) throw error;
-                      res.status(200).json({
-                        server: servers.rows[0],
-                        users: users.rows,
-                        channels: channels.rows,
-                        roles: roles.rows,
-                        channel_groups: groups.rows,
-                        bans: bans.rows,
+                      let promiseArray = [];
+                      users.rows.forEach((user) => {
+                        user.roles = [];
+                      });
+                      for (let i = 0; i < users.rows.length; i++) {
+                        promiseArray.push(
+                          new Promise((resolve, reject) => {
+                            pool.query(
+                              queries.getUserRoles,
+                              [users.rows[i].id, servers.rows[0].id],
+                              (error, results) => {
+                                if (error) reject(error);
+                                resolve([
+                                  ...results.rows,
+                                  {
+                                    rolenr: null,
+                                    name: "online",
+                                    colour: "aaaaaa",
+                                  },
+                                ]);
+                              },
+                            );
+                          }),
+                        );
+                      }
+
+                      Promise.all(promiseArray).then((values) => {
+                        for (let i = 0; i < users.rows.length; i++) {
+                          values[i].sort((a, b) => {
+                            if (a.rolenr === null) {
+                              return 1;
+                            } else if (b.rolenr === null) {
+                              return -1;
+                            } else {
+                              return a.rolenr - b.rolenr;
+                            }
+                          });
+                          users.rows[i].roles = values[i];
+                        }
+
+                        pool.query(
+                          queries.getChannelGroups,
+                          [servers.rows[0].id],
+                          (error, groups) => {
+                            if (error) throw error;
+                            res.status(200).json({
+                              server: servers.rows[0],
+                              users: users.rows,
+                              channels: channels.rows,
+                              roles: roles.rows,
+                              channel_groups: groups.rows,
+                              bans: bans.rows,
+                            });
+                          },
+                        );
                       });
                     },
                   );
-                });
-              },
-            );
-          },
-        );
+                },
+              );
+            },
+          );
+        });
       });
-    });
-  });
+    },
+  );
 };
 
 const getMessages = (req, res) => {
@@ -335,6 +373,29 @@ const deleteChannels = (req, res) => {
   res.status(200).json({ message: "success" });
 };
 
+const createInvite = (req, res) => {
+  let inviteCode = crypto.randomBytes(8).toString("hex");
+  pool.query(queries.findInvite, [inviteCode], (error, results) => {
+    if (error) throw error;
+    if (results.rows.length > 0) {
+      createInvite(req, res);
+    } else {
+      pool.query(
+        queries.newInvite,
+        [
+          req.params.serverId,
+          inviteCode,
+          new Date(Date.now() + 24 * 60 * 60 * 1000), // adds 24 hours
+        ],
+        (error, results) => {
+          if (error) throw error;
+          res.status(200).json({ inviteCode: inviteCode });
+        },
+      );
+    }
+  });
+};
+
 export default {
   getServers,
   createServer,
@@ -351,4 +412,5 @@ export default {
   removeChannelGroups,
   addChannel,
   deleteChannels,
+  createInvite,
 };

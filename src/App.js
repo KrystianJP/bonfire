@@ -4,6 +4,7 @@ import ServerPage from "./components/ServerPage";
 import SettingsPage from "./components/Settings/SettingsPage";
 import LoginPage from "./components/LoginPage";
 import ServerCreationModal from "./components/ServerCreationModal";
+import InviteBuffer from "./components/InviteBuffer.js";
 
 import {
   BrowserRouter as Router,
@@ -118,7 +119,7 @@ function App() {
           {/* SERVERS */}
           <Route
             exact
-            path="/servers/:serverId/:channelId"
+            path="/servers/:serverId/:channelId?"
             element={
               <>
                 <ServersBar token={token} toggleModal={toggleServerModal} />{" "}
@@ -165,6 +166,12 @@ function App() {
             exact
             path="/register"
             element={<LoginPage login={false} />}
+          ></Route>
+
+          <Route
+            exact
+            path="/invite/:serverId/:inviteCode"
+            element={<InviteBuffer token={token} />}
           ></Route>
         </Routes>
         {serverModalOpen && (

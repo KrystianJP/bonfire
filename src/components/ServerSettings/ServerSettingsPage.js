@@ -199,6 +199,8 @@ function ServerSettingsPage({ setting, token }) {
             info={anyoneInvite}
             setAnyoneInvite={setAnyoneInvite}
             setState={setState}
+            token={token}
+            serverId={serverId}
           />
         )}
         {!busy && setting === "bans" && (
