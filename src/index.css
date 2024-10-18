@@ -615,7 +615,7 @@ label {
   display: grid;
   grid-template-areas: "server-name top-bar top-bar" "channels messages users" "profile-bar messages users";
   grid-template-rows: min-content 1fr min-content;
-  grid-template-columns: 240px 1fr 240px;
+  grid-template-columns: 240px 1fr min-content;
 }
 .channels-bar {
   grid-area: channels;
@@ -623,6 +623,7 @@ label {
 .users-bar {
   grid-area: users;
   background: var(--dark-darker);
+  width: 240px;
 }
 .server-name-container {
   grid-area: server-name;
