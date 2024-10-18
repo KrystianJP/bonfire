@@ -200,7 +200,7 @@ const updateSettings = (req, res) => {
       req.body.channels.forEach((channel) => {
         pool.query(
           queries.updateChannels,
-          [channel.name, channel.id],
+          [channel.name, channel.channelnr, channel.id],
           (error, _) => {
             if (error) throw error;
           },
@@ -223,17 +223,20 @@ const updateSettings = (req, res) => {
   );
 };
 
-const addRoles = (req, res) => {
-  req.body.roles.forEach((role) => {
-    pool.query(
-      queries.addRole,
-      [role.name, role.colour, role.rolenr, req.params.serverId],
-      (error, _) => {
-        if (error) throw error;
-      },
-    );
-  });
-  res.status(200).json({ message: "success" });
+const addRole = (req, res) => {
+  pool.query(
+    queries.addRole,
+    [
+      req.body.role.name,
+      req.body.role.colour,
+      req.body.role.rolenr,
+      req.params.serverId,
+    ],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json({ role: results.rows[0] });
+    },
+  );
 };
 const deleteRoles = (req, res) => {
   req.body.roles.forEach((role) => {
@@ -297,6 +300,23 @@ const removeChannelGroups = (req, res) => {
   res.status(200).json({ message: "success" });
 };
 
+const addChannel = (req, res) => {
+  pool.query(
+    queries.addChannel,
+    [
+      req.body.name,
+      req.body.voice,
+      req.body.serverid,
+      req.body.channel_group,
+      req.body.channelnr,
+    ],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json({ channel: results.rows[0] });
+    },
+  );
+};
+
 export default {
   getServers,
   createServer,
@@ -306,9 +326,10 @@ export default {
   sendMessage,
   findServer,
   updateSettings,
-  addRoles,
+  addRole,
   deleteRoles,
   applyRoles,
   addChannelGroup,
   removeChannelGroups,
+  addChannel,
 };

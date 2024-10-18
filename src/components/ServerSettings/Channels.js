@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ChannelCreationModal from "../ChannelCreationModal";
 
 function Channels({
   channels,
@@ -6,10 +7,8 @@ function Channels({
   setChannels,
   setChannelGroups,
   setState,
-  addedChannels,
   deletedChannels,
   deletedGroups,
-  toggleChannelModal,
   token,
   serverId,
 }) {
@@ -17,6 +16,9 @@ function Channels({
   const [changingGroup, setChangingGroup] = useState(-1);
   const [nameValue, setNameValue] = useState("");
   const [groupsWithChannels, setGroupsWithChannels] = useState([]);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalGroup, setModalGroup] = useState({});
 
   function disableChangingName() {
     setChangingChannelName(-1);
@@ -38,12 +40,51 @@ function Channels({
     setGroupsWithChannels(tempGroups);
   }, [channels, channelGroups]);
 
+  function addChannel(name, voice, group) {
+    let groupIndex = channelGroups.findIndex(
+      (channelGroup) => channelGroup.id === group.id,
+    );
+    // add 1 to last channel's channelnr in group
+    let channelnr;
+    if (groupsWithChannels[groupIndex].channels.length > 0) {
+      channelnr =
+        groupsWithChannels[groupIndex].channels[
+          groupsWithChannels[groupIndex].channels.length - 1
+        ].channelnr + 1;
+    } else {
+      channelnr = 0;
+    }
+
+    const newChannel = {
+      name,
+      voice,
+      serverid: serverId,
+      channel_group: group.id,
+      channelnr,
+    };
+
+    fetch("/api/servers/channel/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(newChannel),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.channel);
+        setChannels([...channels, data.channel]);
+      })
+      .catch((err) => console.log(err));
+  }
+
   function addGroup() {
     let groupnr = channelGroups[channelGroups.length - 1].groupnr + 1;
 
     const newGroup = { name: "New Group", groupnr };
 
-    fetch("/api/servers/settings/channel_group/" + serverId, {
+    fetch("/api/servers/channel_group/" + serverId, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +94,7 @@ function Channels({
     })
       .then((res) => res.json())
       .then((data) => {
-        setChannelGroups([...channelGroups, newGroup]);
+        setChannelGroups([...channelGroups, data.group]);
       })
       .catch((err) => console.log(err));
   }
@@ -71,14 +112,19 @@ function Channels({
 
     tempChannels.map((channel) => {
       let channelFromGroup =
-        group.channels[group.channels.indexOf((c) => c.id === channel.id)];
+        group.channels.find((c) => c.id === channel.id) || -1;
 
-      if (channelFromGroup) {
+      if (channelFromGroup !== -1) {
         channel.channelnr = channelFromGroup.channelnr;
         channel.channel_group = group.id;
       }
       return channel;
     });
+
+    setState(
+      setChannels,
+      tempChannels.sort((a, b) => a.channelnr - b.channelnr),
+    );
   }
 
   // moving up from first group should be blocked
@@ -90,36 +136,41 @@ function Channels({
       (channel) => channel.channelnr === channelnr,
     );
 
+    let tempGroups = groupsWithChannels.map((group) => ({
+      ...group,
+      channels: [...group.channels], // Deep copy channels
+    }));
+
     if (channelIndex === 0) {
-      let newGroupLength = groupsWithChannels[groupIndex - 1].channels.length;
+      let newGroupLength = tempGroups[groupIndex - 1].channels.length;
 
-      let newChannelNr = groupsWithChannels[groupIndex - 1]
-        ? groupsWithChannels[groupIndex - 1].channels[newGroupLength - 1]
-            .channelnr + 1
-        : 0;
+      let newChannelNr =
+        newGroupLength > 0
+          ? tempGroups[groupIndex - 1].channels[newGroupLength - 1].channelnr +
+            1
+          : 0;
 
-      groupsWithChannels[groupIndex].channels[0].channelnr = newChannelNr;
+      tempGroups[groupIndex].channels[0].channelnr = newChannelNr;
 
-      groupsWithChannels[groupIndex - 1].channels.push(
-        groupsWithChannels[groupIndex].channels.shift(),
+      tempGroups[groupIndex - 1].channels.push(
+        tempGroups[groupIndex].channels.shift(),
       );
 
-      updateChannels(groupsWithChannels[groupIndex - 1]);
+      updateChannels(tempGroups[groupIndex - 1]);
     } else {
       let newChannelNr =
-        groupsWithChannels[groupIndex].channels[channelIndex - 1];
+        tempGroups[groupIndex].channels[channelIndex - 1].channelnr;
 
-      let temp = groupsWithChannels[groupIndex].channels[channelIndex];
-      groupsWithChannels[groupIndex].channels[channelIndex] =
-        groupsWithChannels[groupIndex].channels[channelIndex - 1];
-      groupsWithChannels[groupIndex].channels[channelIndex - 1] = temp;
+      let temp = tempGroups[groupIndex].channels[channelIndex];
+      tempGroups[groupIndex].channels[channelIndex] =
+        tempGroups[groupIndex].channels[channelIndex - 1];
+      tempGroups[groupIndex].channels[channelIndex - 1] = temp;
 
-      groupsWithChannels[groupIndex].channels[channelIndex - 1].channelnr =
+      tempGroups[groupIndex].channels[channelIndex - 1].channelnr =
         newChannelNr;
-      groupsWithChannels[groupIndex].channels[channelIndex].channelnr =
-        channelnr;
+      tempGroups[groupIndex].channels[channelIndex].channelnr = channelnr;
 
-      updateChannels(groupsWithChannels[groupIndex]);
+      updateChannels(tempGroups[groupIndex]);
     }
 
     disableChangingName();
@@ -134,36 +185,42 @@ function Channels({
       (channel) => channel.channelnr === channelnr,
     );
 
-    // if last channel in group, swap with first of next group
+    let tempGroups = groupsWithChannels.map((group) => ({
+      ...group,
+      channels: [...group.channels], // Deep copy channels
+    }));
+
     if (channelIndex === groupsWithChannels[groupIndex].channels.length - 1) {
-      let newChannelNr = groupsWithChannels[groupIndex + 1]
-        ? groupsWithChannels[groupIndex + 1].channels[0].channelnr
-        : 0;
-      groupsWithChannels[groupIndex + 1].channels.map(
+      let newChannelNr =
+        tempGroups[groupIndex + 1].channels.length > 0
+          ? tempGroups[groupIndex + 1].channels[0].channelnr
+          : 0;
+      tempGroups[groupIndex + 1].channels.map(
         (channel) => (channel.channelnr += 1),
       );
 
-      groupsWithChannels[groupIndex + 1].channels.unshift(
-        groupsWithChannels[groupIndex].channels.pop(),
+      tempGroups[groupIndex + 1].channels.unshift(
+        tempGroups[groupIndex].channels.pop(),
       );
 
-      groupsWithChannels[groupIndex].channels[0].channelnr = newChannelNr;
+      if (tempGroups[groupIndex].channels.length > 0) {
+        tempGroups[groupIndex].channels[0].channelnr = newChannelNr;
+      }
 
-      updateChannels(groupsWithChannels[groupIndex + 1]);
+      updateChannels(tempGroups[groupIndex + 1]);
     } else {
       let newChannelNr =
-        groupsWithChannels[groupIndex].channels[channelIndex + 1];
-      let temp = groupsWithChannels[groupIndex].channels[channelIndex];
-      groupsWithChannels[groupIndex].channels[channelIndex] =
-        groupsWithChannels[groupIndex].channels[channelIndex + 1];
-      groupsWithChannels[groupIndex].channels[channelIndex + 1] = temp;
+        tempGroups[groupIndex].channels[channelIndex + 1].channelnr;
+      let temp = tempGroups[groupIndex].channels[channelIndex];
+      tempGroups[groupIndex].channels[channelIndex] =
+        tempGroups[groupIndex].channels[channelIndex + 1];
+      tempGroups[groupIndex].channels[channelIndex + 1] = temp;
 
-      groupsWithChannels[groupIndex].channels[channelIndex + 1].channelnr =
+      tempGroups[groupIndex].channels[channelIndex + 1].channelnr =
         newChannelNr;
-      groupsWithChannels[groupIndex].channels[channelIndex].channelnr =
-        channelnr;
+      tempGroups[groupIndex].channels[channelIndex].channelnr = channelnr;
 
-      updateChannels(groupsWithChannels[groupIndex]);
+      updateChannels(tempGroups[groupIndex]);
     }
 
     disableChangingName();
@@ -264,7 +321,11 @@ function Channels({
               <span className="friend-icons">
                 <span
                   className="material-icons"
-                  // onClick={(e) => toggleChannelModal(e, group)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setModalOpen(true);
+                    setModalGroup(group);
+                  }}
                 >
                   add
                 </span>
@@ -286,7 +347,7 @@ function Channels({
                 .filter((g) => g.id === group.id)[0]
                 .channels.map((channel) => {
                   return (
-                    <div className="channel" key={channel.id}>
+                    <div className="channel" key={channels.indexOf(channel)}>
                       {changingChannelName !== channel.id ? (
                         <div className="friend-left">
                           <span className="material-icons">
@@ -368,6 +429,14 @@ function Channels({
                                   group.groupnr,
                                 )
                               }
+                              style={{
+                                marginLeft: !checkFirstChannel(
+                                  channel.channelnr,
+                                  group.groupnr,
+                                )
+                                  ? "0px"
+                                  : "24px",
+                              }}
                             >
                               arrow_downward
                             </span>
@@ -380,6 +449,14 @@ function Channels({
           </div>
         );
       })}
+
+      {modalOpen && (
+        <ChannelCreationModal
+          addChannel={addChannel}
+          setModalOpen={setModalOpen}
+          group={modalGroup}
+        />
+      )}
     </div>
   );
 }

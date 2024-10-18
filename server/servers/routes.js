@@ -16,19 +16,21 @@ router.post("/join/:serverId", authenticateToken, controller.joinServer);
 router.post("/message/:channelId", authenticateToken, controller.sendMessage);
 
 router.post("/roles/apply/:serverId", authenticateToken, controller.applyRoles);
-router.post("/roles/add/:serverId", authenticateToken, controller.addRoles);
+router.post("/role/add/:serverId", authenticateToken, controller.addRole);
 router.delete("/roles/:serverId", authenticateToken, controller.deleteRoles);
 
 router.post(
-  "/settings/channel_group/:serverId",
+  "/channel_group/:serverId",
   authenticateToken,
   controller.addChannelGroup,
 );
 router.delete(
-  "/settings/channel_groups",
+  "/channel_groups",
   authenticateToken,
   controller.removeChannelGroups,
 );
+
+router.post("/channel/add", authenticateToken, controller.addChannel);
 
 router.post(
   "/settings/:serverId",

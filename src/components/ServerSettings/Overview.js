@@ -8,6 +8,7 @@ function Overview({ info, setOverview, setState, channels }) {
   );
   const [changingName, setChangingName] = useState(false);
   const [nameValue, setNameValue] = useState(info.name);
+  // const [defaultChannel, setDefaultChannel] = useState(info.default_channel);
 
   const defaultIcon =
     "https://cdn-icons-png.flaticon.com/512/16745/16745664.png";
@@ -124,9 +125,10 @@ function Overview({ info, setOverview, setState, channels }) {
           id="input-device-select"
           className="setting-text-size"
           defaultValue={info.default_channel}
-          onChange={(e) =>
-            setState(setOverview, { ...info, default_channel: e.target.value })
-          }
+          onChange={(e) => {
+            setState(setOverview, { ...info, defaultChannel: e.target.value });
+            console.log(info);
+          }}
         >
           {channels.map((channel) => (
             <option key={channel.id} value={channel.id}>

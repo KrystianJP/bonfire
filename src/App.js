@@ -14,23 +14,15 @@ import {
 import "./index.css";
 import ServerSettingsPage from "./components/ServerSettings/ServerSettingsPage";
 import ChannelCreationModal from "./components/ChannelCreationModal";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { socket } from "./socket.js";
 
 function App() {
-  const [channelModalOpen, setChannelModalOpen] = useState(false);
   const [serverModalOpen, setServerModalOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
-  const [currentGroup, setCurrentGroup] = useState("");
   const [token, setToken] = useState("");
   const [user, setUser] = useState({});
-
-  function toggleChannelModal(e, group) {
-    setChannelModalOpen(!channelModalOpen);
-    setCurrentGroup(group);
-    e.stopPropagation();
-  }
 
   function toggleServerModal(e) {
     setServerModalOpen(!serverModalOpen);
@@ -132,7 +124,6 @@ function App() {
                 <ServersBar token={token} toggleModal={toggleServerModal} />{" "}
                 <ServerPage
                   user={user}
-                  toggleChannelModal={toggleChannelModal}
                   userProfileState={[userProfileOpen, setUserProfileOpen]}
                   token={token}
                 />
@@ -176,13 +167,6 @@ function App() {
             element={<LoginPage login={false} />}
           ></Route>
         </Routes>
-        {channelModalOpen && (
-          <ChannelCreationModal
-            toggleModal={toggleChannelModal}
-            group={currentGroup}
-            token={token}
-          />
-        )}
         {serverModalOpen && (
           <ServerCreationModal token={token} toggleModal={toggleServerModal} />
         )}

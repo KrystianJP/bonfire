@@ -70,7 +70,6 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
       offline: [],
     };
     users.forEach((friend) => {
-      console.log(friend.roles);
       // *** add offline part later
       if (friend.roles.length === 1) {
         tempRoleGroups.online.push(friend);
@@ -82,7 +81,6 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
         tempRoleGroups[friend.roles[0]].push(friend);
       }
     });
-    console.log(tempRoleGroups);
     setRoleGroups(tempRoleGroups);
   }
 

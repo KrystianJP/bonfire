@@ -1,20 +1,14 @@
 import { Link, useParams } from "react-router-dom";
 
-function ChannelsBar({ toggleChannelModal, groups, channels }) {
-  const { channelId } = useParams();
+function ChannelsBar({ groups, channels }) {
+  const { channelId, serverId } = useParams();
   return (
     <div className="channels-bar friends-bar">
       {groups.map((group) => {
         return (
-          <div className="channel-group" key={group}>
+          <div className="channel-group" key={group.id}>
             <div className="channel-group-name-container">
               <h4 className="channel-group-name">{group.name.toUpperCase()}</h4>
-              <span
-                className="material-icons"
-                onClick={(e) => toggleChannelModal(e, group)}
-              >
-                add
-              </span>
             </div>
             {channels
               .filter((channel) => channel.channel_group === group.id)
@@ -22,7 +16,9 @@ function ChannelsBar({ toggleChannelModal, groups, channels }) {
                 return (
                   <Link
                     to={
-                      channel.type === "text" ? `/servers/1/${channel.id}` : "#"
+                      !channel.voice
+                        ? `/servers/${serverId}/${channel.id}`
+                        : "#"
                     }
                     className={
                       "channel" + (channelId == channel.id ? " highlight" : "")

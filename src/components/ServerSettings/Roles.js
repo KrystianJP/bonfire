@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Roles({ roles, setRoles, setState, addedRoles, deletedRoles }) {
+function Roles({ roles, setRoles, setState, deletedRoles, serverId, token }) {
   // set to corresponding rolenr
   const [changingName, setChangingName] = useState(-1);
   const [nameValue, setNameValue] = useState("");
@@ -12,6 +12,7 @@ function Roles({ roles, setRoles, setState, addedRoles, deletedRoles }) {
     } else {
       rolenr = roles[roles.length - 1].rolenr + 1;
     }
+    // "/api/servers/roles/add/" + serverId
 
     const newRole = {
       name: "New role",
@@ -19,8 +20,18 @@ function Roles({ roles, setRoles, setState, addedRoles, deletedRoles }) {
       rolenr: rolenr,
     };
 
-    setState(setRoles, [...roles, newRole]);
-    addedRoles.current.push(newRole);
+    fetch("/api/servers/role/add/" + serverId, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ role: newRole }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setRoles([...roles, data.role]);
+      });
   }
 
   function deleteRole(rolenr) {
@@ -102,6 +113,15 @@ function Roles({ roles, setRoles, setState, addedRoles, deletedRoles }) {
                     {changingName !== role.rolenr ? (
                       <div className="username-container">
                         <span className="username">{role.name}</span>
+                        <span
+                          className="material-icons edit-icon"
+                          onClick={() => {
+                            setChangingName(role.rolenr);
+                            setNameValue(role.name);
+                          }}
+                        >
+                          edit
+                        </span>
                       </div>
                     ) : (
                       <form

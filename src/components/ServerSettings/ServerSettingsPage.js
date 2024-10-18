@@ -23,8 +23,6 @@ function ServerSettingsPage({ setting, token }) {
   const [bans, setBans] = useState([]);
 
   // addition
-  let addedRoles = useRef([]);
-  let addedChannels = useRef([]);
 
   // deletion
   let deletedRoles = useRef([]);
@@ -67,6 +65,36 @@ function ServerSettingsPage({ setting, token }) {
 
   // will also include delete and add functionality
   function saveChanges() {
+    if (deletedRoles.current.length > 0) {
+      sendRequest(
+        "/api/servers/roles/" + serverId,
+        {
+          roles: deletedRoles.current,
+        },
+        "DELETE",
+      );
+    }
+    if (deletedGroups.current.length > 0) {
+      sendRequest(
+        "/api/servers/channel_groups",
+        {
+          groups: deletedGroups.current,
+        },
+        "DELETE",
+      );
+    }
+    if (deletedChannels.current.length > 0) {
+      sendRequest(
+        "/api/servers/channels/",
+        {
+          channels: deletedChannels.current,
+        },
+        "DELETE",
+      );
+    }
+    if (deletedBans.current.length > 0) {
+      sendRequest();
+    }
     fetch("/api/servers/settings/" + serverId, {
       method: "POST",
       headers: {
@@ -83,33 +111,6 @@ function ServerSettingsPage({ setting, token }) {
         roles,
       }),
     });
-    if (addedRoles.current.length > 0) {
-      sendRequest(
-        "/api/servers/roles/add/" + serverId,
-        {
-          roles: addedRoles.current,
-        },
-        "POST",
-      );
-    }
-    if (deletedRoles.current.length > 0) {
-      sendRequest(
-        "/api/servers/roles/" + serverId,
-        {
-          roles: deletedRoles.current,
-        },
-        "DELETE",
-      );
-    }
-    if (deletedGroups.current.length > 0) {
-      sendRequest(
-        "/api/servers/settings/channel_groups",
-        {
-          groups: deletedGroups.current,
-        },
-        "DELETE",
-      );
-    }
 
     setChangesButton(false);
     // window.location.href =
@@ -188,8 +189,9 @@ function ServerSettingsPage({ setting, token }) {
             roles={roles}
             setRoles={setRoles}
             setState={setState}
-            addedRoles={addedRoles}
             deletedRoles={deletedRoles}
+            serverId={serverId}
+            token={token}
           />
         )}
         {!busy && setting === "invites" && (
@@ -209,7 +211,6 @@ function ServerSettingsPage({ setting, token }) {
             setChannelGroups={setChannelGroups}
             setChannels={setChannels}
             setState={setState}
-            addedChannels={addedChannels}
             deletedChannels={deletedChannels}
             deletedGroups={deletedGroups}
             token={token}

@@ -8,7 +8,8 @@ const joinServer =
 const getServer = "SELECT * FROM servers WHERE id = $1;";
 const getUsers =
   "SELECT users.id,name,pfp,about,banner FROM users JOIN serverships ON users.id = serverships.userid WHERE serverships.serverid = $1;";
-const getChannels = "SELECT * FROM channels WHERE serverid = $1;";
+const getChannels =
+  "SELECT * FROM channels WHERE serverid = $1 ORDER BY channelnr;";
 const getRoles = "SELECT * FROM roles WHERE serverid = $1 ORDER BY rolenr;";
 const getChannelGroups =
   "SELECT * FROM channel_groups WHERE serverid = $1 ORDER BY groupnr;";
@@ -34,7 +35,8 @@ const findServer = "SELECT name FROM servers WHERE name = $1;";
 
 const updateServer =
   "UPDATE servers SET name = $1, icon = $2, default_channel= $3, anyone_invite = $4 WHERE id = $5;";
-const updateChannels = "UPDATE channels SET name = $1 WHERE id = $2;";
+const updateChannels =
+  "UPDATE channels SET name = $1, channelnr = $2 WHERE id = $3;";
 const updateRoles =
   "UPDATE roles SET name = $1, colour = $2, rolenr = $3, server_admin = $4 WHERE id = $5;";
 const updateChannelGroup =
@@ -47,7 +49,7 @@ const deleteRole = "DELETE FROM roles WHERE id = $1;";
 const deleteServer = "DELETE FROM servers WHERE id = $1;";
 
 const addRole =
-  "INSERT INTO roles (name, colour, rolenr, serverid) VALUES ($1, $2, $3, $4);";
+  "INSERT INTO roles (name, colour, rolenr, serverid) VALUES ($1, $2, $3, $4) RETURNING *;";
 
 const giveUserRole =
   "INSERT INTO user_roles (userid, roleid) VALUES ($1, $2) ON CONFLICT DO NOTHING;";
@@ -57,6 +59,9 @@ const removeUserRole =
 const addChannelGroup =
   "INSERT INTO channel_groups (name, serverid, groupnr) VALUES ($1, $2, $3) RETURNING *;";
 const removeChannelGroup = "DELETE FROM channel_groups WHERE id = $1";
+
+const addChannel =
+  "INSERT INTO channels (name, voice, serverid, channel_group, channelnr) VALUES ($1, $2, $3, $4, $5) RETURNING *;";
 
 export default {
   getServers,
@@ -89,4 +94,5 @@ export default {
   removeUserRole,
   addChannelGroup,
   removeChannelGroup,
+  addChannel,
 };

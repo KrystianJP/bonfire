@@ -1,17 +1,23 @@
 import { useState } from "react";
 
-function ChannelCreationModal({ toggleModal, group }) {
+function ChannelCreationModal({ setModalOpen, group, addChannel }) {
   const [type, setType] = useState("text");
+  const [name, setName] = useState("");
   return (
-    <div className="dark-bg" onClick={(e) => toggleModal(e, "")}>
-      <div
+    <div className="dark-bg" onClick={(e) => setModalOpen(false)}>
+      <form
         className="channel-creation-modal"
         onClick={(e) => {
           e.stopPropagation();
         }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          addChannel(name, type === "text" ? false : true, group);
+          setModalOpen(false);
+        }}
       >
         <h2>Create Channel</h2>
-        <div>in {group}</div>
+        <div>in {group.name}</div>
         <div className="setting-container">
           <div className="setting-label">CHANNEL TYPE</div>
           <label
@@ -71,16 +77,31 @@ function ChannelCreationModal({ toggleModal, group }) {
               name="channel-name"
               className="search-bar channel-name-input"
               placeholder="new-channel"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />{" "}
           </div>
         </div>
         <div className="modal-buttons-container">
-          <button className="cancel-button" onClick={toggleModal}>
+          <button
+            type="button"
+            className="cancel-button"
+            onClick={() => setModalOpen(false)}
+          >
             Cancel
           </button>
-          <button className="create-button">Create Channel</button>
+          <button
+            className="create-button"
+            type="submit"
+            // onClick={() => {
+            //   addChannel(name, type === "text" ? false : true, group);
+            //   setModalOpen(false);
+            // }}
+          >
+            Create Channel
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
