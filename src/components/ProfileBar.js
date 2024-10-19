@@ -28,8 +28,6 @@ function ProfileBar({ user }) {
           <span className="profile-name">{user.name}</span>
         </div>
         <div className="profile-icons">
-          <span className="material-icons">mic</span>
-          <span className="material-icons">headphones</span>
           <Link to="/settings/account" className="material-icons">
             settings
           </Link>
@@ -41,9 +39,13 @@ function ProfileBar({ user }) {
             <span id="connected-text">Connected</span>{" "}
             <span id="connected-channel">voice</span>
           </div>
-          <span className="material-icons" onClick={leaveVoiceChannelHandler}>
-            call_end
-          </span>
+          <div className="profile-icons">
+            <span className="material-icons">mic</span>
+            <span className="material-icons">headphones</span>
+            <span className="material-icons" onClick={leaveVoiceChannelHandler}>
+              call_end
+            </span>
+          </div>
         </div>
       )}
     </div>

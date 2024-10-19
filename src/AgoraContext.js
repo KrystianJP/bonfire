@@ -17,6 +17,21 @@ export const AgoraProvider = ({ children }) => {
     });
 
     setClient(agoraClient);
+
+    // Listen for other users joining the channel
+    agoraClient.on("user-published", async (user, mediaType) => {
+      console.log(`User ${user.uid} published ${mediaType}`);
+      await agoraClient.subscribe(user, mediaType);
+      if (mediaType === "audio") {
+        const audioTrack = user.audioTrack;
+        audioTrack.play(); // Play the audio track
+      }
+    });
+
+    agoraClient.on("user-unpublished", (user, mediaType) => {
+      console.log(`User ${user.uid} unpublished ${mediaType}`);
+      // Handle user audio unpublish if necessary
+    });
   }, []);
 
   const fetchToken = async (channelid, uid) => {
@@ -31,19 +46,16 @@ export const AgoraProvider = ({ children }) => {
     if (!client) return;
 
     try {
-      // Fetch token from server
       const token = await fetchToken(channelid, userId);
-
-      // Create the local audio track
       const localTrack = await AgoraRTC.createMicrophoneAudioTrack();
       setLocalAudioTrack(localTrack);
 
-      // Join the channel using token and publish the audio
+      // Join the channel and publish the local audio track
       await client.join(APP_ID, channelid, token, userId);
       await client.publish([localTrack]);
+      console.log(`${userId} Joined voice channel: ${channelid}`);
 
       setIsJoined(true);
-      console.log("Joined voice channel:", channelid);
     } catch (error) {
       console.error("Failed to join the voice channel:", error);
     }

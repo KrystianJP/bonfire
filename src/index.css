@@ -1754,7 +1754,6 @@ input:checked + .slider:before {
   align-items: center;
   justify-content: center;
   padding: 10px;
-  padding-right: 20px;
 }
 .profile-bottom-left {
   display: grid;
