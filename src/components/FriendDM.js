@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-function FriendDM({ friend }) {
+function FriendDM({ friend, unread }) {
   const { friendId } = useParams();
   const [highlight, setHighlight] = useState("");
+  // console.log(friend);
 
   useEffect(() => {
     if (friendId && friend.id == friendId) {
@@ -33,7 +34,7 @@ function FriendDM({ friend }) {
       >
         {friend.name}
       </span>
-      {friend.unread && friend.id != friendId ? (
+      {unread && friendId != friend.id ? (
         <div className="unread-dot"></div>
       ) : null}
     </Link>

@@ -11,6 +11,7 @@ function FriendsPage({ page, user, token }) {
   const [friends, setFriends] = useState([]);
   const [refresh, setRefresh] = useState(0);
   const [currentFriend, setCurrentFriend] = useState({});
+  const [unread, setUnread] = useState({}); // {friendId: true}
 
   useEffect(() => {
     if (!token) return;
@@ -20,17 +21,18 @@ function FriendsPage({ page, user, token }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        setFriends(
-          data.friends.map((friend) => {
-            for (let i = 0; i < data.unread.length; i++) {
-              if (data.unread[i].sender === friend.id) {
-                friend.unread = true;
-                break;
-              }
+        setFriends(data.friends);
+        let tempUnread = {};
+        data.friends.forEach((friend) => {
+          for (let i = 0; i < data.unread.length; i++) {
+            if (data.unread[i].sender === friend.id) {
+              tempUnread[friend.id] = true;
+              break;
             }
-            return friend;
-          }),
-        );
+          }
+          tempUnread[friend.id] = false;
+        });
+        setUnread(tempUnread);
       });
   }, [token, refresh]);
 
@@ -48,7 +50,7 @@ function FriendsPage({ page, user, token }) {
       setFriends((friends) => {
         return friends.map((friend) => {
           if (friend.id === id) {
-            friend.online = true;
+            return { ...friend, online: true };
           }
           return friend;
         });
@@ -62,13 +64,24 @@ function FriendsPage({ page, user, token }) {
 
   return (
     <div className="friends-page">
-      <FriendsBar setFriends={setFriends} token={token} friends={friends} />
+      <FriendsBar
+        unread={unread}
+        setUnread={setUnread}
+        token={token}
+        friends={friends}
+      />
       <ProfileBar user={user} />
       {page === "friends-list" && (
         <FriendsList token={token} setRefresh={setRefresh} friends={friends} />
       )}
       {page === "dms" && (
-        <DMs user={user} token={token} friendInfo={currentFriend} />
+        <DMs
+          user={user}
+          token={token}
+          friendInfo={currentFriend}
+          unread={unread}
+          setUnread={setUnread}
+        />
       )}
     </div>
   );

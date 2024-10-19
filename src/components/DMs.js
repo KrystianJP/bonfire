@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import DMProfileBar from "./DMProfileBar";
 import Messages from "./Messages";
 import { useEffect, useState } from "react";
-function DMs({ friendInfo, token, user, setFriends, friends }) {
+function DMs({ friendInfo, token, user, unread, setUnread }) {
   var { friendId } = useParams();
   const [profileBarOpen, setProfileBarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -30,7 +30,7 @@ function DMs({ friendInfo, token, user, setFriends, friends }) {
 
   useEffect(() => {
     setMessages([]);
-    if (!token) return;
+    if (!token || !friendInfo || !friendId) return;
     if (friendId != friendInfo.id) return;
     fetch("/api/friends/messages/" + friendId, {
       method: "GET",
@@ -39,14 +39,9 @@ function DMs({ friendInfo, token, user, setFriends, friends }) {
       .then((res) => res.json())
       .then((data) => {
         setMessages(data);
-        setFriends(
-          friends.map((friend) => {
-            if (friend.id == friendInfo.id) {
-              return { ...friend, unread: false };
-            }
-            return friend;
-          }),
-        );
+        let tempUnread = { ...unread };
+        tempUnread[friendId] = false;
+        setUnread(tempUnread);
       })
       .catch((err) => console.log(err));
   }, [token, friendInfo, friendId]);
