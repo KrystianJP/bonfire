@@ -72,7 +72,7 @@ function ServerUserProfile({ user, roles, configureRoleGroups }) {
 
           <div className="user-roles">
             {user.roles.map((role) => {
-              if (role.name === "online") return null;
+              if (role.id === "online" || role.id === "offline") return null;
               return (
                 <div className="user-role" key={role.id}>
                   <div
@@ -100,7 +100,8 @@ function ServerUserProfile({ user, roles, configureRoleGroups }) {
             <div>
               <div className="user-role-list">
                 {roles.map((role) => {
-                  if (role.name === "online") return null;
+                  if (role.id === "online" || role.id === "offline")
+                    return null;
                   return (
                     <label
                       key={role.id}

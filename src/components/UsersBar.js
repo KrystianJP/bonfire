@@ -32,7 +32,10 @@ function UsersBar({
   return (
     <div className="users-bar">
       {roles.map((role) => {
-        if (!Object.keys(roleGroups).includes(role.name)) {
+        if (!Object.keys(roleGroups).includes(role.id.toString())) {
+          return null;
+        }
+        if (roleGroups[role.id].users.length === 0) {
           return null;
         }
         // if role in roleGroups, display the users in that group
@@ -41,7 +44,7 @@ function UsersBar({
             <h4 className="role-group-name channel-group-name">
               {role.name.toUpperCase()}
             </h4>
-            {roleGroups[role.name].map((user) => {
+            {roleGroups[role.id].users.map((user) => {
               return (
                 <div
                   onClick={(e) => {
@@ -62,11 +65,23 @@ function UsersBar({
                       src={user.pfp}
                       alt="server user profile picture"
                       className="pfp-img"
+                      style={{
+                        filter:
+                          role.id === "offline"
+                            ? "brightness(70%)"
+                            : "brightness(100%)",
+                      }}
                     />
                   </div>
                   <span
                     className="server-user-name friend-name"
-                    style={{ color: "#" + user.roles[0].colour }}
+                    style={{
+                      color: "#" + user.roles[0].colour,
+                      filter:
+                        role.id === "offline"
+                          ? "brightness(70%)"
+                          : "brightness(100%)",
+                    }}
                   >
                     {user.name}
                   </span>

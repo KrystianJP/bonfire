@@ -148,6 +148,7 @@ const getServer = (req, res) => {
                                     rolenr: null,
                                     name: "online",
                                     colour: "aaaaaa",
+                                    id: "online",
                                   },
                                 ]);
                               },

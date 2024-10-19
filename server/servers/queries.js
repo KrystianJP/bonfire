@@ -9,7 +9,7 @@ const findServership =
 
 const getServer = "SELECT * FROM servers WHERE id = $1;";
 const getUsers =
-  "SELECT users.id,name,pfp,about,banner FROM users JOIN serverships ON users.id = serverships.userid WHERE serverships.serverid = $1;";
+  "SELECT users.id,name,pfp,about,banner, online FROM users JOIN serverships ON users.id = serverships.userid WHERE serverships.serverid = $1;";
 const getChannels =
   "SELECT * FROM channels WHERE serverid = $1 ORDER BY channelnr;";
 const getRoles = "SELECT * FROM roles WHERE serverid = $1 ORDER BY rolenr;";

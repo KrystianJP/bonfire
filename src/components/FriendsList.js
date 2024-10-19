@@ -109,28 +109,44 @@ function FriendsList({ friends, token, setRefresh }) {
       <div className="setting-container">
         <div className="setting-label">FRIENDS</div>
         <div className="role-list">
-          {friends.map((friend) => {
-            return (
-              <div className="role-container" key={friend.name}>
-                <Link to={"/messages/" + friend.id} className="role">
-                  <div className="friend-left">
-                    <div className="friend-pfp">
-                      <img
-                        className="pfp-img"
-                        alt="friend profile"
-                        src={friend.pfp ? friend.pfp : defaultPfp}
-                      />
+          {[...friends]
+            .sort((a, b) => (!a.online && b.online ? 1 : -1))
+            .map((friend) => {
+              return (
+                <div className="role-container" key={friend.name}>
+                  <Link to={"/messages/" + friend.id} className="role">
+                    <div className="friend-left">
+                      <div className="friend-pfp">
+                        <img
+                          className="pfp-img"
+                          alt="friend profile"
+                          style={{
+                            filter: friend.online
+                              ? "brightness(100%)"
+                              : "brightness(70%)",
+                          }}
+                          src={friend.pfp ? friend.pfp : defaultPfp}
+                        />
+                      </div>
+                      <span
+                        className="friend-name"
+                        style={{
+                          filter: friend.online
+                            ? "brightness(100%)"
+                            : "brightness(50%)",
+                        }}
+                      >
+                        {friend.name}
+                      </span>
                     </div>
-                    <span className="friend-name">{friend.name}</span>
-                  </div>
-                  <span className="friend-icons">
-                    <span className="material-icons ">message</span>
-                    <span className="material-icons ">delete</span>
-                  </span>
-                </Link>
-              </div>
-            );
-          })}
+                    <span className="friend-icons">
+                      <span className="material-icons ">message</span>
+                      <span className="material-icons ">delete</span>
+                    </span>
+                  </Link>
+                </div>
+              );
+            })}
         </div>
       </div>
       <div className="setting-container">

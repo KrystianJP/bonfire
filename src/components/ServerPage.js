@@ -5,6 +5,7 @@ import UsersBar from "./UsersBar";
 import ServerDropdown from "./ServerDropdown";
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { socket } from "../socket.js";
 
 function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -16,9 +17,9 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
   const [channelGroups, setChannelGroups] = useState([]);
   const [roles, setRoles] = useState([]);
   const [roleGroups, setRoleGroups] = useState({
-    online: [],
-    offline: [],
-  });
+    online: { name: "online", users: [] },
+    offline: { name: "offline", users: [] },
+  }); // { id: {name: "...", users: [users]} }
   const [server, setServer] = useState({});
   const [usersBarOpen, setUsersBarOpen] = useState(true);
 
@@ -45,7 +46,8 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
         setChannels(data.channels);
         setRoles([
           ...data.roles,
-          { id: Infinity, name: "online", colour: "var(--dark-text)" },
+          { id: "online", name: "online", colour: "var(--dark-text)" },
+          { id: "offline", name: "offline", colour: "var(--dark-text)" },
         ]);
         setChannelGroups(data.channel_groups);
       });
@@ -73,24 +75,55 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
 
   function configureRoleGroups() {
     let tempRoleGroups = {
-      online: [],
-      offline: [],
+      online: {
+        name: "online",
+        users: [],
+      },
+      offline: {
+        name: "offline",
+        users: [],
+      },
     };
     users.forEach((friend) => {
       // *** add offline part later
-      if (friend.roles.length === 1) {
-        tempRoleGroups.online.push(friend);
+      if (!friend.online) {
+        tempRoleGroups.offline.users.push(friend);
+      } else if (friend.roles.length === 1) {
+        tempRoleGroups.online.users.push(friend);
       }
       // if user's first role is not in roleGroups, add it
-      else if (!tempRoleGroups[friend.roles[0].name]) {
-        tempRoleGroups[friend.roles[0].name] = [friend];
+      else if (!tempRoleGroups[friend.roles[0].id]) {
+        tempRoleGroups[friend.roles[0].id] = {
+          name: friend.roles[0].name,
+          users: [friend],
+        };
       } else {
-        tempRoleGroups[friend.roles[0].name].push(friend);
+        tempRoleGroups[friend.roles[0].id].users.push(friend);
       }
     });
 
     setRoleGroups(tempRoleGroups);
   }
+
+  useEffect(() => {
+    if (users.length === 0) return;
+    socket.emit("entered_page", users);
+
+    socket.on("connected_user", (id) => {
+      setUsers((friends) => {
+        return friends.map((friend) => {
+          if (friend.id === id) {
+            return { ...friend, online: true };
+          }
+          return friend;
+        });
+      });
+    });
+
+    return () => {
+      socket.emit("left_page", users);
+    };
+  }, [users, socket]);
 
   // make role groups { group_name: [users] }
   useEffect(() => {
