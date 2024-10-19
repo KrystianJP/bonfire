@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import DMProfileBar from "./DMProfileBar";
 import Messages from "./Messages";
 import { useEffect, useState } from "react";
-function DMs({ friendInfo, token, user }) {
+function DMs({ friendInfo, token, user, setFriends, friends }) {
   var { friendId } = useParams();
   const [profileBarOpen, setProfileBarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -39,7 +39,14 @@ function DMs({ friendInfo, token, user }) {
       .then((res) => res.json())
       .then((data) => {
         setMessages(data);
-        friendInfo.unread = false;
+        setFriends(
+          friends.map((friend) => {
+            if (friend.id == friendInfo.id) {
+              return { ...friend, unread: false };
+            }
+            return friend;
+          }),
+        );
       })
       .catch((err) => console.log(err));
   }, [token, friendInfo, friendId]);

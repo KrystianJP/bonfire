@@ -9,6 +9,7 @@ import passport from "passport";
 import flash from "express-flash";
 import session from "express-session";
 import { Server } from "socket.io";
+import pool from "./db.js";
 
 initializePassport(passport);
 
@@ -60,6 +61,32 @@ io.use((socket, next) => {
 io.on("connection", (socket) => {
   users[socket.user.id] = socket.id;
 
+  // make user online
+  io.to("user" + socket.user.id).emit("connected_user", socket.user.id);
+  pool.query(
+    "UPDATE users SET online = true WHERE id = $1",
+    [socket.user.id],
+    (err) => {
+      if (err) {
+        console.log(err);
+      }
+    },
+  );
+
+  socket.on("entered_page", (viewedUsers) => {
+    viewedUsers.forEach((user) => {
+      socket.join("user" + user.id);
+    });
+
+    // io.to(socket.id).emit("update_online_users", users);
+  });
+
+  socket.on("left_page", (viewedUsers) => {
+    viewedUsers.forEach((user) => {
+      socket.leave("user" + user.id);
+    });
+  });
+
   socket.on("join_room", (roomId) => {
     socket.join(roomId);
   });
@@ -78,6 +105,18 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
+    socket
+      .to("user" + socket.user.id)
+      .emit("disconnected_user", socket.user.id);
     delete users[socket.user.id];
+    pool.query(
+      "UPDATE users SET online = false WHERE id = $1",
+      [socket.user.id],
+      (err) => {
+        if (err) {
+          console.log(err);
+        }
+      },
+    );
   });
 });

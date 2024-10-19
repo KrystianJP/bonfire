@@ -5,6 +5,7 @@ import VoiceVideo from "./VoiceVideo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import { socket } from "../../socket.js";
 
 function SettingsPage({ setting, token, user }) {
   const [account, setAccount] = useState({});
@@ -51,6 +52,7 @@ function SettingsPage({ setting, token, user }) {
   function logout() {
     localStorage.removeItem("token");
     fetch("/api/users/logout", { method: "DELETE" });
+    socket.disconnect();
   }
 
   function saveChanges() {

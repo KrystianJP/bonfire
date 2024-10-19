@@ -4,6 +4,7 @@ import FriendsList from "./FriendsList";
 import DMs from "./DMs";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { socket } from "../socket.js";
 
 function FriendsPage({ page, user, token }) {
   const { friendId } = useParams();
@@ -39,13 +40,29 @@ function FriendsPage({ page, user, token }) {
     }
   }, [friendId, friends]);
 
+  useEffect(() => {
+    if (friends.length === 0) return;
+    socket.emit("entered_page", friends);
+
+    socket.on("connected_user", (id) => {
+      setFriends((friends) => {
+        return friends.map((friend) => {
+          if (friend.id === id) {
+            friend.online = true;
+          }
+          return friend;
+        });
+      });
+    });
+
+    return () => {
+      socket.emit("left_page", friends);
+    };
+  }, [friends, socket]);
+
   return (
     <div className="friends-page">
-      <FriendsBar
-        token={token}
-        friends={friends}
-        currentFriend={page === "dms" ? currentFriend : ""}
-      />
+      <FriendsBar setFriends={setFriends} token={token} friends={friends} />
       <ProfileBar user={user} />
       {page === "friends-list" && (
         <FriendsList token={token} setRefresh={setRefresh} friends={friends} />
