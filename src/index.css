@@ -335,6 +335,8 @@ label {
   grid-area: profile-bar;
   background-color: var(--dark-profile-bar);
   width: 240px;
+}
+.profile-top {
   display: flex;
   align-items: center;
   padding: 6px;
@@ -1717,4 +1719,66 @@ input:checked + .slider:before {
 .channels-page .channel:hover .arrows-container,
 .channels-page .channel:hover .delete-button {
   visibility: visible;
+}
+
+.channels-bar .channel {
+  margin-top: 2px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.voice-channel-user {
+  font-size: 0.85rem;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.voice-channel-user .ban-pfp {
+  margin-right: 8px;
+}
+.voice-channel-user:hover {
+  cursor: pointer;
+  background: var(--dark-highlight);
+  color: var(--dark-lighter);
+}
+
+.profile-bottom {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  padding-right: 20px;
+}
+.profile-bottom-left {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.profile-bottom .material-icons {
+  font-size: 1.35rem;
+  padding: 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-bottom .material-icons:hover {
+  cursor: pointer;
+  color: var(--dark-lightest);
+  background: var(--dark-highlight);
+}
+#connected-text {
+  color: #23a55a;
+}
+#connected-channel {
+  font-size: 0.95rem;
 }

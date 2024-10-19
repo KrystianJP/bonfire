@@ -7,7 +7,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "../socket.js";
 
-function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
+function ServerPage({ userProfileState, user, token }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { channelId } = useParams();
   const { serverId } = useParams();
@@ -120,8 +120,21 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
       });
     });
 
+    socket.on("disconnected_user", (id) => {
+      setUsers((friends) => {
+        return friends.map((friend) => {
+          if (friend.id === id) {
+            return { ...friend, online: false };
+          }
+          return friend;
+        });
+      });
+    });
+
     return () => {
       socket.emit("left_page", users);
+      socket.off("connected_user");
+      socket.off("disconnected_user");
     };
   }, [users, socket]);
 
@@ -138,7 +151,8 @@ function ServerPage({ toggleChannelModal, userProfileState, user, token }) {
         {dropdownOpen && <ServerDropdown />}
       </div>
       <ChannelsBar
-        toggleChannelModal={toggleChannelModal}
+        users={users}
+        user={user}
         groups={channelGroups}
         channels={channels}
       />

@@ -57,8 +57,21 @@ function FriendsPage({ page, user, token }) {
       });
     });
 
+    socket.on("disconnected_user", (id) => {
+      setFriends((friends) => {
+        return friends.map((friend) => {
+          if (friend.id === id) {
+            return { ...friend, online: false };
+          }
+          return friend;
+        });
+      });
+    });
+
     return () => {
       socket.emit("left_page", friends);
+      socket.off("connected_user");
+      socket.off("disconnected_user");
     };
   }, [friends, socket]);
 
