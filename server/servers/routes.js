@@ -18,6 +18,11 @@ router.post(
 );
 
 router.post("/message/:channelId", authenticateToken, controller.sendMessage);
+router.delete(
+  "/message/:messageId",
+  authenticateToken,
+  controller.deleteMessage,
+);
 
 router.post("/roles/apply/:serverId", authenticateToken, controller.applyRoles);
 router.post("/role/add/:serverId", authenticateToken, controller.addRole);

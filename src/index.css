@@ -556,9 +556,9 @@ label {
 }
 .message-container {
   display: grid;
-  grid-template-areas: "message-pfp message-username message-date" "message-pfp message-content message-content";
+  grid-template-areas: "message-pfp message-username message-date delete-msg" "message-pfp message-content message-content message-content";
   grid-template-rows: min-content 1fr;
-  grid-template-columns: min-content min-content 1fr;
+  grid-template-columns: min-content min-content min-content 1fr;
   padding: 5px 15px;
   padding-right: max(15px, 3%);
 }
@@ -574,11 +574,28 @@ label {
   text-decoration: underline;
   cursor: pointer;
 }
+.delete-msg {
+  grid-area: delete-msg;
+  color: #ff3838;
+  font-size: 0.8rem;
+  margin-left: 5px;
+  align-self: last baseline;
+  visibility: hidden;
+  width: min-content;
+}
+.delete-msg:hover {
+  cursor: pointer;
+  filter: brightness(80%);
+}
+.message-container-container:hover .delete-msg {
+  visibility: visible;
+}
 .message-date {
   grid-area: message-date;
   font-size: 0.7rem;
   align-self: last baseline;
   margin-left: 8px;
+  white-space: nowrap;
 }
 .message-content {
   grid-area: message-content;

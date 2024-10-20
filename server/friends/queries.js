@@ -40,6 +40,8 @@ const isFriend =
 const removeFriend =
   "DELETE FROM friendships WHERE user1id = $1 AND user2id = $2;";
 
+const deleteMessage = "DELETE FROM direct_messages WHERE id = $1;";
+
 export default {
   getFriends,
   insertFriendship,
@@ -55,4 +57,5 @@ export default {
   insertUnread,
   isFriend,
   removeFriend,
+  deleteMessage,
 };

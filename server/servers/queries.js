@@ -75,6 +75,8 @@ const getChannelById = "SELECT * FROM channels WHERE id = $1;";
 
 const kickUser = "DELETE FROM serverships WHERE serverid = $1 AND userid = $2;";
 
+const deleteMessage = "DELETE FROM channel_messages WHERE id = $1;";
+
 export default {
   getServers,
   createServer,
@@ -113,4 +115,5 @@ export default {
   checkForInvite,
   getChannelById,
   kickUser,
+  deleteMessage,
 };

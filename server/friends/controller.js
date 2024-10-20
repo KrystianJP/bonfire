@@ -188,6 +188,17 @@ const removeFriend = (req, res) => {
   );
 };
 
+const deleteMessage = (req, res) => {
+  pool.query(
+    queries.deleteMessage,
+    [req.params.messageId],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
 export default {
   getFriends,
   addFriendRequest,
@@ -199,4 +210,5 @@ export default {
   updateUnread,
   isFriend,
   removeFriend,
+  deleteMessage,
 };

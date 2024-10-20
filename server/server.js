@@ -220,11 +220,26 @@ io.on("connection", (socket) => {
     if (data.receiver) {
       io.to(users[data.receiver]).emit("unread", data);
     }
-    console.log("message sent to " + data.roomId);
   });
 
   socket.on("leave_room", (roomId) => {
     socket.leave(roomId);
+  });
+
+  socket.on("delete_channel_message", (messageId) => {
+    let roomId = Array.from(socket.rooms).find((room) =>
+      room.startsWith("channel"),
+    );
+
+    io.to(roomId).emit("deleted_channel_message", messageId);
+  });
+
+  socket.on("delete_dm_message", (messageId) => {
+    let roomId = Array.from(socket.rooms).find((room) =>
+      room.startsWith("friend"),
+    );
+
+    io.to(roomId).emit("deleted_dm_message", messageId);
   });
 
   socket.on("disconnect", () => {

@@ -16,6 +16,11 @@ router.post(
   controller.acceptFriendRequest,
 );
 router.post("/message/:friendId", authenticateToken, controller.sendMessage);
+router.delete(
+  "/message/:messageId",
+  authenticateToken,
+  controller.deleteMessage,
+);
 
 router.delete(
   "/decline/:friendId",

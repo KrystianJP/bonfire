@@ -81,6 +81,22 @@ function DMs({
     });
   }
 
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      const newMessage = data.message.message;
+      setMessages((prev) => [newMessage, ...prev]);
+    });
+
+    socket.on("deleted_dm_message", (messageId) => {
+      setMessages((prev) => prev.filter((message) => message.id != messageId));
+    });
+
+    return () => {
+      socket.off("receive_message");
+      socket.off("deleted_dm_message");
+    };
+  }, []);
+
   return (
     <div className="dms">
       <div className="top-bar top-dm-bar">
@@ -104,7 +120,7 @@ function DMs({
           <span className="material-icons">videocam</span>
           <span className="material-icons">notifications</span>
           <span className="material-icons ">delete</span>
-          <span className="material-icons ">block</span>
+          {/* <span className="material-icons ">block</span> */}
         </div>
       </div>
 

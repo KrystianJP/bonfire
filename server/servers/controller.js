@@ -387,7 +387,7 @@ const createInvite = (req, res) => {
         [
           req.params.serverId,
           inviteCode,
-          new Date(Date.now() + 24 * 60 * 60 * 1000), // adds 24 hours
+          new Date(Date.now() + 2 * 60 * 60 * 1000), // adds 2 hours
         ],
         (error, results) => {
           if (error) throw error;
@@ -420,6 +420,17 @@ const kickUser = (req, res) => {
   );
 };
 
+const deleteMessage = (req, res) => {
+  pool.query(
+    queries.deleteMessage,
+    [req.params.messageId],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
 export default {
   getServers,
   createServer,
@@ -439,4 +450,5 @@ export default {
   createInvite,
   getChannelById,
   kickUser,
+  deleteMessage,
 };

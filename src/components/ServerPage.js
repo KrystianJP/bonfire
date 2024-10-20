@@ -66,6 +66,24 @@ function ServerPage({ userProfileState, user, token }) {
   }, [token, serverId]);
 
   useEffect(() => {
+    socket.on("receive_message", (data) => {
+      const newMessage = data.message.message;
+      setMessages((prev) => [newMessage, ...prev]);
+    });
+
+    socket.on("deleted_channel_message", (messageId) => {
+      setMessages((prev) => {
+        return prev.filter((message) => message.id !== messageId);
+      });
+    });
+
+    return () => {
+      socket.off("receive_message");
+      socket.off("deleted_channel_message");
+    };
+  }, []);
+
+  useEffect(() => {
     if (!server) return;
     if (!server.default_channel) return;
     if (!channelId) {
@@ -216,7 +234,7 @@ function ServerPage({ userProfileState, user, token }) {
           <Messages
             users={users}
             messages={messages}
-            user={user}
+            user={users.find((u) => u.id == user.id)}
             roles={roles}
             placeholder={
               "#" +

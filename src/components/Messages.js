@@ -17,7 +17,7 @@ function Messages({ users, messages, roles, placeholder, token, user }) {
   } else {
     roomId = "channel" + channelId;
   }
-  const [stateMessages, setStateMessages] = useState([]);
+  // const [stateMessages, setStateMessages] = useState([]);
 
   function sendMessage() {
     if (!token || !msgText) return;
@@ -36,21 +36,21 @@ function Messages({ users, messages, roles, placeholder, token, user }) {
   useEffect(() => {
     if (!token) return;
     socket.emit("join_room", roomId);
-    socket.on("receive_message", (data) => {
-      const newMessage = data.message.message;
-      setStateMessages((prevMessages) => [newMessage, ...prevMessages]);
-    });
+    // socket.on("receive_message", (data) => {
+    //   const newMessage = data.message.message;
+    //   setStateMessages((prevMessages) => [newMessage, ...prevMessages]);
+    // });
 
     return () => {
       socket.emit("leave_room", roomId);
-      socket.off("receive_message");
+      // socket.off("receive_message");
     };
   }, [token, roomId]);
 
-  useEffect(() => {
-    // setMessages([]);
-    setStateMessages([]);
-  }, [friendId, channelId]);
+  // useEffect(() => {
+  // setMessages([]);
+  //   setStateMessages([]);
+  // }, [friendId, channelId]);
 
   function sendDM() {
     fetch("/api/friends/message/" + friendId, {
@@ -100,20 +100,24 @@ function Messages({ users, messages, roles, placeholder, token, user }) {
   return (
     <div className="messages-bar">
       <div className="messages-container">
-        {stateMessages.map((message) => (
+        {/* {stateMessages.map((message) => (
           <Message
             userInfo={users.filter((user) => user.id == message.authorid)[0]}
             message={message}
             key={message.id}
             roles={roles}
+            token={token}
+            user={user}
           />
-        ))}
+        ))} */}
         {messages.map((message) => (
           <Message
             userInfo={users.filter((user) => user.id == message.authorid)[0]}
             message={message}
             key={message.id}
             roles={roles}
+            token={token}
+            user={user}
           />
         ))}
       </div>
