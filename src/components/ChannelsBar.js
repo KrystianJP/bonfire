@@ -57,6 +57,7 @@ function ChannelsBar({ groups, channels, user, users }) {
 
     return () => {
       socket.off("joined_voice_channel");
+      socket.off("left_voice_channel");
     };
   }, [socket, usersMap]);
 
@@ -66,18 +67,18 @@ function ChannelsBar({ groups, channels, user, users }) {
     channels
       .filter((channel) => channel.voice)
       .forEach((channel) => {
-        socket.emit("get_current_users", channel.id, (users) => {
+        socket.emit("get_current_users", "channel" + channel.id, (users) => {
           setVoiceChannelUsers((prev) => ({
             ...prev,
-            [channel.id]: users,
+            ["channel" + channel.id]: users,
           }));
         });
       });
   }, [channels]);
 
   function joinVoiceChannelHandler(channelId) {
-    joinVoiceChannel(channelId.toString(), user.id);
-    socket.emit("join_voice_channel", channelId);
+    joinVoiceChannel("channel" + channelId, user.id);
+    socket.emit("join_voice_channel", "channel" + channelId);
   }
 
   return (
@@ -116,22 +117,24 @@ function ChannelsBar({ groups, channels, user, users }) {
                     </Link>
                     <div className="voice-channel-users">
                       {channel.voice &&
-                        voiceChannelUsers[channel.id] &&
-                        voiceChannelUsers[channel.id].map((userid) => {
-                          return (
-                            <div className="voice-channel-user" key={userid}>
-                              <div className="ban-pfp">
-                                <img
-                                  src={usersMap[userid].pfp}
-                                  alt={usersMap[userid].name}
-                                  className="pfp-img"
-                                  key={userid}
-                                />
+                        voiceChannelUsers["channel" + channel.id] &&
+                        voiceChannelUsers["channel" + channel.id].map(
+                          (userid) => {
+                            return (
+                              <div className="voice-channel-user" key={userid}>
+                                <div className="ban-pfp">
+                                  <img
+                                    src={usersMap[userid].pfp}
+                                    alt={usersMap[userid].name}
+                                    className="pfp-img"
+                                    key={userid}
+                                  />
+                                </div>
+                                {usersMap[userid].name}
                               </div>
-                              {usersMap[userid].name}
-                            </div>
-                          );
-                        })}
+                            );
+                          },
+                        )}
                     </div>
                   </div>
                 );

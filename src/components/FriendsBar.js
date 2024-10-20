@@ -3,7 +3,7 @@ import FriendDM from "./FriendDM";
 import { useEffect, useState } from "react";
 import { socket } from "../socket.js";
 
-function FriendsBar({ friends, token, unread, setUnread }) {
+function FriendsBar({ friends, token, unread, inVoice, setUnread }) {
   const { friendId } = useParams();
   const [newFriends, setNewFriends] = useState(friends);
 
@@ -46,7 +46,6 @@ function FriendsBar({ friends, token, unread, setUnread }) {
 
   useEffect(() => {
     setNewFriends(friends);
-    // console.log(friends);
   }, [friends]);
 
   return (
@@ -59,6 +58,7 @@ function FriendsBar({ friends, token, unread, setUnread }) {
       {newFriends.map((friend) => {
         return (
           <FriendDM
+            inVoice={inVoice[friend.id]}
             unread={unread[friend.id]}
             friend={friend}
             key={friend.id}

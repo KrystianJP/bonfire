@@ -145,6 +145,13 @@ const getUserByName = (req, res) => {
   });
 };
 
+const getUserById = (req, res) => {
+  pool.query(queries.getUserById, [req.params.id], (error, results) => {
+    if (error) throw error;
+    res.status(200).send(results.rows[0]);
+  });
+};
+
 export default {
   loginUser,
   registerUser,
@@ -152,4 +159,5 @@ export default {
   getMe,
   getUserByName,
   updateUser,
+  getUserById,
 };

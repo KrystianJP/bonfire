@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-function FriendDM({ friend, unread }) {
+function FriendDM({ friend, unread, inVoice }) {
   const { friendId } = useParams();
   const [highlight, setHighlight] = useState("");
   // console.log(friend);
@@ -34,6 +34,9 @@ function FriendDM({ friend, unread }) {
       >
         {friend.name}
       </span>
+      {inVoice ? (
+        <span className="material-icons in-voice">volume_up</span>
+      ) : null}
       {unread && friendId != friend.id ? (
         <div className="unread-dot"></div>
       ) : null}

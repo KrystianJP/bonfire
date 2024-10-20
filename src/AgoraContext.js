@@ -7,6 +7,7 @@ export const AgoraProvider = ({ children }) => {
   const [client, setClient] = useState(null);
   const [localAudioTrack, setLocalAudioTrack] = useState(null);
   const [isJoined, setIsJoined] = useState(false);
+  const [currentChannel, setCurrentChannel] = useState(null);
 
   const APP_ID = "0b3851e50b80459bb0dfd644e9410a90";
 
@@ -53,6 +54,8 @@ export const AgoraProvider = ({ children }) => {
       // Join the channel and publish the local audio track
       await client.join(APP_ID, channelid, token, userId);
       await client.publish([localTrack]);
+
+      setCurrentChannel(channelid);
       console.log(`${userId} Joined voice channel: ${channelid}`);
 
       setIsJoined(true);
@@ -72,6 +75,8 @@ export const AgoraProvider = ({ children }) => {
       setLocalAudioTrack(null);
       setIsJoined(false);
       console.log("Left the voice channel");
+
+      setCurrentChannel(null);
     } catch (error) {
       console.error("Failed to leave the voice channel:", error);
     }
@@ -79,7 +84,7 @@ export const AgoraProvider = ({ children }) => {
 
   return (
     <AgoraContext.Provider
-      value={{ joinVoiceChannel, leaveVoiceChannel, isJoined }}
+      value={{ joinVoiceChannel, leaveVoiceChannel, isJoined, currentChannel }}
     >
       {children}
     </AgoraContext.Provider>

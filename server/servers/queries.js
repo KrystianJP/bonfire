@@ -71,6 +71,8 @@ const findInvite = "SELECT * FROM invites WHERE invite_code = $1;";
 const checkForInvite =
   "SELECT * FROM invites WHERE serverid = $1 AND invite_code = $2;";
 
+const getChannelById = "SELECT * FROM channels WHERE id = $1;";
+
 export default {
   getServers,
   createServer,
@@ -107,4 +109,5 @@ export default {
   newInvite,
   findInvite,
   checkForInvite,
+  getChannelById,
 };

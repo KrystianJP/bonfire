@@ -3,7 +3,7 @@ import ProfileBar from "./ProfileBar";
 import Messages from "./Messages";
 import UsersBar from "./UsersBar";
 import ServerDropdown from "./ServerDropdown";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "../socket.js";
 
@@ -156,7 +156,7 @@ function ServerPage({ userProfileState, user, token }) {
         groups={channelGroups}
         channels={channels}
       />
-      <ProfileBar user={user} />
+      {Object.keys(user).length > 0 && <ProfileBar user={user} />}
       <div className="top-bar top-dm-bar">
         <div className="top-bar-left-server">
           <span className="material-icons">tag</span>

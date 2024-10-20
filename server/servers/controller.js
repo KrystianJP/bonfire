@@ -397,6 +397,17 @@ const createInvite = (req, res) => {
   });
 };
 
+const getChannelById = (req, res) => {
+  pool.query(
+    queries.getChannelById,
+    [req.params.channelId],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json({ channel: results.rows[0] });
+    },
+  );
+};
+
 export default {
   getServers,
   createServer,
@@ -414,4 +425,5 @@ export default {
   addChannel,
   deleteChannels,
   createInvite,
+  getChannelById,
 };

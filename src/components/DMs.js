@@ -2,11 +2,16 @@
 import { Link, useParams } from "react-router-dom";
 import DMProfileBar from "./DMProfileBar";
 import Messages from "./Messages";
-import { useEffect, useState } from "react";
-function DMs({ friendInfo, token, user, unread, setUnread }) {
+import { useEffect, useState, useContext } from "react";
+import { AgoraContext } from "../AgoraContext";
+import { socket } from "../socket.js";
+
+function DMs({ friendInfo, token, user, unread, setUnread, setInVoice }) {
   var { friendId } = useParams();
   const [profileBarOpen, setProfileBarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
+
+  const { joinVoiceChannel } = useContext(AgoraContext);
 
   function widthListener() {
     if (window.innerWidth > 1000) {
@@ -46,6 +51,26 @@ function DMs({ friendInfo, token, user, unread, setUnread }) {
       .catch((err) => console.log(err));
   }, [token, friendInfo, friendId]);
 
+  function joinVoiceChannelHandler() {
+    setInVoice((prev) => {
+      return { ...prev, [friendInfo.id]: true };
+    });
+    joinVoiceChannel(
+      "friend" +
+        Math.min(friendInfo.id, user.id) +
+        "," +
+        Math.max(friendInfo.id, user.id),
+      user.id,
+    );
+    socket.emit(
+      "join_voice_call",
+      "friend" +
+        Math.min(friendInfo.id, user.id) +
+        "," +
+        Math.max(friendInfo.id, user.id),
+    );
+  }
+
   return (
     <div className="dms">
       <div className="top-bar top-dm-bar">
@@ -63,7 +88,9 @@ function DMs({ friendInfo, token, user, unread, setUnread }) {
           <span className="friend-name friend-name-dm">{friendInfo.name}</span>
         </div>
         <div className="top-bar-right">
-          <span className="material-icons">call</span>
+          <span className="material-icons" onClick={joinVoiceChannelHandler}>
+            call
+          </span>
           <span className="material-icons">videocam</span>
           <span className="material-icons">notifications</span>
           <span className="material-icons ">delete</span>

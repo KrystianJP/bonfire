@@ -12,6 +12,7 @@ function FriendsPage({ page, user, token }) {
   const [refresh, setRefresh] = useState(0);
   const [currentFriend, setCurrentFriend] = useState({});
   const [unread, setUnread] = useState({}); // {friendId: true}
+  const [inVoice, setInVoice] = useState({});
 
   useEffect(() => {
     if (!token) return;
@@ -68,12 +69,49 @@ function FriendsPage({ page, user, token }) {
       });
     });
 
+    socket.on("joined_voice_call", (data) => {
+      setInVoice((prev) => {
+        return { ...prev, [data.userid]: true };
+      });
+    });
+    socket.on("left_voice_call", (data) => {
+      socket.emit("get_current_users", data.channelId, (users) => {
+        if (users.length === 0) {
+          setInVoice((prev) => {
+            return { ...prev, [data.userid]: false };
+          });
+        }
+      });
+    });
+
     return () => {
       socket.emit("left_page", friends);
       socket.off("connected_user");
       socket.off("disconnected_user");
     };
   }, [friends, socket]);
+
+  useEffect(() => {
+    if (!friends || !user) return;
+    // checking if any friends are in private call with user
+    friends.forEach((friend) => {
+      socket.emit(
+        "get_current_users",
+        "friend" +
+          Math.min(user.id, friend.id) +
+          "," +
+          Math.max(user.id, friend.id),
+        (users) => {
+          setInVoice((prev) => {
+            return {
+              ...prev,
+              [friend.id]: users.includes(user.id) || users.includes(friend.id),
+            };
+          });
+        },
+      );
+    });
+  }, [friends, user]);
 
   return (
     <div className="friends-page">
@@ -82,8 +120,11 @@ function FriendsPage({ page, user, token }) {
         setUnread={setUnread}
         token={token}
         friends={friends}
+        inVoice={inVoice}
       />
-      <ProfileBar user={user} />
+      {Object.keys(user).length > 0 && (
+        <ProfileBar setInVoice={setInVoice} user={user} />
+      )}
       {page === "friends-list" && (
         <FriendsList token={token} setRefresh={setRefresh} friends={friends} />
       )}
@@ -94,6 +135,7 @@ function FriendsPage({ page, user, token }) {
           friendInfo={currentFriend}
           unread={unread}
           setUnread={setUnread}
+          setInVoice={setInVoice}
         />
       )}
     </div>

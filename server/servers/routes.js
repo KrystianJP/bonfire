@@ -45,4 +45,6 @@ router.post(
 
 router.get("/invite/:serverId", authenticateToken, controller.createInvite);
 
+router.get("/channel/:channelId", authenticateToken, controller.getChannelById);
+
 export default router;
