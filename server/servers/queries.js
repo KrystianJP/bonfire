@@ -73,6 +73,8 @@ const checkForInvite =
 
 const getChannelById = "SELECT * FROM channels WHERE id = $1;";
 
+const kickUser = "DELETE FROM serverships WHERE serverid = $1 AND userid = $2;";
+
 export default {
   getServers,
   createServer,
@@ -110,4 +112,5 @@ export default {
   findInvite,
   checkForInvite,
   getChannelById,
+  kickUser,
 };

@@ -5,8 +5,15 @@ import { AgoraContext } from "../AgoraContext";
 import { socket } from "../socket.js";
 
 function ProfileBar({ user, setInVoice }) {
-  const { leaveVoiceChannel, isJoined, currentChannel } =
-    useContext(AgoraContext);
+  const {
+    leaveVoiceChannel,
+    isJoined,
+    currentChannel,
+    isMuted,
+    toggleMute,
+    isDeafened,
+    toggleDeafen,
+  } = useContext(AgoraContext);
   const [channelName, setChannelName] = useState("");
   const [call, setCall] = useState(false);
   const defaultPfp =
@@ -96,8 +103,25 @@ function ProfileBar({ user, setInVoice }) {
             <span id="connected-channel">{channelName}</span>
           </div>
           <div className="profile-icons">
-            <span className="material-icons">mic</span>
-            <span className="material-icons">headphones</span>
+            <span
+              className="material-icons"
+              onClick={toggleMute}
+              style={{ color: isMuted ? "#ff3838" : "inherit" }}
+            >
+              {isMuted ? "mic_off" : "mic"}
+            </span>
+            <span
+              className="material-icons"
+              onClick={() => {
+                if (!isMuted) {
+                  toggleMute();
+                }
+                toggleDeafen();
+              }}
+              style={{ color: isDeafened ? "#ff3838" : "inherit" }}
+            >
+              {isDeafened ? "headset_off" : "headphones"}
+            </span>
             <span className="material-icons" onClick={leaveVoiceChannelHandler}>
               call_end
             </span>

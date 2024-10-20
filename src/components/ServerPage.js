@@ -22,6 +22,7 @@ function ServerPage({ userProfileState, user, token }) {
   }); // { id: {name: "...", users: [users]} }
   const [server, setServer] = useState({});
   const [usersBarOpen, setUsersBarOpen] = useState(true);
+  const [busy, setBusy] = useState(true);
 
   const [messages, setMessages] = useState([]);
 
@@ -37,7 +38,13 @@ function ServerPage({ userProfileState, user, token }) {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 403) {
+          console.log("You are not authorised to access this server");
+          window.location.href = "/";
+        }
+        return res.json();
+      })
       .then((data) => {
         setUsers(data.users);
 
@@ -50,14 +57,31 @@ function ServerPage({ userProfileState, user, token }) {
           { id: "offline", name: "offline", colour: "var(--dark-text)" },
         ]);
         setChannelGroups(data.channel_groups);
+
+        setBusy(false);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, [token, serverId]);
 
   useEffect(() => {
+    if (!server) return;
     if (!server.default_channel) return;
     if (!channelId) {
       window.location.href = `/servers/${serverId}/${server.default_channel}`;
     }
+    const kickedUserHandler = (data) => {
+      if (data.serverid == serverId) {
+        window.location.href = "/";
+      }
+    };
+
+    socket.on("kicked_user", kickedUserHandler);
+
+    return () => {
+      socket.off("kicked_user", kickedUserHandler);
+    };
   }, [server, serverId, channelId]);
 
   useEffect(() => {
@@ -106,6 +130,7 @@ function ServerPage({ userProfileState, user, token }) {
   }
 
   useEffect(() => {
+    if (!users) return;
     if (users.length === 0) return;
     socket.emit("entered_page", users);
 
@@ -145,70 +170,73 @@ function ServerPage({ userProfileState, user, token }) {
   }, [users]);
 
   return (
-    <div className="server-page">
-      <div className="server-name-container" onClick={toggleDropdown}>
-        <span className="server-name">{server.name}</span>
-        {dropdownOpen && <ServerDropdown />}
-      </div>
-      <ChannelsBar
-        users={users}
-        user={user}
-        groups={channelGroups}
-        channels={channels}
-      />
-      {Object.keys(user).length > 0 && <ProfileBar user={user} />}
-      <div className="top-bar top-dm-bar">
-        <div className="top-bar-left-server">
-          <span className="material-icons">tag</span>
-          {channels
-            .filter((channel) => {
-              return channel.id == channelId;
-            })
-            .map((channel) => {
-              return channel.name;
-            })}
+    !busy && (
+      <div className="server-page">
+        <div className="server-name-container" onClick={toggleDropdown}>
+          <span className="server-name">{server.name}</span>
+          {dropdownOpen && <ServerDropdown />}
         </div>
-        <div className="top-bar-right">
-          <span
-            className="material-icons"
-            onClick={() => setUsersBarOpen(!usersBarOpen)}
-          >
-            group
-          </span>
-          <div className="search-container">
-            <span className="material-icons search-icon">search</span>
-            <input
-              id="server-search-bar"
-              className="search-bar"
-              type="text"
-              placeholder="Search"
-            />
+        <ChannelsBar
+          users={users}
+          user={user}
+          groups={channelGroups}
+          channels={channels}
+        />
+        {Object.keys(user).length > 0 && <ProfileBar user={user} />}
+        <div className="top-bar top-dm-bar">
+          <div className="top-bar-left-server">
+            <span className="material-icons">tag</span>
+            {channels
+              .filter((channel) => {
+                return channel.id == channelId;
+              })
+              .map((channel) => {
+                return channel.name;
+              })}
+          </div>
+          <div className="top-bar-right">
+            <span
+              className="material-icons"
+              onClick={() => setUsersBarOpen(!usersBarOpen)}
+            >
+              group
+            </span>
+            <div className="search-container">
+              <span className="material-icons search-icon">search</span>
+              <input
+                id="server-search-bar"
+                className="search-bar"
+                type="text"
+                placeholder="Search"
+              />
+            </div>
           </div>
         </div>
+        {channelId && channels.length > 0 && users.length > 0 && users[0] && (
+          <Messages
+            users={users}
+            messages={messages}
+            user={user}
+            roles={roles}
+            placeholder={
+              "#" +
+              channels.filter((channel) => channel.id == channelId)[0].name
+            }
+            setMessages={setMessages}
+            token={token}
+          />
+        )}
+        {usersBarOpen && (
+          <UsersBar
+            userProfileState={userProfileState}
+            roles={roles}
+            roleGroups={roleGroups}
+            configureRoleGroups={configureRoleGroups}
+            user={user}
+          />
+        )}
       </div>
-      {channelId && channels.length > 0 && users.length > 0 && users[0] && (
-        <Messages
-          users={users}
-          messages={messages}
-          user={user}
-          roles={roles}
-          placeholder={
-            "#" + channels.filter((channel) => channel.id == channelId)[0].name
-          }
-          setMessages={setMessages}
-          token={token}
-        />
-      )}
-      {usersBarOpen && (
-        <UsersBar
-          userProfileState={userProfileState}
-          roles={roles}
-          roleGroups={roleGroups}
-          configureRoleGroups={configureRoleGroups}
-          user={user}
-        />
-      )}
-    </div>
+    )
   );
 }
 

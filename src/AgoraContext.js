@@ -8,6 +8,8 @@ export const AgoraProvider = ({ children }) => {
   const [localAudioTrack, setLocalAudioTrack] = useState(null);
   const [isJoined, setIsJoined] = useState(false);
   const [currentChannel, setCurrentChannel] = useState(null);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isDeafened, setIsDeafened] = useState(false);
 
   const APP_ID = "0b3851e50b80459bb0dfd644e9410a90";
 
@@ -82,9 +84,46 @@ export const AgoraProvider = ({ children }) => {
     }
   };
 
+  const toggleMute = async () => {
+    if (isMuted) {
+      await localAudioTrack.setVolume(100);
+      setIsMuted(false);
+    } else {
+      await localAudioTrack.setVolume(0);
+      setIsMuted(true);
+    }
+  };
+
+  const toggleDeafen = async () => {
+    if (isDeafened) {
+      setIsDeafened(false);
+      client.remoteUsers.forEach((user) => {
+        if (user.audioTrack) {
+          user.audioTrack.setVolume(100); // restore volume to normal
+        }
+      });
+    } else {
+      setIsDeafened(true);
+      client.remoteUsers.forEach((user) => {
+        if (user.audioTrack) {
+          user.audioTrack.setVolume(0); // mute all
+        }
+      });
+    }
+  };
+
   return (
     <AgoraContext.Provider
-      value={{ joinVoiceChannel, leaveVoiceChannel, isJoined, currentChannel }}
+      value={{
+        joinVoiceChannel,
+        leaveVoiceChannel,
+        isJoined,
+        currentChannel,
+        isMuted,
+        toggleMute,
+        isDeafened,
+        toggleDeafen,
+      }}
     >
       {children}
     </AgoraContext.Provider>

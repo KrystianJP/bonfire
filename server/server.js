@@ -187,6 +187,10 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("kicked_user", (data) => {
+    io.to(users[data.userid]).emit("kicked_user", data);
+  });
+
   socket.on("get_current_users", (channelId, callback) => {
     const currentUsers = voiceChannels[channelId] || [];
 

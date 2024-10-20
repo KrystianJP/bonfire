@@ -47,4 +47,10 @@ router.get("/invite/:serverId", authenticateToken, controller.createInvite);
 
 router.get("/channel/:channelId", authenticateToken, controller.getChannelById);
 
+router.delete(
+  "/kick/:serverId/:userId",
+  authenticateToken,
+  controller.kickUser,
+);
+
 export default router;

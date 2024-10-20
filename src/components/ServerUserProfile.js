@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { socket } from "../socket.js";
 
 function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
   const { serverId } = useParams();
@@ -60,6 +61,25 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
     } else {
       setRoleList(roleList.filter((role) => role.id != e.target.value));
     }
+  }
+
+  function kickUser() {
+    let token = localStorage.getItem("token");
+    if (!token) return;
+    fetch("/api/servers/kick/" + serverId + "/" + user.id, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "User not found") {
+          alert("User not found");
+        } else if (data.message === "success") {
+          socket.emit("kicked_user", { userid: user.id, serverid: serverId });
+          window.location.reload();
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   useEffect(() => {
@@ -196,7 +216,10 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
                   </span>
                 </label>
               </label>
-              <div className="server-dropdown-item dangerous-icon">
+              <div
+                className="server-dropdown-item dangerous-icon"
+                onClick={kickUser}
+              >
                 Kick User
               </div>
               <div className="server-dropdown-item dangerous-icon">

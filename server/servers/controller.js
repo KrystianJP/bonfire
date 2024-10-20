@@ -101,6 +101,7 @@ const getServer = (req, res) => {
       if (error) throw error;
       if (results.rows.length === 0) {
         res.status(403).json({ message: "Not a member of this server" });
+        return;
       }
       pool.query(queries.getServer, [req.params.serverId], (error, servers) => {
         if (error) throw error;
@@ -408,6 +409,17 @@ const getChannelById = (req, res) => {
   );
 };
 
+const kickUser = (req, res) => {
+  pool.query(
+    queries.kickUser,
+    [req.params.serverId, req.params.userId],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
 export default {
   getServers,
   createServer,
@@ -426,4 +438,5 @@ export default {
   deleteChannels,
   createInvite,
   getChannelById,
+  kickUser,
 };

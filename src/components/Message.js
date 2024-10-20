@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 /* eslint-disable jsx-a11y/img-redundant-alt */
 function Message({ userInfo, message, roles }) {
   message.timestamp = new Date(message.msg_timestamp.replace(" ", "T"));
@@ -11,7 +11,10 @@ function Message({ userInfo, message, roles }) {
   )}:${doubleDigit(message.timestamp.getMinutes())}
   `;
 
+  const [author, setAuthor] = useState(userInfo);
+
   function getRoleColour() {
+    if (!userInfo) return "var(--dark-text)";
     if (!roles) return "var(--dark-lightest)";
 
     return "#" + userInfo.roles[0].colour;
@@ -24,27 +27,40 @@ function Message({ userInfo, message, roles }) {
       return num;
     }
   }
+
+  useEffect(() => {
+    if (userInfo || !message.authorid) return;
+
+    fetch("/api/users/get/" + message.authorid, { method: "GET" })
+      .then((res) => res.json())
+      .then((data) => {
+        setAuthor(data);
+      });
+  }, [userInfo, message.authorid]);
+
   return (
     <div className="message-container-container">
-      <div className="message-container">
-        <div className="message-pfp">
-          <img
-            className="pfp-img"
-            src={userInfo.pfp}
-            alt="user profile picture"
-          />
+      {author && (
+        <div className="message-container">
+          <div className="message-pfp">
+            <img
+              className="pfp-img"
+              src={author.pfp}
+              alt="user profile picture"
+            />
+          </div>
+          <span
+            className="message-username"
+            style={{
+              color: getRoleColour(),
+            }}
+          >
+            {author.name}
+          </span>
+          <span className="message-date">{formattedTimestamp}</span>
+          <div className="message-content">{message.msg_text}</div>
         </div>
-        <span
-          className="message-username"
-          style={{
-            color: getRoleColour(),
-          }}
-        >
-          {userInfo.name}
-        </span>
-        <span className="message-date">{formattedTimestamp}</span>
-        <div className="message-content">{message.msg_text}</div>
-      </div>
+      )}
     </div>
   );
 }
