@@ -430,8 +430,8 @@ label {
 .dms {
   grid-area: friends-list;
   display: grid;
-  grid-template-areas: "top-bar top-bar" "messages dm-profile-bar";
-  grid-template-rows: min-content 1fr;
+  grid-template-areas: "top-bar top-bar" "users-in-call dm-profile-bar" "messages dm-profile-bar";
+  grid-template-rows: min-content min-content 1fr;
   grid-template-columns: 1fr min-content;
 }
 
@@ -443,6 +443,17 @@ label {
   width: 340px;
   overflow-y: scroll;
   background-color: var(--dark-profile-bar);
+}
+
+.users-in-call {
+  grid-area: users-in-call;
+  height: 52px;
+  width: 100%;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  background: var(--dark-darkest);
+  gap: 15px;
 }
 
 .dm-profile-bar::-webkit-scrollbar {
@@ -1786,4 +1797,8 @@ input:checked + .slider:before {
 }
 #connected-channel {
   font-size: 0.95rem;
+}
+
+.user-in-call {
+  margin: 0;
 }

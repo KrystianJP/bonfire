@@ -74,6 +74,7 @@ function FriendsPage({ page, user, token }) {
         return { ...prev, [data.userid]: true };
       });
     });
+
     socket.on("left_voice_call", (data) => {
       socket.emit("get_current_users", data.channelId, (users) => {
         if (users.length === 0) {
@@ -88,6 +89,8 @@ function FriendsPage({ page, user, token }) {
       socket.emit("left_page", friends);
       socket.off("connected_user");
       socket.off("disconnected_user");
+      socket.off("joined_voice_call");
+      socket.off("left_voice_call");
     };
   }, [friends, socket]);
 
@@ -136,6 +139,7 @@ function FriendsPage({ page, user, token }) {
           unread={unread}
           setUnread={setUnread}
           setInVoice={setInVoice}
+          inVoice={inVoice[currentFriend.id] || false}
         />
       )}
     </div>

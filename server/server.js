@@ -129,7 +129,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("join_voice_call", (channelId) => {
+  socket.on("join_voice_call", ({ channelId, friendId }) => {
     // if user is already in another channel, remove them
     for (const currentChannelId in voiceChannels) {
       const index = voiceChannels[currentChannelId]?.indexOf(socket.user.id);
@@ -148,11 +148,15 @@ io.on("connection", (socket) => {
 
     voiceChannels[channelId].push(socket.user.id);
 
-    io.to("user" + socket.user.id).emit("joined_voice_call", {
+    io.to(users[friendId]).emit("joined_voice_call", {
       channelId,
       userid: socket.user.id,
     });
+    io.to(users[friendId]).emit("joined_voice_call_for_users_in_call", {
+      userid: socket.user.id,
+    });
     io.to(socket.id).emit("user_joined_voice", channelId);
+    io.to(socket.id).emit("user_joined_voice_for_users_in_call", channelId);
   });
 
   socket.on("leave_voice_call", () => {
@@ -162,19 +166,29 @@ io.on("connection", (socket) => {
     if (voiceChannels[channelId]) {
       const index = voiceChannels[channelId].indexOf(socket.user.id);
       if (index > -1) {
-        voiceChannels[channelId].splice(index, 1);
+        // get friend's id
+        let grabbedId = channelId.substring(6);
+        grabbedId = grabbedId.split(",");
 
-        io.to("user" + socket.user.id).emit("left_voice_call", {
+        const friendId = grabbedId.filter((id) => id != socket.user.id)[0];
+        io.to(users[friendId]).emit("left_voice_call", {
           channelId,
           userid: socket.user.id,
         });
+        io.to(users[friendId]).emit("left_voice_call_for_users_in_call", {
+          userid: socket.user.id,
+        });
+
+        voiceChannels[channelId].splice(index, 1);
+
+        io.to(socket.id).emit("user_left_voice");
+        io.to(socket.id).emit("user_left_voice_for_users_in_call", channelId);
       }
     }
   });
 
   socket.on("get_current_users", (channelId, callback) => {
     const currentUsers = voiceChannels[channelId] || [];
-    console.log(voiceChannels);
 
     callback(currentUsers);
   });

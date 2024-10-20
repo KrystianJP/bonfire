@@ -34,6 +34,12 @@ const sendMessage =
 const updateLastMessage =
   "UPDATE friendships SET last_msg_timestamp = to_timestamp($1 / 1000.0) WHERE user1id = $2 AND user2id = $3;";
 
+const isFriend =
+  "SELECT * FROM friendships WHERE user1id = $1 AND user2id = $2;";
+
+const removeFriend =
+  "DELETE FROM friendships WHERE user1id = $1 AND user2id = $2;";
+
 export default {
   getFriends,
   insertFriendship,
@@ -47,4 +53,6 @@ export default {
   updateUnread,
   getUnread,
   insertUnread,
+  isFriend,
+  removeFriend,
 };

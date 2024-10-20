@@ -205,6 +205,7 @@ function ServerPage({ userProfileState, user, token }) {
           roles={roles}
           roleGroups={roleGroups}
           configureRoleGroups={configureRoleGroups}
+          user={user}
         />
       )}
     </div>

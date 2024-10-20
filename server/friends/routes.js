@@ -22,5 +22,8 @@ router.delete(
   authenticateToken,
   controller.declineFriendRequest,
 );
+router.delete("/remove/:friendId", authenticateToken, controller.removeFriend);
+
+router.get("/is_friend/:friendId", authenticateToken, controller.isFriend);
 
 export default router;

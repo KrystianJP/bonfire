@@ -7,6 +7,7 @@ function UsersBar({
   roles,
   roleGroups,
   configureRoleGroups,
+  user,
 }) {
   const [currentUser, setCurrentUser] = useState({});
 
@@ -97,6 +98,7 @@ function UsersBar({
           roles={roles}
           user={currentUser}
           configureRoleGroups={configureRoleGroups}
+          actualUser={user}
         />
       )}
     </div>

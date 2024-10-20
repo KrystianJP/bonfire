@@ -160,6 +160,34 @@ const updateUnread = (req, res) => {
   );
 };
 
+const isFriend = (req, res) => {
+  pool.query(
+    queries.isFriend,
+    [
+      Math.min(req.user.id, req.params.friendId),
+      Math.max(req.user.id, req.params.friendId),
+    ],
+    (error, results) => {
+      if (error) throw error;
+      res.status(200).json(results.rows);
+    },
+  );
+};
+
+const removeFriend = (req, res) => {
+  pool.query(
+    queries.removeFriend,
+    [
+      Math.min(req.user.id, req.params.friendId),
+      Math.max(req.user.id, req.params.friendId),
+    ],
+    (error, _) => {
+      if (error) throw error;
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
 export default {
   getFriends,
   addFriendRequest,
@@ -169,4 +197,6 @@ export default {
   getMessages,
   sendMessage,
   updateUnread,
+  isFriend,
+  removeFriend,
 };

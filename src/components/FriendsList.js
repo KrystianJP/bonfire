@@ -59,6 +59,22 @@ function FriendsList({ friends, token, setRefresh }) {
       .catch((err) => console.log(err));
   }
 
+  function removeFriend(friendId) {
+    if (!token) return;
+    fetch("api/friends/remove/" + friendId, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "success") {
+          setRefresh(Math.random());
+          setRefreshRequests(Math.random());
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   useEffect(() => {
     if (!token) return;
     fetch("api/friends/requests", {
@@ -141,7 +157,16 @@ function FriendsList({ friends, token, setRefresh }) {
                     </div>
                     <span className="friend-icons">
                       <span className="material-icons ">message</span>
-                      <span className="material-icons ">delete</span>
+                      <span
+                        className="material-icons "
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          removeFriend(friend.id);
+                        }}
+                      >
+                        delete
+                      </span>
                     </span>
                   </Link>
                 </div>

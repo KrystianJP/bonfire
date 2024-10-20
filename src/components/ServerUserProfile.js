@@ -1,11 +1,30 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-function ServerUserProfile({ user, roles, configureRoleGroups }) {
+function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
   const { serverId } = useParams();
   const [roleListOpen, setRoleListOpen] = useState(false);
   const [roleList, setRoleList] = useState(user.roles);
+  const [friendRequestIcon, setFriendRequestIcon] = useState(false);
+
+  function sendFriendRequest() {
+    let token = localStorage.getItem("token");
+    if (!token) return;
+    fetch("api/friends/" + user.name, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "User not found") {
+          alert("User not found");
+        } else if (data.message === "success") {
+          setFriendRequestIcon("person_check");
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 
   function applyRoles() {
     setRoleListOpen(false);
@@ -42,6 +61,33 @@ function ServerUserProfile({ user, roles, configureRoleGroups }) {
       setRoleList(roleList.filter((role) => role.id != e.target.value));
     }
   }
+
+  useEffect(() => {
+    if (!user.id || !actualUser) return;
+
+    // if it's the user's own profile
+    if (user.id === actualUser.id) {
+      setFriendRequestIcon(false);
+      return;
+    }
+
+    let token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetch("/api/friends/is_friend/" + user.id, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length > 0) {
+          setFriendRequestIcon(false);
+        } else {
+          setFriendRequestIcon(true);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [user.id, actualUser.id]);
 
   return (
     <div className="server-user-profile-container">
@@ -132,46 +178,56 @@ function ServerUserProfile({ user, roles, configureRoleGroups }) {
               </button>
             </div>
           )}
-
-          <label
-            className="server-dropdown-item checkbox-item"
-            style={{ marginTop: "15px" }}
-          >
-            Mute
-            <label className="checkbox-container">
-              <input type="checkbox" className="checkbox" name="mute-server" />
-              <span className="checkmark">
-                <span className=" material-icons">check</span>
-              </span>
-            </label>
-          </label>
-          {/* <label className="server-dropdown-item checkbox-item">
-            Disable video
-            <label className="checkbox-container">
-              <input type="checkbox" className="checkbox" name="mute-server" />
-              <span className="checkmark">
-                <span className=" material-icons">check</span>
-              </span>
-            </label>
-          </label> */}
-          <div className="server-dropdown-item dangerous-icon">Kick User</div>
-          <div className="server-dropdown-item dangerous-icon">Ban User</div>
-
-          <div className="user-profile-buttons">
-            <Link to="/messages/1" className="button">
-              <span className="material-icons" style={{ fontSize: "1.3rem" }}>
-                message
-              </span>
-            </Link>
-            <div className="button">
-              <span className="material-icons" style={{ fontSize: "1.3rem" }}>
-                person_add
-              </span>
+          {user.id !== actualUser.id && (
+            <div>
+              <label
+                className="server-dropdown-item checkbox-item"
+                style={{ marginTop: "15px" }}
+              >
+                Mute
+                <label className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    name="mute-server"
+                  />
+                  <span className="checkmark">
+                    <span className=" material-icons">check</span>
+                  </span>
+                </label>
+              </label>
+              <div className="server-dropdown-item dangerous-icon">
+                Kick User
+              </div>
+              <div className="server-dropdown-item dangerous-icon">
+                Ban User
+              </div>
             </div>
-            <div className="button">
-              <span className="material-icons">block</span>
+          )}
+
+          {user.id !== actualUser.id && (
+            <div className="user-profile-buttons">
+              <Link to={"/messages/" + user.id} className="button">
+                <span className="material-icons" style={{ fontSize: "1.3rem" }}>
+                  message
+                </span>
+              </Link>
+              {friendRequestIcon && (
+                <div className="button" onClick={sendFriendRequest}>
+                  <span
+                    className="material-icons"
+                    style={{ fontSize: "1.3rem" }}
+                  >
+                    person_add
+                  </span>
+                </div>
+              )}
+
+              {/* <div className="button">
+                <span className="material-icons">block</span>
+              </div> */}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -5,8 +5,17 @@ import Messages from "./Messages";
 import { useEffect, useState, useContext } from "react";
 import { AgoraContext } from "../AgoraContext";
 import { socket } from "../socket.js";
+import UsersInCall from "./UsersInCall.js";
 
-function DMs({ friendInfo, token, user, unread, setUnread, setInVoice }) {
+function DMs({
+  friendInfo,
+  token,
+  user,
+  unread,
+  setUnread,
+  setInVoice,
+  inVoice,
+}) {
   var { friendId } = useParams();
   const [profileBarOpen, setProfileBarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -62,13 +71,14 @@ function DMs({ friendInfo, token, user, unread, setUnread, setInVoice }) {
         Math.max(friendInfo.id, user.id),
       user.id,
     );
-    socket.emit(
-      "join_voice_call",
-      "friend" +
+    socket.emit("join_voice_call", {
+      channelId:
+        "friend" +
         Math.min(friendInfo.id, user.id) +
         "," +
         Math.max(friendInfo.id, user.id),
-    );
+      friendId: friendInfo.id,
+    });
   }
 
   return (
@@ -97,6 +107,10 @@ function DMs({ friendInfo, token, user, unread, setUnread, setInVoice }) {
           <span className="material-icons ">block</span>
         </div>
       </div>
+
+      {inVoice && (
+        <UsersInCall user={user} friend={friendInfo} friendId={friendId} />
+      )}
 
       <Messages
         user={user}

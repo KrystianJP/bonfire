@@ -37,7 +37,7 @@ function FriendDM({ friend, unread, inVoice }) {
       {inVoice ? (
         <span className="material-icons in-voice">volume_up</span>
       ) : null}
-      {unread && friendId != friend.id ? (
+      {!inVoice && unread && friendId != friend.id ? (
         <div className="unread-dot"></div>
       ) : null}
     </Link>
