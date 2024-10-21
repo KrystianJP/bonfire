@@ -13,6 +13,8 @@ function Account({ info, setAccount, setState, user }) {
   const [changingName, setChangingName] = useState(false);
   const [nameValue, setNameValue] = useState(info.username);
 
+  // *** delete account
+
   function uploadPfp(url) {
     var image = new Image();
     image.src = url;
@@ -134,7 +136,7 @@ function Account({ info, setAccount, setState, user }) {
           }
         ></textarea>
       </div>
-      <button className="password-button">Change password</button>
+      {/* <button className="password-button">Change password</button> */}
       <button className="danger-button">Delete account</button>
     </div>
   );

@@ -13,6 +13,8 @@ function Overview({ info, setOverview, setState, channels }) {
   const defaultIcon =
     "https://cdn-icons-png.flaticon.com/512/16745/16745664.png";
 
+  // *** delete server
+
   function uploadPfp(url) {
     var image = new Image();
     image.src = url;

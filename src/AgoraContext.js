@@ -84,6 +84,25 @@ export const AgoraProvider = ({ children }) => {
     }
   };
 
+  const joinTestChannel = async () => {
+    try {
+      const localTrack = await AgoraRTC.createMicrophoneAudioTrack();
+
+      setLocalAudioTrack(localTrack);
+
+      localTrack.play();
+    } catch (error) {
+      console.error("Failed to join the voice channel:", error);
+    }
+  };
+  const leaveTestChannel = async () => {
+    try {
+      localAudioTrack.close();
+    } catch (error) {
+      console.error("Failed to join the voice channel:", error);
+    }
+  };
+
   const toggleMute = async () => {
     if (isMuted) {
       await localAudioTrack.setVolume(100);
@@ -123,6 +142,8 @@ export const AgoraProvider = ({ children }) => {
         toggleMute,
         isDeafened,
         toggleDeafen,
+        joinTestChannel,
+        leaveTestChannel,
       }}
     >
       {children}

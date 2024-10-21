@@ -1,5 +1,20 @@
+import { useState, useContext } from "react";
+import { AgoraContext } from "../../AgoraContext";
+
 function VoiceVideo() {
-  // *** test microphone
+  const [testingMic, setTestingMic] = useState(false);
+
+  const { joinTestChannel, leaveTestChannel } = useContext(AgoraContext);
+
+  function testMicrophone() {
+    if (testingMic) {
+      setTestingMic(false);
+      leaveTestChannel();
+    } else {
+      setTestingMic(true);
+      joinTestChannel();
+    }
+  }
   return (
     <div className="settings-content voice-video-page">
       <h1>Voice & Video</h1>
@@ -29,7 +44,9 @@ function VoiceVideo() {
           <option value="20px">X-Large</option>
         </select>
       </div> */}
-      <button className="test-mic-button">Test Microphone</button>
+      <button className="test-mic-button" onClick={testMicrophone}>
+        {testingMic ? "Stop Testing" : "Test"} Microphone
+      </button>
       {/* <div className="setting-container">
         <div className="setting-label">VIDEO DEVICE</div>
         <select

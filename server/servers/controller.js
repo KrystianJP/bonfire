@@ -3,7 +3,6 @@ import queries from "./queries.js";
 import {} from "dotenv/config.js";
 import crypto from "crypto";
 
-// *** make sure user is admin before allowing certain actions
 const checkAdmin = async (userid, serverid, res) => {
   let admin = false;
   let query = new Promise((resolve, reject) => {

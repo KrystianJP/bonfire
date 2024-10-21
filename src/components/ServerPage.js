@@ -127,7 +127,6 @@ function ServerPage({ userProfileState, user, token }) {
       },
     };
     users.forEach((friend) => {
-      // *** add offline part later
       if (!friend.online) {
         tempRoleGroups.offline.users.push(friend);
       } else if (friend.roles.length === 1) {
