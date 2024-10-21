@@ -103,9 +103,9 @@ function ServerPage({ userProfileState, user, token }) {
   }, [server, serverId, channelId]);
 
   useEffect(() => {
-    if (!token || !channelId) return;
+    if (!token || !channelId || !serverId) return;
     setMessages([]);
-    fetch("/api/servers/messages/" + channelId, {
+    fetch("/api/servers/messages/" + serverId + "/" + channelId, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -113,7 +113,7 @@ function ServerPage({ userProfileState, user, token }) {
       .then((data) => {
         setMessages(data);
       });
-  }, [channelId, token]);
+  }, [channelId, token, serverId]);
 
   function configureRoleGroups() {
     let tempRoleGroups = {
@@ -192,7 +192,9 @@ function ServerPage({ userProfileState, user, token }) {
       <div className="server-page">
         <div className="server-name-container" onClick={toggleDropdown}>
           <span className="server-name">{server.name}</span>
-          {dropdownOpen && <ServerDropdown />}
+          {dropdownOpen && (
+            <ServerDropdown user={users.find((u) => u.id == user.id)} />
+          )}
         </div>
         <ChannelsBar
           users={users}
@@ -250,7 +252,7 @@ function ServerPage({ userProfileState, user, token }) {
             roles={roles}
             roleGroups={roleGroups}
             configureRoleGroups={configureRoleGroups}
-            user={user}
+            user={users.find((u) => u.id == user.id)}
           />
         )}
       </div>

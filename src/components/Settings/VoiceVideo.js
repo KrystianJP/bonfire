@@ -1,4 +1,5 @@
 function VoiceVideo() {
+  // *** test microphone
   return (
     <div className="settings-content voice-video-page">
       <h1>Voice & Video</h1>
@@ -28,7 +29,6 @@ function VoiceVideo() {
           <option value="20px">X-Large</option>
         </select>
       </div> */}
-
       <button className="test-mic-button">Test Microphone</button>
       {/* <div className="setting-container">
         <div className="setting-label">VIDEO DEVICE</div>
@@ -43,7 +43,7 @@ function VoiceVideo() {
           <option value="20px">X-Large</option>
         </select>
       </div> */}
-      <button className="test-video-button">Test Video Device</button>
+      {/* <button className="test-video-button">Test Video Device</button> */}
     </div>
   );
 }

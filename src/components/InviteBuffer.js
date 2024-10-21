@@ -11,21 +11,25 @@ function InviteBuffer({ token }) {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => res.json())
-      .then((data) => {
+      .then((res) => {
+        if (res.status === 404) {
+          return res.json();
+        }
+        if (res.status === 400) {
+          return res.json();
+        }
+        if (res.status === 403) {
+          return res.json();
+        }
         window.location.href = "/servers/" + serverId;
       })
-      .catch((err) => {
-        if (err.status === 404) {
-          setText(err.message);
-        } else if (err.status === 400) {
-          setText(err.message);
-        } else if (err.status === 403) {
-          setText("You are not logged in.");
-        } else {
-          console.log(err);
+      .then((data) => {
+        if (data) {
+          setText(data.message);
         }
-        return;
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, [token, serverId, inviteCode]);
 

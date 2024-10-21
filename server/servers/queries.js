@@ -31,7 +31,8 @@ const getMessages =
 const sendMessage =
   "INSERT INTO channel_messages (authorid, channelid, msg_text, msg_timestamp) VALUES ($1, $2, $3, to_timestamp($4 / 1000.0)) RETURNING *;";
 
-const getBans = "SELECT * FROM bans WHERE serverid = $1;";
+const getBans =
+  "SELECT bans.userid, users.* FROM bans JOIN users ON bans.userid = users.id WHERE bans.serverid = $1;";
 
 const findServer = "SELECT name FROM servers WHERE name = $1;";
 
@@ -77,6 +78,12 @@ const kickUser = "DELETE FROM serverships WHERE serverid = $1 AND userid = $2;";
 
 const deleteMessage = "DELETE FROM channel_messages WHERE id = $1;";
 
+const banUser =
+  "INSERT INTO bans (serverid, userid) VALUES ($1, $2) RETURNING *;";
+const unbanUser = "DELETE FROM bans WHERE serverid = $1 AND userid = $2;";
+
+const getOwner = "SELECT owner FROM servers WHERE id = $1;";
+
 export default {
   getServers,
   createServer,
@@ -116,4 +123,7 @@ export default {
   getChannelById,
   kickUser,
   deleteMessage,
+  banUser,
+  unbanUser,
+  getOwner,
 };

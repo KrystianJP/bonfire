@@ -22,6 +22,8 @@ function DMs({
 
   const { joinVoiceChannel } = useContext(AgoraContext);
 
+  // *** need to also include functionality when not friends
+
   function widthListener() {
     if (window.innerWidth > 1000) {
       setProfileBarOpen(true);

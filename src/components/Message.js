@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { socket } from "../socket.js";
 /* eslint-disable jsx-a11y/img-redundant-alt */
 function Message({ userInfo, message, roles, token, user }) {
+  const { serverId } = useParams();
   message.timestamp = new Date(message.msg_timestamp.replace(" ", "T"));
   const msgMonth = message.timestamp.getMonth() + 1;
   const formattedTimestamp = `${message.timestamp.getDate()}/${doubleDigit(
@@ -31,7 +32,7 @@ function Message({ userInfo, message, roles, token, user }) {
 
   function deleteMessage() {
     if (roles) {
-      fetch("/api/servers/message/" + message.id, {
+      fetch("/api/servers/message/" + serverId + "/" + message.id, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

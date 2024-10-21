@@ -27,7 +27,7 @@ function Invites({ info, setAnyoneInvite, setState, token, serverId }) {
   return (
     <div className="invites-page settings-content">
       <h1>Invites</h1>
-      <div className="setting-toggle">
+      {/* <div className="setting-toggle">
         <label className="label" htmlFor="invite-toggle">
           Anyone can send invites
         </label>
@@ -42,7 +42,7 @@ function Invites({ info, setAnyoneInvite, setState, token, serverId }) {
           />
           <span className="slider round"></span>
         </label>
-      </div>
+      </div> */}
       <p>(You can allow specific roles this permission)</p>
       <button className="create-invite" onClick={createInvite}>
         {buttonText}

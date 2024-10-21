@@ -82,6 +82,25 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
       .catch((err) => console.log(err));
   }
 
+  function banUser() {
+    let token = localStorage.getItem("token");
+    if (!token) return;
+    fetch("/api/servers/ban/" + serverId + "/" + user.id, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "User not found") {
+          alert("User not found");
+        } else if (data.message === "success") {
+          socket.emit("kicked_user", { userid: user.id, serverid: serverId });
+          window.location.reload();
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   useEffect(() => {
     if (!user.id || !actualUser) return;
 
@@ -151,16 +170,18 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
                 </div>
               );
             })}
-            <div
-              className="user-role add-role"
-              onClick={() => {
-                setRoleListOpen(!roleListOpen);
-              }}
-            >
-              <div className="role-color"></div>
+            {actualUser.roles.some((role) => role.server_admin) && (
+              <div
+                className="user-role add-role"
+                onClick={() => {
+                  setRoleListOpen(!roleListOpen);
+                }}
+              >
+                <div className="role-color"></div>
 
-              <span className="material-icons">add</span>
-            </div>
+                <span className="material-icons">add</span>
+              </div>
+            )}
           </div>
           {roleListOpen && (
             <div>
@@ -198,35 +219,39 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
               </button>
             </div>
           )}
-          {user.id !== actualUser.id && (
-            <div>
-              <label
-                className="server-dropdown-item checkbox-item"
-                style={{ marginTop: "15px" }}
-              >
-                Mute
-                <label className="checkbox-container">
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    name="mute-server"
-                  />
-                  <span className="checkmark">
-                    <span className=" material-icons">check</span>
-                  </span>
-                </label>
-              </label>
-              <div
-                className="server-dropdown-item dangerous-icon"
-                onClick={kickUser}
-              >
-                Kick User
+          {user.id !== actualUser.id &&
+            actualUser.roles.some((role) => role.server_admin) && (
+              <div>
+                {/* <label
+                  className="server-dropdown-item checkbox-item"
+                  style={{ marginTop: "15px" }}
+                >
+                  Mute
+                  <label className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="checkbox"
+                      name="mute-server"
+                    />
+                    <span className="checkmark">
+                      <span className=" material-icons">check</span>
+                    </span>
+                  </label>
+                </label> */}
+                <div
+                  className="server-dropdown-item dangerous-icon"
+                  onClick={kickUser}
+                >
+                  Kick User
+                </div>
+                <div
+                  className="server-dropdown-item dangerous-icon"
+                  onClick={banUser}
+                >
+                  Ban User
+                </div>
               </div>
-              <div className="server-dropdown-item dangerous-icon">
-                Ban User
-              </div>
-            </div>
-          )}
+            )}
 
           {user.id !== actualUser.id && (
             <div className="user-profile-buttons">

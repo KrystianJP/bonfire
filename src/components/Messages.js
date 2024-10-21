@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { socket } from "../socket.js";
 function Messages({ users, messages, roles, placeholder, token, user }) {
   const { friendId } = useParams();
-  const { channelId } = useParams();
+  const { channelId, serverId } = useParams();
   const [msgText, setMsgText] = useState("");
   let roomId;
   if (!roles) {
@@ -82,7 +82,7 @@ function Messages({ users, messages, roles, placeholder, token, user }) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ message: msgText }),
+      body: JSON.stringify({ message: msgText, serverId }),
     })
       .then((res) => res.json())
       .then((data) => {

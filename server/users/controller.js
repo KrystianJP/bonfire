@@ -100,21 +100,21 @@ const registerUser = [
   },
 ];
 
-const getMe = (req, res) => {
+const getMe = async (req, res) => {
   pool.query(queries.getUserById, [req.user.id], (error, results) => {
     if (error) throw error;
     res.status(200).json(results.rows[0]);
   });
 };
 
-const getSettings = (req, res) => {
+const getSettings = async (req, res) => {
   pool.query(queries.getSettings, [req.user.id], (error, results) => {
     if (error) throw error;
     res.status(200).json(results.rows[0]);
   });
 };
 
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
   pool.query(
     queries.updateUser,
     [req.user.id, req.body.name, req.body.pfp, req.body.about, req.body.banner],
@@ -138,14 +138,14 @@ const updateUser = (req, res) => {
   );
 };
 
-const getUserByName = (req, res) => {
+const getUserByName = async (req, res) => {
   pool.query(queries.getUserByName, [req.params.username], (error, results) => {
     if (error) throw error;
     res.status(200).send(results.rows);
   });
 };
 
-const getUserById = (req, res) => {
+const getUserById = async (req, res) => {
   pool.query(queries.getUserById, [req.params.id], (error, results) => {
     if (error) throw error;
     res.status(200).send(results.rows[0]);

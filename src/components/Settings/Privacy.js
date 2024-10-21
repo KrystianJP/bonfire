@@ -17,7 +17,7 @@ function Privacy({ info, setPrivacy, setState }) {
   return (
     <div className="privacy-page settings-content">
       <h1>Privacy</h1>
-      <div className="setting-container">
+      {/* <div className="setting-container">
         <div className="setting-label">WHO CAN SEND MESSAGES?</div>
         <div className="setting-toggle">
           <label className="label" htmlFor="everyone-message-toggle">
@@ -136,7 +136,7 @@ function Privacy({ info, setPrivacy, setState }) {
             <span className="slider round"></span>
           </label>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

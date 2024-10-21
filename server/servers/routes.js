@@ -6,7 +6,11 @@ const router = Router();
 
 router.get("/", authenticateToken, controller.getServers);
 router.get("/:serverId", authenticateToken, controller.getServer);
-router.get("/messages/:channelId", authenticateToken, controller.getMessages);
+router.get(
+  "/messages/:serverId/:channelId",
+  authenticateToken,
+  controller.getMessages,
+);
 router.get("/find/:serverName", controller.findServer);
 
 router.post("/", authenticateToken, controller.createServer);
@@ -19,7 +23,7 @@ router.post(
 
 router.post("/message/:channelId", authenticateToken, controller.sendMessage);
 router.delete(
-  "/message/:messageId",
+  "/message/:serverId/:messageId",
   authenticateToken,
   controller.deleteMessage,
 );
@@ -34,13 +38,17 @@ router.post(
   controller.addChannelGroup,
 );
 router.delete(
-  "/channel_groups",
+  "/channel_groups/:serverId",
   authenticateToken,
   controller.removeChannelGroups,
 );
 
 router.post("/channel/add", authenticateToken, controller.addChannel);
-router.delete("/channels", authenticateToken, controller.deleteChannels);
+router.delete(
+  "/channels/:serverId",
+  authenticateToken,
+  controller.deleteChannels,
+);
 
 router.post(
   "/settings/:serverId",
@@ -57,5 +65,10 @@ router.delete(
   authenticateToken,
   controller.kickUser,
 );
+
+router.delete("/ban/:serverId/:userId", authenticateToken, controller.banUser);
+router.post("/unban/:serverId", authenticateToken, controller.unbanUsers);
+
+router.get("/admin/:serverId", authenticateToken, controller.getAdmin);
 
 export default router;

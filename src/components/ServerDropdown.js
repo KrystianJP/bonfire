@@ -1,7 +1,8 @@
 import { Link, useParams } from "react-router-dom";
 
-function ServerDropdown() {
+function ServerDropdown({ user }) {
   const { serverId } = useParams();
+  // *** leaving server
   return (
     <div
       className="server-dropdown"
@@ -9,15 +10,17 @@ function ServerDropdown() {
         e.stopPropagation();
       }}
     >
-      <Link
-        to={`/servers/${serverId}/settings/overview`}
-        className="server-dropdown-item"
-      >
-        {" "}
-        Server Settings
-      </Link>
+      {user.roles.some((role) => role.server_admin) && (
+        <Link
+          to={`/servers/${serverId}/settings/overview`}
+          className="server-dropdown-item"
+        >
+          {" "}
+          Server Settings
+        </Link>
+      )}
 
-      <label className="server-dropdown-item checkbox-item">
+      {/* <label className="server-dropdown-item checkbox-item">
         Mute server
         <label className="checkbox-container">
           <input type="checkbox" className="checkbox" name="mute-server" />
@@ -38,7 +41,7 @@ function ServerDropdown() {
             <span className=" material-icons">check</span>
           </span>
         </label>
-      </label>
+      </label> */}
       <div className="server-dropdown-item dangerous-icon">Leave server</div>
     </div>
   );
