@@ -104,7 +104,7 @@ function FriendsList({ friends, token, setRefresh }) {
             setSentMsg(false);
           }}
           type="text"
-          placeholder="Enter username to add"
+          placeholder="Add friend"
         />
         <button className="add-friend-button" type="submit">
           Send Friend Request

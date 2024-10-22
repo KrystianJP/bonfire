@@ -30,6 +30,26 @@ function ServerPage({ userProfileState, user, token }) {
     setDropdownOpen(!dropdownOpen);
   }
 
+  function widthListener() {
+    if (window.innerWidth > 1000) {
+      setUsersBarOpen(true);
+    } else {
+      setUsersBarOpen(false);
+    }
+  }
+
+  useEffect(() => {
+    if (window.innerWidth <= 1000) {
+      setUsersBarOpen(false);
+    }
+
+    window.addEventListener("resize", widthListener);
+
+    return () => {
+      window.removeEventListener("resize", widthListener);
+    };
+  }, []);
+
   useEffect(() => {
     if (!token || !serverId) return;
     fetch("/api/servers/" + serverId, {

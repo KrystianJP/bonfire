@@ -13,6 +13,9 @@ function Message({ userInfo, message, roles, token, user }) {
   )}:${doubleDigit(message.timestamp.getMinutes())}
   `;
 
+  const defaultPfp =
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+
   const [author, setAuthor] = useState(userInfo);
 
   function getRoleColour() {
@@ -64,8 +67,13 @@ function Message({ userInfo, message, roles, token, user }) {
     fetch("/api/users/get/" + message.authorid, { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
+        if (!data) {
+          setAuthor({ name: "deleted user", pfp: defaultPfp });
+          return;
+        }
         setAuthor(data);
-      });
+      })
+      .catch((err) => console.log(err));
   }, [userInfo, message.authorid]);
 
   function showDeleteMessage() {
