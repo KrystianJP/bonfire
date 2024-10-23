@@ -8,6 +8,7 @@ function FriendsList({ friends, token, setRefresh }) {
   const [sentMsg, setSentMsg] = useState(false);
   const [friendRequests, setFriendRequests] = useState([]);
   const [refreshRequests, setRefreshRequests] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   function sendFriendRequest(name) {
     if (!token) return;
@@ -119,6 +120,8 @@ function FriendsList({ friends, token, setRefresh }) {
           name="friend-search-bar"
           className="search-bar"
           type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search friends"
         />
       </div>
@@ -128,6 +131,11 @@ function FriendsList({ friends, token, setRefresh }) {
           {[...friends]
             .sort((a, b) => (!a.online && b.online ? 1 : -1))
             .map((friend) => {
+              if (
+                searchQuery &&
+                !friend.name.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+                return null;
               return (
                 <div className="role-container" key={friend.name}>
                   <Link to={"/messages/" + friend.id} className="role">

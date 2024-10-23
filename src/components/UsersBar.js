@@ -8,6 +8,7 @@ function UsersBar({
   roleGroups,
   configureRoleGroups,
   user,
+  searchQuery,
 }) {
   const [currentUser, setCurrentUser] = useState({});
 
@@ -46,6 +47,12 @@ function UsersBar({
               {role.name.toUpperCase()}
             </h4>
             {roleGroups[role.id].users.map((user) => {
+              if (
+                searchQuery &&
+                !user.name.toLowerCase().includes(searchQuery.toLowerCase())
+              ) {
+                return null;
+              }
               return (
                 <div
                   onClick={(e) => {

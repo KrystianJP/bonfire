@@ -26,6 +26,8 @@ function ServerPage({ userProfileState, user, token }) {
 
   const [messages, setMessages] = useState([]);
 
+  const [searchQuery, setSearchQuery] = useState("");
+
   function toggleDropdown() {
     setDropdownOpen(!dropdownOpen);
   }
@@ -251,6 +253,8 @@ function ServerPage({ userProfileState, user, token }) {
                 className="search-bar"
                 type="text"
                 placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
@@ -278,6 +282,7 @@ function ServerPage({ userProfileState, user, token }) {
             roleGroups={roleGroups}
             configureRoleGroups={configureRoleGroups}
             user={users.find((u) => u.id == user.id)}
+            searchQuery={searchQuery}
           />
         )}
       </div>
