@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { socket } from "../socket.js";
 
-function ServersBar({ toggleModal, token }) {
+function ServersBar({ toggleModal, token, unreadMsg, setUnreadMsg }) {
   const { serverId } = useParams();
   const [servers, setServers] = useState([]);
   const defaultIcon =
@@ -31,6 +32,38 @@ function ServersBar({ toggleModal, token }) {
       });
   }, [token]);
 
+  useEffect(() => {
+    if (!setUnreadMsg) return;
+    socket.on("unread_sidebar", (data) => {
+      setUnreadMsg("true");
+    });
+
+    return () => {
+      socket.off("unread_sidebar");
+    };
+  }, [setUnreadMsg]);
+
+  useEffect(() => {
+    if (!token || !setUnreadMsg || unreadMsg) return;
+    if (!window.location.href.includes("/servers")) return;
+    fetch("/api/friends", {
+      method: "GET",
+      headers: { authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        data.friends.forEach((friend) => {
+          for (let i = 0; i < data.unread.length; i++) {
+            if (data.unread[i].sender === friend.id) {
+              setUnreadMsg(true);
+            } else {
+              setUnreadMsg(false);
+            }
+          }
+        });
+      });
+  }, [setUnreadMsg, token]);
+
   return (
     <div className="sidebar">
       <div className="bonfire-text">
@@ -42,6 +75,7 @@ function ServersBar({ toggleModal, token }) {
           alt="bonfire logo"
           className="pfp-img main-icon-img"
         />
+        {unreadMsg ? <div className="unread-icon"></div> : null}
       </Link>
       <div className="hor-line"></div>
       {servers.map((server) => {

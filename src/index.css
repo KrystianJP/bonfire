@@ -1823,3 +1823,16 @@ input:checked + .slider:before {
 .user-in-call {
   margin: 0;
 }
+
+.main-icon {
+  position: relative;
+}
+.sidebar .unread-icon {
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  background: rgb(221, 78, 78);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}

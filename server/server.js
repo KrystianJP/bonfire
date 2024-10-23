@@ -219,6 +219,7 @@ io.on("connection", (socket) => {
     io.to(data.roomId).emit("receive_message", data);
     if (data.receiver) {
       io.to(users[data.receiver]).emit("unread", data);
+      io.to(users[data.receiver]).emit("unread_sidebar", data);
     }
   });
 

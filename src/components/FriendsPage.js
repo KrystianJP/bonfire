@@ -6,13 +6,21 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { socket } from "../socket.js";
 
-function FriendsPage({ page, user, token }) {
+function FriendsPage({ page, user, token, setUnreadMsg }) {
   const { friendId } = useParams();
   const [friends, setFriends] = useState([]);
   const [refresh, setRefresh] = useState(0);
   const [currentFriend, setCurrentFriend] = useState({});
   const [unread, setUnread] = useState({}); // {friendId: true}
   const [inVoice, setInVoice] = useState({});
+
+  // when unread is updated, change setUnreadMsg accordingly
+  useEffect(() => {
+    if (Object.keys(unread).length === 0) return;
+    Object.values(unread).some((value) => value)
+      ? setUnreadMsg(true)
+      : setUnreadMsg(false);
+  }, [unread, setUnreadMsg]);
 
   useEffect(() => {
     if (!token) return;
@@ -28,10 +36,10 @@ function FriendsPage({ page, user, token }) {
           for (let i = 0; i < data.unread.length; i++) {
             if (data.unread[i].sender === friend.id) {
               tempUnread[friend.id] = true;
-              break;
+            } else {
+              tempUnread[friend.id] = false;
             }
           }
-          tempUnread[friend.id] = false;
         });
         setUnread(tempUnread);
       });

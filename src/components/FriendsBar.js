@@ -23,6 +23,7 @@ function FriendsBar({ friends, token, unread, inVoice, setUnread }) {
           },
           body: JSON.stringify({ unread: false }),
         }).then(() => {
+          console.log("Marked message as read");
           let tempUnread = { ...unread };
           tempUnread[data.sender] = false;
           setUnread(tempUnread);

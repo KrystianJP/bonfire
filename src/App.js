@@ -26,6 +26,7 @@ function App() {
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const [token, setToken] = useState("");
   const [user, setUser] = useState({});
+  const [unreadMsg, setUnreadMsg] = useState(false);
 
   function toggleServerModal(e) {
     setServerModalOpen(!serverModalOpen);
@@ -79,8 +80,18 @@ function App() {
               path="/"
               element={
                 <>
-                  <ServersBar toggleModal={toggleServerModal} token={token} />{" "}
-                  <FriendsPage token={token} user={user} page="friends-list" />
+                  <ServersBar
+                    unreadMsg={unreadMsg}
+                    setUnreadMsg={setUnreadMsg}
+                    toggleModal={toggleServerModal}
+                    token={token}
+                  />{" "}
+                  <FriendsPage
+                    setUnreadMsg={setUnreadMsg}
+                    token={token}
+                    user={user}
+                    page="friends-list"
+                  />
                 </>
               }
             ></Route>
@@ -89,8 +100,18 @@ function App() {
               path="/messages/:friendId"
               element={
                 <>
-                  <ServersBar toggleModal={toggleServerModal} token={token} />{" "}
-                  <FriendsPage token={token} user={user} page="dms" />
+                  <ServersBar
+                    unreadMsg={unreadMsg}
+                    setUnreadMsg={setUnreadMsg}
+                    toggleModal={toggleServerModal}
+                    token={token}
+                  />{" "}
+                  <FriendsPage
+                    setUnreadMsg={setUnreadMsg}
+                    token={token}
+                    user={user}
+                    page="dms"
+                  />
                 </>
               }
             ></Route>
@@ -125,7 +146,12 @@ function App() {
               path="/servers/:serverId/:channelId?"
               element={
                 <>
-                  <ServersBar token={token} toggleModal={toggleServerModal} />{" "}
+                  <ServersBar
+                    unreadMsg={unreadMsg}
+                    setUnreadMsg={setUnreadMsg}
+                    token={token}
+                    toggleModal={toggleServerModal}
+                  />{" "}
                   <ServerPage
                     user={user}
                     userProfileState={[userProfileOpen, setUserProfileOpen]}

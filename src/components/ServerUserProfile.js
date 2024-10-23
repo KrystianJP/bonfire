@@ -187,7 +187,13 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
             <div>
               <div className="user-role-list">
                 {roles.map((role) => {
-                  if (role.id === "online" || role.id === "offline")
+                  if (
+                    role.id === "online" ||
+                    role.id === "offline" ||
+                    (role.server_admin &&
+                      !actualUser.roles[actualUser.roles.length - 1]
+                        .server_admin)
+                  )
                     return null;
                   return (
                     <label
