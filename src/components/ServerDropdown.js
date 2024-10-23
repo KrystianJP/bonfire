@@ -55,12 +55,14 @@ function ServerDropdown({ user, token }) {
           </span>
         </label>
       </label> */}
-      <div
-        className="server-dropdown-item dangerous-icon"
-        onClick={leaveServer}
-      >
-        Leave server
-      </div>
+      {!user.roles[user.roles.length - 1].server_admin && (
+        <div
+          className="server-dropdown-item dangerous-icon"
+          onClick={leaveServer}
+        >
+          Leave server
+        </div>
+      )}
     </div>
   );
 }

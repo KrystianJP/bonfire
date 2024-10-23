@@ -101,6 +101,24 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
       .catch((err) => console.log(err));
   }
 
+  function setOwner() {
+    let token = localStorage.getItem("token");
+    if (!token) return;
+    fetch("/api/servers/owner/" + serverId + "/" + user.id, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "User not found") {
+          alert("User not found");
+        } else if (data.message === "success") {
+          window.location.reload();
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   useEffect(() => {
     if (!user.id || !actualUser) return;
 
@@ -256,6 +274,11 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
                 >
                   Ban User
                 </div>
+                {actualUser.roles[actualUser.roles.length - 1].server_admin && (
+                  <div className="server-dropdown-item " onClick={setOwner}>
+                    Set As Owner
+                  </div>
+                )}
               </div>
             )}
 

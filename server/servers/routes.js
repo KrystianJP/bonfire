@@ -75,4 +75,10 @@ router.delete("/:serverId", authenticateToken, controller.deleteServer);
 
 router.delete("/leave/:serverId", authenticateToken, controller.leaveServer);
 
+router.post(
+  "/owner/:serverId/:userId",
+  authenticateToken,
+  controller.updateOwner,
+);
+
 export default router;

@@ -591,12 +591,31 @@ const deleteServer = async (req, res) => {
 };
 
 const leaveServer = async (req, res) => {
+  pool.query(queries.getOwner, [req.params.serverId], (error, results) => {
+    if (error) throw error;
+    if (results.rows[0].owner === req.user.id) {
+      res.status(403).json({ message: "Cannot leave as server owner" });
+      return;
+    }
+    pool.query(
+      queries.leaveServer,
+      [req.params.serverId, req.user.id],
+      (error, results) => {
+        if (error) throw error;
+        res.status(200).json({ message: "success" });
+      },
+    );
+  });
+};
+
+const updateOwner = async (req, res) => {
+  let admin = await checkAdmin(req.user.id, req.params.serverId, res);
+  if (!admin[1]) return;
   pool.query(
-    queries.leaveServer,
-    [req.params.serverId, req.user.id],
+    queries.updateOwner,
+    [req.params.userId, req.params.serverId],
     (error, results) => {
       if (error) throw error;
-      console.log("worked");
       res.status(200).json({ message: "success" });
     },
   );
@@ -627,4 +646,5 @@ export default {
   getAdmin,
   deleteServer,
   leaveServer,
+  updateOwner,
 };
