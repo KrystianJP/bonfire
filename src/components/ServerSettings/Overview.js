@@ -1,6 +1,15 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
-function Overview({ info, setOverview, setState, channels }) {
+function Overview({
+  info,
+  setOverview,
+  setState,
+  channels,
+  serverId,
+  token,
+  user,
+}) {
   const [uploadURLDisplay, setUploadURLDisplay] = useState(false);
   const [pfpURL, setPfpURL] = useState("");
   const [pfpPlaceholderText, setPfpPlaceholderText] = useState(
@@ -41,6 +50,20 @@ function Overview({ info, setOverview, setState, channels }) {
           setChangingName(false);
         }
       });
+  }
+
+  function deleteServer() {
+    fetch("/api/servers/" + serverId, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.message === "success") {
+          window.location.href = "/";
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -140,7 +163,11 @@ function Overview({ info, setOverview, setState, channels }) {
         </select>
       </div>
 
-      <button className="danger-button">Delete server</button>
+      {user.roles[user.roles.length - 1].server_admin && (
+        <button className="danger-button" onClick={deleteServer}>
+          Delete server
+        </button>
+      )}
     </div>
   );
 }

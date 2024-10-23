@@ -22,21 +22,6 @@ router.get("/get/:id", controller.getUserById);
 
 router.get("/:username", controller.getUserByName);
 
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect("/login");
-}
-
-function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    console.log("not authenticated");
-    return res.redirect("/");
-  }
-
-  next();
-}
+router.delete("/:id", authenticateToken, controller.deleteUser);
 
 export default router;

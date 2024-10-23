@@ -6,7 +6,7 @@ import Invites from "./Invites";
 import Bans from "./Bans";
 import Channels from "./Channels";
 
-function ServerSettingsPage({ setting, token }) {
+function ServerSettingsPage({ setting, token, givenUser }) {
   // will have deletedRoles, deletedChannels... etc. state later (and added)
   const { serverId } = useParams();
   const [overview, setOverview] = useState({
@@ -20,6 +20,7 @@ function ServerSettingsPage({ setting, token }) {
   const [channels, setChannels] = useState([]);
   const [channelGroups, setChannelGroups] = useState([]);
   const [bans, setBans] = useState([]); // [users]
+  const [user, setUser] = useState({});
 
   // addition
 
@@ -51,7 +52,7 @@ function ServerSettingsPage({ setting, token }) {
   }, [serverId, token]);
 
   useEffect(() => {
-    if (token && authenticated) {
+    if (token && authenticated && serverId && givenUser.id) {
       fetch("/api/servers/" + serverId, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
@@ -67,6 +68,8 @@ function ServerSettingsPage({ setting, token }) {
           setAnyoneInvite(data.server.anyone_invite);
           setRoles(data.roles);
 
+          setUser(data.users.filter((u) => u.id === givenUser.id)[0]);
+
           setChannels(data.channels);
           setChannelGroups(data.channel_groups);
 
@@ -75,7 +78,7 @@ function ServerSettingsPage({ setting, token }) {
           setBusy(false);
         });
     }
-  }, [token, serverId, authenticated]);
+  }, [token, serverId, authenticated, givenUser.id]);
 
   function setState(set, value) {
     set(value);
@@ -209,6 +212,9 @@ function ServerSettingsPage({ setting, token }) {
               setOverview={setOverview}
               setState={setState}
               channels={channels}
+              token={token}
+              serverId={serverId}
+              user={user}
             />
           )}
           {!busy && setting === "roles" && (

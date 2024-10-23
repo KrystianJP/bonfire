@@ -14,6 +14,8 @@ const updateUser =
 const updateSettings =
   "UPDATE user_settings SET message_privacy = $2, friend_privacy = $3, theme = $4, role_colours = $5 WHERE userid = $1;";
 
+const deleteUser = "DELETE FROM users WHERE id = $1;";
+
 export default {
   getUsers,
   insertUser,
@@ -23,4 +25,5 @@ export default {
   getUserById,
   updateUser,
   updateSettings,
+  deleteUser,
 };

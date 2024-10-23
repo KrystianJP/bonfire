@@ -71,4 +71,6 @@ router.post("/unban/:serverId", authenticateToken, controller.unbanUsers);
 
 router.get("/admin/:serverId", authenticateToken, controller.getAdmin);
 
+router.delete("/:serverId", authenticateToken, controller.deleteServer);
+
 export default router;

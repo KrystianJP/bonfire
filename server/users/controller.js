@@ -152,6 +152,13 @@ const getUserById = async (req, res) => {
   });
 };
 
+const deleteUser = async (req, res) => {
+  pool.query(queries.deleteUser, [req.user.id], (error, _) => {
+    if (error) throw error;
+    res.status(200).json({ message: "success" });
+  });
+};
+
 export default {
   loginUser,
   registerUser,
@@ -160,4 +167,5 @@ export default {
   getUserByName,
   updateUser,
   getUserById,
+  deleteUser,
 };

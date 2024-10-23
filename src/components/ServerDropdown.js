@@ -1,7 +1,26 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 function ServerDropdown({ user }) {
   const { serverId } = useParams();
+  const [admin, setAdmin] = useState(false);
+
+  // useEffect(() => {
+  //   if (!serverId) return;
+  //   let token = localStorage.getItem("token");
+  //   if (!token) return;
+  //   fetch("/api/servers/admin/" + serverId, {
+  //     method: "GET",
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.admin) {
+  //         setAdmin(true);
+  //       }
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, [serverId]);
   // *** leaving server
   return (
     <div

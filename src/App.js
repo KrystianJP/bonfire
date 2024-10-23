@@ -137,27 +137,57 @@ function App() {
             <Route
               exact
               path="/servers/:serverId/settings/overview"
-              element={<ServerSettingsPage token={token} setting="overview" />}
+              element={
+                <ServerSettingsPage
+                  givenUser={user}
+                  token={token}
+                  setting="overview"
+                />
+              }
             ></Route>
             <Route
               exact
               path="/servers/:serverId/settings/channels"
-              element={<ServerSettingsPage token={token} setting="channels" />}
+              element={
+                <ServerSettingsPage
+                  givenUser={user}
+                  token={token}
+                  setting="channels"
+                />
+              }
             ></Route>
             <Route
               exact
               path="/servers/:serverId/settings/roles"
-              element={<ServerSettingsPage token={token} setting="roles" />}
+              element={
+                <ServerSettingsPage
+                  givenUser={user}
+                  token={token}
+                  setting="roles"
+                />
+              }
             ></Route>
             <Route
               exact
               path="/servers/:serverId/settings/invites"
-              element={<ServerSettingsPage token={token} setting="invites" />}
+              element={
+                <ServerSettingsPage
+                  givenUser={user}
+                  token={token}
+                  setting="invites"
+                />
+              }
             ></Route>
             <Route
               exact
               path="/servers/:serverId/settings/bans"
-              element={<ServerSettingsPage token={token} setting="bans" />}
+              element={
+                <ServerSettingsPage
+                  givenUser={user}
+                  token={token}
+                  setting="bans"
+                />
+              }
             ></Route>
 
             <Route

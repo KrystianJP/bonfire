@@ -7,7 +7,6 @@ Discord clone project
 - Real-time text chatting
 - Direct messaging
 - Voice chat and channels
-- Video chat (planned)
 - Discord "Servers" including
   - settings
   - channels

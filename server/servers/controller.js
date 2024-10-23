@@ -4,19 +4,35 @@ import {} from "dotenv/config.js";
 import crypto from "crypto";
 
 const checkAdmin = async (userid, serverid, res) => {
+  let owner = false;
   let admin = false;
-  let query = new Promise((resolve, reject) => {
+  let adminQuery = new Promise((resolve, reject) => {
     pool.query(queries.getUserRoles, [userid, serverid], (error, results) => {
       if (error) reject(error);
+
       if (!results.rows.some((role) => role.server_admin)) {
-        res.status(401).json({ message: "Unauthorized" });
         resolve(false);
       }
       resolve(true);
     });
   });
-  await query.then((a) => (admin = a));
-  return admin;
+  let ownerQuery = new Promise((resolve, reject) => {
+    pool.query(queries.getOwner, [serverid], (error, results) => {
+      if (error) reject(error);
+      if (results.rows[0].owner === userid) {
+        resolve(true);
+      }
+      resolve(false);
+    });
+  });
+
+  await Promise.all([adminQuery, ownerQuery]).then((values) => {
+    admin = values[0] || values[1];
+    owner = values[1];
+  });
+  if (!admin) res.status(401).json({ message: "Unauthorized" });
+
+  return [admin, owner];
 };
 
 const getServers = async (req, res) => {
@@ -130,6 +146,7 @@ const getServer = async (req, res) => {
         if (error) throw error;
         if (servers.rows.length === 0) {
           res.status(404).json({ message: "Server not found" });
+          return;
         }
         pool.query(queries.getBans, [req.params.serverId], (error, bans) => {
           if (error) throw error;
@@ -138,6 +155,7 @@ const getServer = async (req, res) => {
             res
               .status(403)
               .json({ message: "You are banned from this server" });
+            return;
           }
           pool.query(
             queries.getUsers,
@@ -173,6 +191,9 @@ const getServer = async (req, res) => {
                                     name: "online",
                                     colour: "aaaaaa",
                                     id: "online",
+                                    server_admin:
+                                      servers.rows[0].owner ===
+                                      users.rows[i].id,
                                   },
                                 ]);
                               },
@@ -278,7 +299,7 @@ const findServer = async (req, res) => {
 
 const updateSettings = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   pool.query(
     queries.updateServer,
     [
@@ -327,7 +348,7 @@ const updateSettings = async (req, res) => {
 
 const addRole = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   pool.query(
     queries.addRole,
     [
@@ -344,7 +365,7 @@ const addRole = async (req, res) => {
 };
 const deleteRoles = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   req.body.roles.forEach((role) => {
     pool.query(queries.deleteRole, [role.id], (error, _) => {
       if (error) throw error;
@@ -355,7 +376,7 @@ const deleteRoles = async (req, res) => {
 
 const applyRoles = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   req.body.roles.forEach((role) => {
     if (role.name === "online") {
       return;
@@ -390,7 +411,7 @@ const applyRoles = async (req, res) => {
 
 const addChannelGroup = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   pool.query(
     queries.addChannelGroup,
     [req.body.name, req.params.serverId, req.body.groupnr],
@@ -403,7 +424,7 @@ const addChannelGroup = async (req, res) => {
 
 const removeChannelGroups = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   req.body.groups.forEach((group) => {
     pool.query(queries.removeChannelGroup, [group], (error, _) => {
       if (error) throw error;
@@ -414,7 +435,7 @@ const removeChannelGroups = async (req, res) => {
 
 const addChannel = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.body.serverid, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   pool.query(
     queries.addChannel,
     [
@@ -433,7 +454,7 @@ const addChannel = async (req, res) => {
 
 const deleteChannels = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverid, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   req.body.channels.forEach((channel) => {
     pool.query(queries.deleteChannel, [channel], (error, _) => {
       if (error) throw error;
@@ -444,7 +465,7 @@ const deleteChannels = async (req, res) => {
 
 const createInvite = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   let inviteCode = crypto.randomBytes(8).toString("hex");
   pool.query(queries.findInvite, [inviteCode], (error, results) => {
     if (error) throw error;
@@ -480,7 +501,7 @@ const getChannelById = async (req, res) => {
 
 const kickUser = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   pool.query(queries.getOwner, [req.params.serverId], (error, results) => {
     if (error) throw error;
     if (results.rows[0].owner === req.user.id) {
@@ -500,7 +521,7 @@ const kickUser = async (req, res) => {
 
 const deleteMessage = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   pool.query(
     queries.deleteMessage,
     [req.params.messageId],
@@ -513,7 +534,7 @@ const deleteMessage = async (req, res) => {
 
 const banUser = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   pool.query(queries.getOwner, [req.params.serverId], (error, results) => {
     if (error) throw error;
     if (results.rows[0].owner === req.user.id) {
@@ -540,7 +561,7 @@ const banUser = async (req, res) => {
 
 const unbanUsers = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
+  if (!admin[0]) return;
   req.body.users.forEach((user) => {
     pool.query(
       queries.unbanUser,
@@ -555,10 +576,18 @@ const unbanUsers = async (req, res) => {
 
 const getAdmin = async (req, res) => {
   let admin = await checkAdmin(req.user.id, req.params.serverId, res);
-  if (!admin) return;
-  console.log("user is admin");
+  if (!admin[0]) return;
 
-  res.json({ admin: true });
+  res.status(200).json({ admin: true });
+};
+
+const deleteServer = async (req, res) => {
+  let admin = await checkAdmin(req.user.id, req.params.serverId, res);
+  if (!admin[1]) return;
+  pool.query(queries.deleteServer, [req.params.serverId], (error, results) => {
+    if (error) throw error;
+    res.status(200).json({ message: "success" });
+  });
 };
 
 export default {
@@ -584,4 +613,5 @@ export default {
   banUser,
   unbanUsers,
   getAdmin,
+  deleteServer,
 };

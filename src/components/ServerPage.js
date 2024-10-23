@@ -51,6 +51,7 @@ function ServerPage({ userProfileState, user, token }) {
   }, []);
 
   useEffect(() => {
+    console.log(channels);
     if (!token || !serverId) return;
     fetch("/api/servers/" + serverId, {
       method: "GET",
@@ -259,7 +260,9 @@ function ServerPage({ userProfileState, user, token }) {
             roles={roles}
             placeholder={
               "#" +
-              channels.filter((channel) => channel.id == channelId)[0].name
+              (channels.filter((channel) => channel.id == channelId)[0]
+                ? channels.filter((channel) => channel.id == channelId)[0].name
+                : "")
             }
             setMessages={setMessages}
             token={token}
