@@ -24,3 +24,4 @@ Discord clone project
 - JWT used to generate and verify secure web token for session management and API authentication
 - Passport.js handles authentication flow, with bcrypt used to hash user passwords
 - socket.io used to make WebSockets (for Real-time chatting)
+- Agora used to handle voice chat
