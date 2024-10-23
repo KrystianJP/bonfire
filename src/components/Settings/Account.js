@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 /* eslint-disable jsx-a11y/alt-text */
-function Account({ info, setAccount, setState, user }) {
+function Account({ info, setAccount, setState, user, token }) {
   const defaultPfp =
     "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
 
@@ -37,6 +37,25 @@ function Account({ info, setAccount, setState, user }) {
         } else {
           setState(setAccount, { ...info, username: username });
           setChangingName(false);
+        }
+      });
+  }
+
+  function deleteAccount() {
+    if (!token) return;
+    fetch("/api/users/", {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === "success") {
+          fetch("/api/users/logout", {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          localStorage.removeItem("token");
+          window.location.href = "/login";
         }
       });
   }
@@ -137,7 +156,9 @@ function Account({ info, setAccount, setState, user }) {
         ></textarea>
       </div>
       {/* <button className="password-button">Change password</button> */}
-      <button className="danger-button">Delete account</button>
+      <button className="danger-button" onClick={deleteAccount}>
+        Delete account
+      </button>
     </div>
   );
 }

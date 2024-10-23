@@ -130,6 +130,7 @@ function SettingsPage({ setting, token, user }) {
             setAccount={setAccount}
             user={user}
             setState={setState}
+            token={token}
           />
         )}
         {!busy && setting === "privacy" && (

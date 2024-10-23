@@ -22,6 +22,6 @@ router.get("/get/:id", controller.getUserById);
 
 router.get("/:username", controller.getUserByName);
 
-router.delete("/:id", authenticateToken, controller.deleteUser);
+router.delete("/", authenticateToken, controller.deleteUser);
 
 export default router;
