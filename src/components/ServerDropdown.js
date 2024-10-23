@@ -1,26 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-function ServerDropdown({ user }) {
+function ServerDropdown({ user, token }) {
   const { serverId } = useParams();
-  const [admin, setAdmin] = useState(false);
 
-  // useEffect(() => {
-  //   if (!serverId) return;
-  //   let token = localStorage.getItem("token");
-  //   if (!token) return;
-  //   fetch("/api/servers/admin/" + serverId, {
-  //     method: "GET",
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.admin) {
-  //         setAdmin(true);
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, [serverId]);
+  function leaveServer() {
+    fetch("/api/servers/leave/" + serverId, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(() => (window.location.href = "/"))
+      .catch((err) => console.log(err));
+  }
+
   // *** leaving server
   return (
     <div
@@ -61,7 +55,12 @@ function ServerDropdown({ user }) {
           </span>
         </label>
       </label> */}
-      <div className="server-dropdown-item dangerous-icon">Leave server</div>
+      <div
+        className="server-dropdown-item dangerous-icon"
+        onClick={leaveServer}
+      >
+        Leave server
+      </div>
     </div>
   );
 }

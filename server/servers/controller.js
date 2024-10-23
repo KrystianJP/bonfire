@@ -590,6 +590,18 @@ const deleteServer = async (req, res) => {
   });
 };
 
+const leaveServer = async (req, res) => {
+  pool.query(
+    queries.leaveServer,
+    [req.params.serverId, req.user.id],
+    (error, results) => {
+      if (error) throw error;
+      console.log("worked");
+      res.status(200).json({ message: "success" });
+    },
+  );
+};
+
 export default {
   getServers,
   createServer,
@@ -614,4 +626,5 @@ export default {
   unbanUsers,
   getAdmin,
   deleteServer,
+  leaveServer,
 };

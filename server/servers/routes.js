@@ -73,4 +73,6 @@ router.get("/admin/:serverId", authenticateToken, controller.getAdmin);
 
 router.delete("/:serverId", authenticateToken, controller.deleteServer);
 
+router.delete("/leave/:serverId", authenticateToken, controller.leaveServer);
+
 export default router;

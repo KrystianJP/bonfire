@@ -84,6 +84,9 @@ const unbanUser = "DELETE FROM bans WHERE serverid = $1 AND userid = $2;";
 
 const getOwner = "SELECT owner FROM servers WHERE id = $1;";
 
+const leaveServer =
+  "DELETE FROM serverships WHERE serverid = $1 AND userid = $2;";
+
 export default {
   getServers,
   createServer,
@@ -126,4 +129,5 @@ export default {
   banUser,
   unbanUser,
   getOwner,
+  leaveServer,
 };

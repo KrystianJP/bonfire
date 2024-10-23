@@ -213,7 +213,10 @@ function ServerPage({ userProfileState, user, token }) {
         <div className="server-name-container" onClick={toggleDropdown}>
           <span className="server-name">{server.name}</span>
           {dropdownOpen && (
-            <ServerDropdown user={users.find((u) => u.id == user.id)} />
+            <ServerDropdown
+              token={token}
+              user={users.find((u) => u.id == user.id)}
+            />
           )}
         </div>
         <ChannelsBar
