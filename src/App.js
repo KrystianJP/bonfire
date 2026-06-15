@@ -7,6 +7,7 @@ import ServerCreationModal from "./components/ServerCreationModal";
 import InviteBuffer from "./components/InviteBuffer.js";
 import ServerSettingsPage from "./components/ServerSettings/ServerSettingsPage";
 import ChannelCreationModal from "./components/ChannelCreationModal";
+import BackendStatus from "./components/BackendStatus";
 
 import {
   BrowserRouter as Router,
@@ -73,6 +74,7 @@ function App() {
     <Router>
       <AgoraProvider>
         <div className="App" onClick={() => setUserProfileOpen(false)}>
+          <BackendStatus />
           <Routes>
             {/* FRIENDS */}
             <Route

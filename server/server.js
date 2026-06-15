@@ -50,6 +50,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.use("/api/users", userRoutes);
 app.use("/api/friends", friendRoutes);
 app.use("/api/servers", serverRoutes);
