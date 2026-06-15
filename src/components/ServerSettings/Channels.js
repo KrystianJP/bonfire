@@ -20,28 +20,82 @@ function Channels({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalGroup, setModalGroup] = useState({});
 
+  function sortGroups(groups) {
+    return [...groups].sort((a, b) => a.groupnr - b.groupnr);
+  }
+
+  function sortChannels(channelList) {
+    return [...channelList].sort((a, b) => a.channelnr - b.channelnr);
+  }
+
+  function sortChannelsByGroup(channelList, groups = channelGroups) {
+    const groupOrder = new Map(groups.map((group) => [group.id, group.groupnr]));
+
+    return [...channelList].sort((a, b) => {
+      const groupDiff =
+        (groupOrder.get(a.channel_group) ?? 0) -
+        (groupOrder.get(b.channel_group) ?? 0);
+
+      if (groupDiff !== 0) {
+        return groupDiff;
+      }
+
+      return a.channelnr - b.channelnr;
+    });
+  }
+
+  function buildGroupsWithChannels(groups = channelGroups, channelList = channels) {
+    return sortGroups(groups).map((group) => ({
+      ...group,
+      channels: sortChannels(
+        channelList
+          .filter((channel) => channel.channel_group === group.id)
+          .map((channel) => ({ ...channel })),
+      ),
+    }));
+  }
+
+  function flattenGroups(groups) {
+    return groups.flatMap((group, groupIndex) =>
+      group.channels.map((channel, channelIndex) => ({
+        channel,
+        groupIndex,
+        channelIndex,
+      })),
+    );
+  }
+
+  function saveVisualChannelOrder(nextGroups) {
+    const movedChannels = nextGroups.flatMap((group) =>
+      group.channels.map((channel, index) => ({
+        ...channel,
+        channel_group: group.id,
+        channelnr: index,
+      })),
+    );
+
+    const movedChannelIds = new Set(movedChannels.map((channel) => channel.id));
+    const untouchedChannels = channels.filter(
+      (channel) => !movedChannelIds.has(channel.id),
+    );
+
+    setState(
+      setChannels,
+      sortChannelsByGroup([...untouchedChannels, ...movedChannels]),
+    );
+  }
+
   function disableChangingName() {
     setChangingChannelName(-1);
     setChangingGroup(-1);
   }
 
   useEffect(() => {
-    let tempGroups = [...channelGroups];
-    tempGroups.forEach((group) => {
-      group.channels = [];
-
-      channels.forEach((channel) => {
-        if (channel.channel_group === group.id) {
-          group.channels.push(channel);
-        }
-      });
-    });
-
-    setGroupsWithChannels(tempGroups);
+    setGroupsWithChannels(buildGroupsWithChannels());
   }, [channels, channelGroups]);
 
   function addChannel(name, voice, group) {
-    let groupIndex = channelGroups.findIndex(
+    let groupIndex = groupsWithChannels.findIndex(
       (channelGroup) => channelGroup.id === group.id,
     );
     // add 1 to last channel's channelnr in group
@@ -114,154 +168,70 @@ function Channels({
     deletedGroups.current.push(groupid);
   }
 
-  function updateChannels(group) {
-    let tempChannels = [...channels];
-
-    tempChannels.map((channel) => {
-      let channelFromGroup =
-        group.channels.find((c) => c.id === channel.id) || -1;
-
-      if (channelFromGroup !== -1) {
-        channel.channelnr = channelFromGroup.channelnr;
-        channel.channel_group = group.id;
-      }
-      return channel;
-    });
-
-    setState(
-      setChannels,
-      tempChannels.sort((a, b) => a.channelnr - b.channelnr),
-    );
-  }
-
-  // moving up from first group should be blocked
-  function moveChannelUp(channelnr, groupnr) {
-    let groupIndex = groupsWithChannels.findIndex(
-      (group) => group.groupnr === groupnr,
-    );
-    let channelIndex = groupsWithChannels[groupIndex].channels.findIndex(
-      (channel) => channel.channelnr === channelnr,
+  function moveChannel(channelId, direction) {
+    const tempGroups = buildGroupsWithChannels();
+    const groupIndex = tempGroups.findIndex((group) =>
+      group.channels.some((channel) => channel.id === channelId),
     );
 
-    let tempGroups = groupsWithChannels.map((group) => ({
-      ...group,
-      channels: [...group.channels], // Deep copy channels
-    }));
-
-    if (channelIndex === 0) {
-      let newGroupLength = tempGroups[groupIndex - 1].channels.length;
-
-      let newChannelNr =
-        newGroupLength > 0
-          ? tempGroups[groupIndex - 1].channels[newGroupLength - 1].channelnr +
-            1
-          : 0;
-
-      tempGroups[groupIndex].channels[0].channelnr = newChannelNr;
-
-      tempGroups[groupIndex - 1].channels.push(
-        tempGroups[groupIndex].channels.shift(),
-      );
-
-      updateChannels(tempGroups[groupIndex - 1]);
-    } else {
-      let newChannelNr =
-        tempGroups[groupIndex].channels[channelIndex - 1].channelnr;
-
-      let temp = tempGroups[groupIndex].channels[channelIndex];
-      tempGroups[groupIndex].channels[channelIndex] =
-        tempGroups[groupIndex].channels[channelIndex - 1];
-      tempGroups[groupIndex].channels[channelIndex - 1] = temp;
-
-      tempGroups[groupIndex].channels[channelIndex - 1].channelnr =
-        newChannelNr;
-      tempGroups[groupIndex].channels[channelIndex].channelnr = channelnr;
-
-      updateChannels(tempGroups[groupIndex]);
+    if (groupIndex === -1) {
+      return;
     }
 
+    const channelIndex = tempGroups[groupIndex].channels.findIndex(
+      (channel) => channel.id === channelId,
+    );
+
+    if (direction < 0) {
+      if (channelIndex > 0) {
+        const channels = tempGroups[groupIndex].channels;
+        [channels[channelIndex - 1], channels[channelIndex]] = [
+          channels[channelIndex],
+          channels[channelIndex - 1],
+        ];
+      } else if (groupIndex > 0) {
+        const [movedChannel] = tempGroups[groupIndex].channels.splice(
+          channelIndex,
+          1,
+        );
+        tempGroups[groupIndex - 1].channels.push(movedChannel);
+      } else {
+        return;
+      }
+    }
+
+    if (direction > 0) {
+      if (channelIndex < tempGroups[groupIndex].channels.length - 1) {
+        const channels = tempGroups[groupIndex].channels;
+        [channels[channelIndex], channels[channelIndex + 1]] = [
+          channels[channelIndex + 1],
+          channels[channelIndex],
+        ];
+      } else if (groupIndex < tempGroups.length - 1) {
+        const [movedChannel] = tempGroups[groupIndex].channels.splice(
+          channelIndex,
+          1,
+        );
+        tempGroups[groupIndex + 1].channels.unshift(movedChannel);
+      } else {
+        return;
+      }
+    }
+
+    saveVisualChannelOrder(tempGroups);
     disableChangingName();
   }
 
-  // moving down from last group should be blocked
-  function moveChannelDown(channelnr, groupnr) {
-    let groupIndex = groupsWithChannels.findIndex(
-      (group) => group.groupnr === groupnr,
-    );
-    let channelIndex = groupsWithChannels[groupIndex].channels.findIndex(
-      (channel) => channel.channelnr === channelnr,
-    );
-
-    let tempGroups = groupsWithChannels.map((group) => ({
-      ...group,
-      channels: [...group.channels], // Deep copy channels
-    }));
-
-    if (channelIndex === groupsWithChannels[groupIndex].channels.length - 1) {
-      let newChannelNr =
-        tempGroups[groupIndex + 1].channels.length > 0
-          ? tempGroups[groupIndex + 1].channels[0].channelnr
-          : 0;
-      tempGroups[groupIndex + 1].channels.map(
-        (channel) => (channel.channelnr += 1),
-      );
-
-      tempGroups[groupIndex + 1].channels.unshift(
-        tempGroups[groupIndex].channels.pop(),
-      );
-
-      if (tempGroups[groupIndex].channels.length > 0) {
-        tempGroups[groupIndex].channels[0].channelnr = newChannelNr;
-      }
-
-      updateChannels(tempGroups[groupIndex + 1]);
-    } else {
-      let newChannelNr =
-        tempGroups[groupIndex].channels[channelIndex + 1].channelnr;
-      let temp = tempGroups[groupIndex].channels[channelIndex];
-      tempGroups[groupIndex].channels[channelIndex] =
-        tempGroups[groupIndex].channels[channelIndex + 1];
-      tempGroups[groupIndex].channels[channelIndex + 1] = temp;
-
-      tempGroups[groupIndex].channels[channelIndex + 1].channelnr =
-        newChannelNr;
-      tempGroups[groupIndex].channels[channelIndex].channelnr = channelnr;
-
-      updateChannels(tempGroups[groupIndex]);
-    }
-
-    disableChangingName();
+  function checkFirstChannel(channelId) {
+    const flattenedChannels = flattenGroups(groupsWithChannels);
+    return flattenedChannels[0]?.channel.id === channelId;
   }
 
-  function checkFirstChannel(channelnr, groupnr) {
-    let groupIndex = channelGroups.findIndex(
-      (group) => group.groupnr === groupnr,
+  function checkLastChannel(channelId) {
+    const flattenedChannels = flattenGroups(groupsWithChannels);
+    return (
+      flattenedChannels[flattenedChannels.length - 1]?.channel.id === channelId
     );
-    let channelIndex = groupsWithChannels[groupIndex].channels.findIndex(
-      (channel) => channel.channelnr === channelnr,
-    );
-
-    if (channelIndex === 0 && groupIndex === 0) {
-      return true;
-    }
-    return false;
-  }
-
-  function checkLastChannel(channelnr, groupnr) {
-    let groupIndex = channelGroups.findIndex(
-      (group) => group.groupnr === groupnr,
-    );
-    let channelIndex = groupsWithChannels[groupIndex].channels.findIndex(
-      (channel) => channel.channelnr === channelnr,
-    );
-
-    if (
-      channelIndex === groupsWithChannels[groupIndex].channels.length - 1 &&
-      groupIndex === channelGroups.length - 1
-    ) {
-      return true;
-    }
-    return false;
   }
 
   function moveGroupUp(groupnr) {
@@ -271,9 +241,9 @@ function Channels({
     let temp = groupsCopy[index];
     groupsCopy[index] = groupsCopy[index - 1];
     groupsCopy[index - 1] = temp;
-    channelGroups[index - 1].groupnr = groupnr;
-    channelGroups[index].groupnr = newGroupNr;
-    setState(setChannelGroups, groupsCopy);
+    groupsCopy[index - 1] = { ...groupsCopy[index - 1], groupnr };
+    groupsCopy[index] = { ...groupsCopy[index], groupnr: newGroupNr };
+    setState(setChannelGroups, sortGroups(groupsCopy));
     disableChangingName(-1);
   }
   function moveGroupDown(groupnr) {
@@ -283,9 +253,9 @@ function Channels({
     let temp = groupsCopy[index];
     groupsCopy[index] = groupsCopy[index + 1];
     groupsCopy[index + 1] = temp;
-    channelGroups[index + 1].groupnr = groupnr;
-    channelGroups[index].groupnr = newGroupNr;
-    setState(setChannelGroups, groupsCopy);
+    groupsCopy[index + 1] = { ...groupsCopy[index + 1], groupnr };
+    groupsCopy[index] = { ...groupsCopy[index], groupnr: newGroupNr };
+    setState(setChannelGroups, sortGroups(groupsCopy));
     disableChangingName(-1);
   }
 
@@ -297,7 +267,7 @@ function Channels({
         New Group
       </button>
 
-      {channelGroups.map((group) => {
+      {sortGroups(channelGroups).map((group) => {
         return (
           <div className="channel-group" key={group.groupnr}>
             <div className="channel-group-name-container">
@@ -368,7 +338,7 @@ function Channels({
                   delete
                 </span>
                 <span className="arrows-container">
-                  {group.groupnr !== channelGroups[0].groupnr && (
+                  {group.groupnr !== sortGroups(channelGroups)[0].groupnr && (
                     <span
                       className="material-icons"
                       onClick={() => moveGroupUp(group.groupnr)}
@@ -378,13 +348,16 @@ function Channels({
                   )}
 
                   {group.groupnr !==
-                    channelGroups[channelGroups.length - 1].groupnr && (
+                    sortGroups(channelGroups)[channelGroups.length - 1]
+                      .groupnr && (
                     <span
                       className="material-icons"
                       onClick={() => moveGroupDown(group.groupnr)}
                       style={{
                         marginLeft:
-                          group.groupnr === channelGroups[0].groupnr ? 24 : 0,
+                          group.groupnr === sortGroups(channelGroups)[0].groupnr
+                            ? 24
+                            : 0,
                       }}
                     >
                       expand_more
@@ -399,7 +372,7 @@ function Channels({
                 .filter((g) => g.id === group.id)[0]
                 .channels.map((channel) => {
                   return (
-                    <div className="channel" key={channels.indexOf(channel)}>
+                    <div className="channel" key={channel.id}>
                       {changingChannelName !== channel.id ? (
                         <div className="friend-left">
                           <span className="material-icons">
@@ -423,7 +396,7 @@ function Channels({
                             setState(
                               setChannels,
                               channels.map((r) =>
-                                r.channelnr === channel.channelnr
+                                r.id === channel.id
                                   ? { ...r, name: nameValue }
                                   : r,
                               ),
@@ -460,37 +433,20 @@ function Channels({
                           className="arrows-container"
                           style={{ marginRight: "15px" }}
                         >
-                          {!checkFirstChannel(
-                            channel.channelnr,
-                            group.groupnr,
-                          ) && (
+                          {!checkFirstChannel(channel.id) && (
                             <span
                               className="material-icons"
-                              onClick={() =>
-                                moveChannelUp(channel.channelnr, group.groupnr)
-                              }
+                              onClick={() => moveChannel(channel.id, -1)}
                             >
                               arrow_upward
                             </span>
                           )}
-                          {!checkLastChannel(
-                            channel.channelnr,
-                            group.groupnr,
-                            channel.id,
-                          ) && (
+                          {!checkLastChannel(channel.id) && (
                             <span
                               className="material-icons"
-                              onClick={() =>
-                                moveChannelDown(
-                                  channel.channelnr,
-                                  group.groupnr,
-                                )
-                              }
+                              onClick={() => moveChannel(channel.id, 1)}
                               style={{
-                                marginLeft: !checkFirstChannel(
-                                  channel.channelnr,
-                                  group.groupnr,
-                                )
+                                marginLeft: !checkFirstChannel(channel.id)
                                   ? "0px"
                                   : "24px",
                               }}

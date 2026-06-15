@@ -323,7 +323,7 @@ const updateSettings = async (req, res) => {
       req.body.channels.forEach((channel) => {
         pool.query(
           queries.updateChannels,
-          [channel.name, channel.channelnr, channel.id],
+          [channel.name, channel.channelnr, channel.channel_group, channel.id],
           (error, _) => {
             if (error) throw error;
           },
