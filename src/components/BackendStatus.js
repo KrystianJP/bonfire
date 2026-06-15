@@ -7,6 +7,7 @@ function BackendStatus() {
 
   useEffect(() => {
     let readyTimeout;
+    let keepAliveInterval;
 
     const checkBackend = async (signal) => {
       const controller = new AbortController();
@@ -40,6 +41,9 @@ function BackendStatus() {
         if (ready) {
           setBackendStatus("ready");
           readyTimeout = window.setTimeout(() => setVisible(false), 6000);
+          keepAliveInterval = window.setInterval(() => {
+            checkBackend(signal);
+          }, 10 * 60 * 1000);
           return;
         }
 
@@ -57,6 +61,7 @@ function BackendStatus() {
     return () => {
       controller.abort();
       window.clearTimeout(readyTimeout);
+      window.clearInterval(keepAliveInterval);
     };
   }, []);
 
