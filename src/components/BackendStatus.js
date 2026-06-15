@@ -17,7 +17,7 @@ function BackendStatus() {
       signal?.addEventListener("abort", abortRequest);
 
       try {
-        const response = await fetch(`${API_BASE_URL || ""}/health`, {
+        const response = await fetch(`${API_BASE_URL || ""}/api/server-awake`, {
           signal: controller.signal,
         });
 
@@ -90,8 +90,8 @@ function BackendStatus() {
         {isReady
           ? "Bonfire is connected and ready."
           : isOffline
-            ? "The backend did not respond. Some features may not work yet."
-            : "The server is starting up. This can take a moment on Render."}
+            ? "The backend did not respond. Some features may not work yet. Try disabling ad blockers such as uBlock Origin for this site."
+            : "The server is starting up. This can take a moment on Render. If it stays here, try disabling ad blockers such as uBlock Origin for this site."}
       </div>
       {!isReady && !isOffline && <div className="backend-status-spinner" />}
     </div>

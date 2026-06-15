@@ -50,7 +50,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/health", (req, res) => {
+app.get("/api/server-awake", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
