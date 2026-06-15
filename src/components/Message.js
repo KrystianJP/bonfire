@@ -98,7 +98,10 @@ function Message({ userInfo, message, roles, token, user }) {
           <div className="message-pfp">
             <img
               className="pfp-img"
-              src={author.pfp}
+              src={author.pfp ? author.pfp : defaultPfp}
+              onError={(e) => {
+                e.currentTarget.src = defaultPfp;
+              }}
               alt="user profile picture"
             />
           </div>

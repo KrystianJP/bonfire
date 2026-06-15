@@ -4,6 +4,8 @@ import { socket } from "../socket.js";
 function UsersInCall({ user, friend }) {
   const [users, setUsers] = useState([]); // list of ids
   const [container, setContainer] = useState(null);
+  const defaultPfp =
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
 
   useEffect(() => {
     if (!user.id || !friend.id) return;
@@ -68,12 +70,26 @@ function UsersInCall({ user, friend }) {
       In Call:
       {users.includes(user.id) && (
         <div className="user-in-call message-pfp">
-          <img src={user.pfp} alt="user" className="pfp-img" />
+          <img
+            src={user.pfp ? user.pfp : defaultPfp}
+            onError={(e) => {
+              e.currentTarget.src = defaultPfp;
+            }}
+            alt="user"
+            className="pfp-img"
+          />
         </div>
       )}
       {users.includes(friend.id) && (
         <div className="user-in-call message-pfp">
-          <img src={friend.pfp} alt="friend" className="pfp-img" />
+          <img
+            src={friend.pfp ? friend.pfp : defaultPfp}
+            onError={(e) => {
+              e.currentTarget.src = defaultPfp;
+            }}
+            alt="friend"
+            className="pfp-img"
+          />
         </div>
       )}
     </div>

@@ -627,16 +627,6 @@ label {
   padding-top: 5px;
   position: relative;
 }
-.attach-file-icon {
-  position: absolute;
-  left: 27px;
-  top: 26px;
-  transform: translateY(-50%);
-}
-.attach-file-icon:hover {
-  cursor: pointer;
-  color: var(--dark-lightest);
-}
 .message-input {
   background: var(--dark-hover);
   border: none;
@@ -646,7 +636,6 @@ label {
   color: var(--dark-lightest);
   font-size: 0.9rem;
   height: 42px;
-  padding-left: 50px;
 }
 
 .dangerous-icon {

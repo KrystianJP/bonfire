@@ -128,7 +128,6 @@ function Messages({ users, messages, roles, placeholder, token, user }) {
         }}
         className="message-input-container"
       >
-        <span className="material-icons attach-file-icon">attach_file</span>
         <input
           type="text"
           className="message-input"

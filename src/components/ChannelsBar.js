@@ -5,6 +5,8 @@ import { socket } from "../socket.js";
 
 function ChannelsBar({ groups, channels, user, users }) {
   const { channelId, serverId } = useParams();
+  const defaultPfp =
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
 
   const [voiceChannelUsers, setVoiceChannelUsers] = useState({});
   const [usersMap, setUsersMap] = useState({}); // {id: user}
@@ -124,7 +126,14 @@ function ChannelsBar({ groups, channels, user, users }) {
                               <div className="voice-channel-user" key={userid}>
                                 <div className="ban-pfp">
                                   <img
-                                    src={usersMap[userid].pfp}
+                                    src={
+                                      usersMap[userid].pfp
+                                        ? usersMap[userid].pfp
+                                        : defaultPfp
+                                    }
+                                    onError={(e) => {
+                                      e.currentTarget.src = defaultPfp;
+                                    }}
                                     alt={usersMap[userid].name}
                                     className="pfp-img"
                                     key={userid}
