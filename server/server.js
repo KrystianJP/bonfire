@@ -17,8 +17,20 @@ initializePassport(passport);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://bonfire-delta.vercel.app",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 const corsOptions = {
-  origin: "http://localhost:3000/", // Replace with your frontend URL
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // Allows the server to accept cookies from the client
   optionsSuccessStatus: 204, // For legacy browser support
@@ -49,7 +61,11 @@ const expressServer = app.listen(PORT, () =>
 );
 
 const io = new Server(expressServer, {
-  cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
 });
 
 let users = {}; // user.id : socket.id

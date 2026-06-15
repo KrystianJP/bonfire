@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
+import { SOCKET_URL } from "./api";
 
-export const socket = io.connect("http://localhost:5000", {
+export const socket = io.connect(SOCKET_URL, {
   auth: { token: localStorage.getItem("token") },
 });
 
