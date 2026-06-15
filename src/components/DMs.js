@@ -16,6 +16,8 @@ function DMs({
   setInVoice,
   inVoice,
 }) {
+  const defaultPfp =
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   var { friendId } = useParams();
   const [profileBarOpen, setProfileBarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -108,7 +110,7 @@ function DMs({
         >
           <div className="profile-pfp friend-dm-pfp">
             <img
-              src={friendInfo.pfp}
+              src={friendInfo.pfp ? friendInfo.pfp : defaultPfp}
               alt="friend profile picture"
               className="pfp-img"
             />

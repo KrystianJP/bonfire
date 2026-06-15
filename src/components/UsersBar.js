@@ -10,6 +10,9 @@ function UsersBar({
   user,
   searchQuery,
 }) {
+  const defaultPfp =
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+
   const [currentUser, setCurrentUser] = useState({});
 
   // run when user clicks on user
@@ -70,7 +73,7 @@ function UsersBar({
                 >
                   <div className="server-user-pfp friend-pfp">
                     <img
-                      src={user.pfp}
+                      src={user.pfp ? user.pfp : defaultPfp}
                       alt="server user profile picture"
                       className="pfp-img"
                       style={{

@@ -504,7 +504,7 @@ const kickUser = async (req, res) => {
   if (!admin[0]) return;
   pool.query(queries.getOwner, [req.params.serverId], (error, results) => {
     if (error) throw error;
-    if (results.rows[0].owner === req.user.id) {
+    if (results.rows[0].owner === req.params.userId) {
       res.status(403).json({ message: "Cannot kick server owner" });
       return;
     }

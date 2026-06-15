@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import { socket } from "../socket.js";
 
 function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
+  const defaultPfp =
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   const { serverId } = useParams();
   const [roleListOpen, setRoleListOpen] = useState(false);
   const [roleList, setRoleList] = useState(user.roles);
@@ -160,7 +162,7 @@ function ServerUserProfile({ user, roles, configureRoleGroups, actualUser }) {
         >
           <div className="dm-profile-pfp">
             <img
-              src={user.pfp}
+              src={user.pfp ? user.pfp : defaultPfp}
               alt="user profile picture"
               className="pfp-img"
             />

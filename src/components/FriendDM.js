@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 function FriendDM({ friend, unread, inVoice }) {
+  const defaultPfp =
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   const { friendId } = useParams();
   const [highlight, setHighlight] = useState("");
   // console.log(friend);
@@ -18,7 +20,7 @@ function FriendDM({ friend, unread, inVoice }) {
     <Link to={`/messages/${friend.id}`} className={"friend-dm " + highlight}>
       <div className="friend-pfp">
         <img
-          src={friend.pfp}
+          src={friend.pfp ? friend.pfp : defaultPfp}
           alt="user profile picture"
           style={{
             filter: friend.online ? "brightness(100%)" : "brightness(70%)",

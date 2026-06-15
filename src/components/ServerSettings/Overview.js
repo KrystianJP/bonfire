@@ -155,11 +155,13 @@ function Overview({
             console.log(info);
           }}
         >
-          {channels.map((channel) => (
-            <option key={channel.id} value={channel.id}>
-              {channel.name}
-            </option>
-          ))}
+          {channels.map((channel) =>
+            channel.voice ? null : (
+              <option key={channel.id} value={channel.id}>
+                {channel.name}
+              </option>
+            ),
+          )}
         </select>
       </div>
 

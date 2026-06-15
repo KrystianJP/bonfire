@@ -2,6 +2,9 @@ import { useParams } from "react-router-dom";
 
 /* eslint-disable jsx-a11y/img-redundant-alt */
 function DMProfileBar({ friend, displayStyle }) {
+  const defaultPfp =
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+
   return (
     <div
       className="dm-profile-bar"
@@ -16,7 +19,7 @@ function DMProfileBar({ friend, displayStyle }) {
       >
         <div className="dm-profile-pfp">
           <img
-            src={friend.pfp}
+            src={friend.pfp ? friend.pfp : defaultPfp}
             alt="user profile picture"
             className="pfp-img"
           />
