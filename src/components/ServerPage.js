@@ -214,6 +214,7 @@ function ServerPage({ userProfileState, user, token }) {
       <div className="server-page">
         <div className="server-name-container" onClick={toggleDropdown}>
           <span className="server-name">{server.name}</span>
+          <span className="material-icons server-menu-icon">menu</span>
           {dropdownOpen && (
             <ServerDropdown
               token={token}

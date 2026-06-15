@@ -52,9 +52,9 @@
 html,
 body {
   height: 100vh;
-  overflow-x: scroll;
-  /* overflow-y: hidden; */
+  overflow: hidden;
   width: 100%;
+  scrollbar-width: none;
 }
 
 html::-webkit-scrollbar {
@@ -92,7 +92,9 @@ label {
 
 .App {
   height: 100vh;
+  width: 100vw;
   display: flex;
+  overflow: hidden;
 }
 
 .bonfire-text {
@@ -110,13 +112,15 @@ label {
   width: 80px;
   padding: 10px;
   height: auto;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
   z-index: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-main) transparent;
 }
 .sidebar::-webkit-scrollbar {
   width: 5px;
@@ -134,9 +138,12 @@ label {
 
 .friends-list {
   grid-area: friends-list;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 12px 25px;
   height: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-darker) transparent;
 }
 .friends-list::-webkit-scrollbar {
   width: 5px;
@@ -234,6 +241,7 @@ label {
 .friends-page {
   width: 100%;
   height: auto;
+  min-width: 0;
   display: grid;
   grid-template-areas:
     "friends-bar friends-list"
@@ -248,8 +256,10 @@ label {
   height: auto;
   padding: 8px;
   background: var(--dark-darker);
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-darkest) transparent;
 }
 .friends-bar::-webkit-scrollbar {
   width: 5px;
@@ -433,6 +443,8 @@ label {
   grid-template-areas: "top-bar top-bar" "users-in-call dm-profile-bar" "messages dm-profile-bar";
   grid-template-rows: min-content min-content 1fr;
   grid-template-columns: 1fr min-content;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .dm-profile-bar {
@@ -441,8 +453,10 @@ label {
   grid-template-rows: min-content 1fr;
   float: right;
   width: 340px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: var(--dark-profile-bar);
+  scrollbar-width: none;
 }
 
 .users-in-call {
@@ -524,7 +538,8 @@ label {
 }
 
 .messages-container {
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: calc(100vh - 52px - 72px - 15px);
   width: 100%;
   margin-top: 5px;
@@ -532,6 +547,8 @@ label {
   margin-bottom: 15px;
   display: flex;
   flex-direction: column-reverse;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-darkest) var(--dark-darker);
 }
 .messages-container::-webkit-scrollbar {
   width: 8px;
@@ -642,6 +659,7 @@ label {
 .server-page {
   width: 100%;
   height: auto;
+  min-width: 0;
   display: grid;
   grid-template-areas: "server-name top-bar top-bar" "channels messages users" "profile-bar messages users";
   grid-template-rows: min-content 1fr min-content;
@@ -770,7 +788,9 @@ label {
 .server-name-container {
   padding: 10px;
   align-items: center;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  gap: 8px;
   padding-left: 15px;
   font-size: 0.95rem;
 }
@@ -778,11 +798,19 @@ label {
   background: var(--dark-hover);
   cursor: pointer;
 }
+.server-name-container:hover .server-menu-icon {
+  color: var(--dark-lightest);
+}
 .server-name {
   color: var(--dark-lightest);
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  user-select: none;
+}
+.server-menu-icon {
+  color: var(--dark-light);
+  font-size: 1.2rem;
   user-select: none;
 }
 
@@ -820,9 +848,11 @@ label {
 .settings-side-bar-container {
   height: auto;
   background: var(--dark-darker);
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   padding: 15px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-darkest) transparent;
 }
 .settings-side-bar-container::-webkit-scrollbar {
   width: 5px;
@@ -857,10 +887,12 @@ label {
 }
 
 .settings-page-content-container {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   width: 700px;
   padding: 40px 30px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-profile-bar) transparent;
 }
 .settings-page-content-container::-webkit-scrollbar {
   width: 5px;
@@ -1461,10 +1493,13 @@ input:checked + .slider:before {
 
 .server-user-profile .user-role-list {
   background: var(--dark-darkest);
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: 100px;
   padding: 10px 6px;
   transform: translateY(0.25px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-main) transparent;
 }
 .user-role-list .checkbox-item {
   padding: 5px;
