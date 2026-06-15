@@ -103,31 +103,61 @@ export const AgoraProvider = ({ children }) => {
     }
   };
 
+  const mute = async () => {
+    if (!localAudioTrack) return;
+
+    await localAudioTrack.setVolume(0);
+    setIsMuted(true);
+  };
+
+  const unmute = async () => {
+    if (!localAudioTrack) return;
+
+    await localAudioTrack.setVolume(100);
+    setIsMuted(false);
+  };
+
+  const deafen = async () => {
+    if (!client) return;
+
+    setIsDeafened(true);
+    client.remoteUsers.forEach((user) => {
+      if (user.audioTrack) {
+        user.audioTrack.setVolume(0); // mute all
+      }
+    });
+  };
+
+  const undeafen = async () => {
+    if (!client) return;
+
+    setIsDeafened(false);
+    client.remoteUsers.forEach((user) => {
+      if (user.audioTrack) {
+        user.audioTrack.setVolume(100); // restore volume to normal
+      }
+    });
+  };
+
   const toggleMute = async () => {
     if (isMuted) {
-      await localAudioTrack.setVolume(100);
-      setIsMuted(false);
+      if (isDeafened) {
+        await undeafen();
+      }
+      await unmute();
     } else {
-      await localAudioTrack.setVolume(0);
-      setIsMuted(true);
+      await mute();
     }
   };
 
   const toggleDeafen = async () => {
     if (isDeafened) {
-      setIsDeafened(false);
-      client.remoteUsers.forEach((user) => {
-        if (user.audioTrack) {
-          user.audioTrack.setVolume(100); // restore volume to normal
-        }
-      });
+      await undeafen();
     } else {
-      setIsDeafened(true);
-      client.remoteUsers.forEach((user) => {
-        if (user.audioTrack) {
-          user.audioTrack.setVolume(0); // mute all
-        }
-      });
+      if (!isMuted) {
+        await mute();
+      }
+      await deafen();
     }
   };
 

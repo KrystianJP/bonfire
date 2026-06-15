@@ -112,12 +112,7 @@ function ProfileBar({ user, setInVoice }) {
             </span>
             <span
               className="material-icons"
-              onClick={() => {
-                if (!isMuted) {
-                  toggleMute();
-                }
-                toggleDeafen();
-              }}
+              onClick={toggleDeafen}
               style={{ color: isDeafened ? "#ff3838" : "inherit" }}
             >
               {isDeafened ? "headset_off" : "headphones"}
