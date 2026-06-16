@@ -1,6 +1,4 @@
 import Account from "./Account";
-import Privacy from "./Privacy";
-import Appearance from "./Appearance";
 import VoiceVideo from "./VoiceVideo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -90,22 +88,6 @@ function SettingsPage({ setting, token, user }) {
             Account
           </Link>
           <Link
-            to="/settings/privacy"
-            className={
-              "settings-group" + (setting === "privacy" ? " highlight" : "")
-            }
-          >
-            Privacy
-          </Link>
-          <Link
-            to="/settings/appearance"
-            className={
-              "settings-group" + (setting === "appearance" ? " highlight" : "")
-            }
-          >
-            Appearance
-          </Link>
-          <Link
             to="/settings/voicevideo"
             className={
               "settings-group" + (setting === "voicevideo" ? " highlight" : "")
@@ -131,16 +113,6 @@ function SettingsPage({ setting, token, user }) {
             user={user}
             setState={setState}
             token={token}
-          />
-        )}
-        {!busy && setting === "privacy" && (
-          <Privacy info={privacy} setPrivacy={setPrivacy} setState={setState} />
-        )}
-        {!busy && setting === "appearance" && (
-          <Appearance
-            info={appearance}
-            setAppearance={setAppearance}
-            setState={setState}
           />
         )}
         {!busy && setting === "voicevideo" && <VoiceVideo />}

@@ -151,7 +151,10 @@ function Overview({
           className="setting-text-size"
           defaultValue={info.default_channel}
           onChange={(e) => {
-            setState(setOverview, { ...info, defaultChannel: e.target.value });
+            setState(setOverview, {
+              ...info,
+              defaultChannel: e.target.value,
+            });
             console.log(info);
           }}
         >

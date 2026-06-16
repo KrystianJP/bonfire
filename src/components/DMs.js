@@ -121,7 +121,6 @@ function DMs({
           <span className="material-icons" onClick={joinVoiceChannelHandler}>
             call
           </span>
-          <span className="material-icons">videocam</span>
           <span className="material-icons">notifications</span>
           <span className="material-icons ">delete</span>
           {/* <span className="material-icons ">block</span> */}

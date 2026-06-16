@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 function ServerDropdown({ user, token }) {
   const { serverId } = useParams();
+  const [inviteText, setInviteText] = useState("Copy Invite Link");
 
   function leaveServer() {
     fetch("/api/servers/leave/" + serverId, {
@@ -12,6 +13,28 @@ function ServerDropdown({ user, token }) {
       },
     })
       .then(() => (window.location.href = "/"))
+      .catch((err) => console.log(err));
+  }
+
+  function copyInviteLink() {
+    fetch("/api/servers/invite/" + serverId, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        navigator.clipboard.writeText(
+          window.location.origin +
+            "/invite/" +
+            serverId +
+            "/" +
+            data.inviteCode,
+        );
+        setInviteText("Copied!");
+        window.setTimeout(() => setInviteText("Copy Invite Link"), 2000);
+      })
       .catch((err) => console.log(err));
   }
 
@@ -32,6 +55,13 @@ function ServerDropdown({ user, token }) {
           Server Settings
         </Link>
       )}
+
+      <div
+        className="server-dropdown-item invite-dropdown-item"
+        onClick={copyInviteLink}
+      >
+        {inviteText}
+      </div>
 
       {/* <label className="server-dropdown-item checkbox-item">
         Mute server
