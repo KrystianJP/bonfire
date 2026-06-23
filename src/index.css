@@ -1674,6 +1674,17 @@ input:checked + .slider:before {
   cursor: pointer;
   background: #4752c4;
 }
+.login-container .demo-account-button {
+  margin-top: 10px;
+  background: #23a55a;
+}
+.login-container .demo-account-button:hover {
+  background: #1f8f4f;
+}
+.login-container .demo-account-button:disabled {
+  cursor: default;
+  filter: brightness(70%);
+}
 .login-container p {
   font-size: 0.9rem;
   margin-top: 5px;
